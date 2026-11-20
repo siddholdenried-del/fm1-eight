@@ -1,5 +1,5 @@
 # fm1-eight's modulation (phase 4) in the host simulator: tools/build.py ../../app --host, then
-#   app/build/host/eight_host app/tests/mod.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/mod.txt OUTDIR
 # lsetN_K: 0 shape 1 rate 2 div 3 sync 4 retrig 5 fade 6 phase 7 dest 8 depth 9 pad; arpsetN_K: 0 mode 1 rate 2 oct 3 gate 4 latch
 # lfoN: the LFO now x 1000; probeN_0: the newest voice's pitch (1/16 semitone, the LFO in), probeN_1: its cutoff (<< 8)
 wait 600

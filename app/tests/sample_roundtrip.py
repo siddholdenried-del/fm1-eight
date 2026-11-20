@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """fm1-eight: a WAV to T3 and T4 and back through the host simulator, as tools/fm1_sample.py does over USB.
 
-    python3 -I app/tests/sample_roundtrip.py app/tools app/build/host/eight_host OUTDIR
+    python3 -I app/tests/sample_roundtrip.py app/tools app/build/host/ghettomachine_host OUTDIR
 
 A 1.5 s 48 kHz 24-bit stereo sweep: sent to T3 at 44.1 kHz and read back byte for byte; sent to T4 at 22.05 kHz;
 both tracks SAMPLERs; T3 deleted. Prints ROUND TRIP PASSED or FAILED."""

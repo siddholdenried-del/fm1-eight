@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="fm1-eight, a four-track groovebox firmware for the M-VAVE FM-1: how it works, and the firmware itself running in the browser.">
-<title>Inside fm1-eight</title>
+<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1: how it works, and the firmware itself running in the browser.">
+<title>Inside GhettoMachine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -179,7 +179,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 <header class="hero">
   <div class="screen">
     <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.4</span></div>
-    <h1>Inside fm1-eight</h1>
+    <h1>Inside the GhettoMachine</h1>
     <div class="sub">How our four-track groovebox works, from the key you press to the sound in your headphones.</div>
     <div class="specs">
       <div><b>4</b><span>tracks</span></div>
@@ -188,13 +188,13 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
       <div><b>16</b><span>voices</span></div>
     </div>
   </div>
-  <p class="lede">fm1-eight replaces the FM-1's own software with ours. It has one drum track (a 909 or an 808), three instrument tracks that can each be a mono synth, a poly synth or a sampler, a sequencer, effects, and a mastering chain. It's about 430 KB of code, and the same code runs in your browser, right here.</p>
+  <p class="lede">The BongTech GhettoMachine replaces the FM-1's own software with ours. It has one drum track (a 909 or an 808), three instrument tracks that can each be a mono synth, a poly synth or a sampler, a sequencer, effects, and a mastering chain. It's about 430 KB of code, and the same code runs in your browser, right here.</p>
   <p>This is the tour: what runs where, how a note becomes sound, where things are saved, and how we build and test it. Each chapter is coloured the way the FM-1's screen colours that part of the instrument.</p>
 
 <section id="play" style="--c: var(--t2)">
     <div class="band"><h2>Play it</h2><span class="tag">IN THE BROWSER</span></div>
-    <p>This is fm1-eight itself, compiled to WebAssembly: the same sequencer, drums, synth, effects and screen as on the FM-1, drawn as its panel. Press <strong>Switch on</strong>, then play it with the mouse or your computer's keyboard. Your work is kept in this browser.</p>
-    <div class="emu-frame"><iframe src="emu/" title="fm1-eight, running in the browser" allow="midi; autoplay" loading="lazy"></iframe></div>
+    <p>This is GhettoMachine itself, compiled to WebAssembly: the same sequencer, drums, synth, effects and screen as on the FM-1, drawn as its panel. Press <strong>Switch on</strong>, then play it with the mouse or your computer's keyboard. Your work is kept in this browser.</p>
+    <div class="emu-frame"><iframe src="emu/" title="GhettoMachine, running in the browser" allow="midi; autoplay" loading="lazy"></iframe></div>
     <p><a href="emu/">Open it full size</a> · <a href="https://github.com/siddholdenried-del/fm1-eight">The source</a> · <a href="https://github.com/siddholdenried-del/fm1-eight/blob/main/MANUAL.md">The manual</a></p>
   </section>
 
@@ -229,7 +229,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   <p>We don't talk to that hardware directly. We build on <strong>fm1-base</strong>, a platform by Charles Vestal that grew out of the Felucca firmware. It gives us a small set of functions for the things every instrument needs: here are the buttons and keys, here's the screen, fill this audio buffer, save this file, send this MIDI. Our code is the app on top: one large file, <code>app.c</code>, for the instrument, plus a folder of sound engines.</p>
   <div class="figure">
     <div class="flow">
-      <div class="stage" style="--c: var(--t2)"><div><b>fm1-eight (our app)</b><span>The sequencer, the screens, the tracks, the project. <code>app.c</code> and <code>dsp/</code>.</span></div></div>
+      <div class="stage" style="--c: var(--t2)"><div><b>GhettoMachine (our app)</b><span>The sequencer, the screens, the tracks, the project. <code>app.c</code> and <code>dsp/</code>.</span></div></div>
       <div class="arrow"></div>
       <div class="stage" style="--c: var(--c808)"><div><b>Sound engines we brought in</b><span>X0X's 909 and 808 drum models, its reverb, delay and master section (GPL-3.0). Felucca-Engines' ANALOG synth voice (MIT).</span></div></div>
       <div class="arrow"></div>
@@ -580,7 +580,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   </div>
   <p>That's 1,400 checks (with a few demos and a screen tour). Separate C tests feed sine waves through the master bus (48 checks) and through the synth (39: FM's harmonics, each shaper, the matrix, slides and accents, everything at maximum at once, built with a checker that stops on any integer overflow), and compare the old and new synth byte for byte. Another sends a WAV to the simulator over its MIDI link and reads it back byte for byte. Demo scripts render WAV files we can listen to, like the master bus comparison.</p>
   <h3>Installing</h3>
-  <p>The build ends in a <code>.fwsc</code> package with an identity, <code>FM-1_800</code>. Installing it over USB works because the firmware already on the FM-1 (X0X the first time, fm1-eight since) includes an updater. The Mac sends the package over MIDI; the FM-1 checks it, restarts into a small loader, compares the flash 4 KB at a time and rewrites only what changed, then starts the new firmware.</p>
+  <p>The build ends in a <code>.fwsc</code> package with an identity, <code>FM-1_800</code>. Installing it over USB works because the firmware already on the FM-1 (X0X the first time, GhettoMachine since) includes an updater. The Mac sends the package over MIDI; the FM-1 checks it, restarts into a small loader, compares the flash 4 KB at a time and rewrites only what changed, then starts the new firmware.</p>
   <p>The <strong>ESP32-S3</strong> board is the rescue route. When an install is cut off and the FM-1 won't start, the S3 talks to the chip's built-in boot mode directly: it can read the whole flash for a backup and write the firmware area back. That's how the FM-1 came back on 18 November.</p>
   <p class="note">Not measured yet on the FM-1 itself: how busy the processor gets with all 16 voices, a dense 808 and every effect on. The voice limiter is there for that.</p>
 </section>
@@ -630,7 +630,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   </dl>
 </section>
 
-<footer>fm1-eight 0.4, as of 20 November 2026. Built on fm1-base (Charles Vestal), with X0X's drum models and effects and Felucca-Engines' ANALOG voice. It's free software under the GPL-3.0: the source and the full manual are at <a href="https://github.com/siddholdenried-del/fm1-eight">github.com/siddholdenried-del/fm1-eight</a>.</footer>
+<footer>BongTech GhettoMachine 0.4, as of 20 November 2026. Built on fm1-base (Charles Vestal), with X0X's drum models and effects and Felucca-Engines' ANALOG voice. It's free software under the GPL-3.0: the source and the full manual are at <a href="https://github.com/siddholdenried-del/fm1-eight">github.com/siddholdenried-del/fm1-eight</a>.</footer>
 </div>
 
 </body>

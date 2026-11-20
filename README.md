@@ -1,10 +1,12 @@
-# fm1-eight
+# BongTech GhettoMachine
 
 A four-track groovebox firmware for the **M-VAVE FM-1**: one drum track (909 or 808, every pad editable) and three
 instrument tracks, each a mono synth, a poly synth or a sampler. A 64-step sequencer with 16 patterns, a scene grid
 for playing live, an LFO on every track, an arpeggiator and chord mode, a reverb, a tempo delay and a master bus with a
 mastering chain, a deeper synth (FM, ring, a wave shaper, a mod matrix, macros) and a **303 pattern generator** whose
 slides and accents play on any sound.
+
+It was called fm1-eight until 0.4, and this repository still is.
 
 - **Play it in the browser:** <https://groovebox.bongcult.com> (the firmware compiled to WebAssembly)
 - **The manual:** [MANUAL.md](MANUAL.md)
@@ -20,8 +22,8 @@ an FM-1 that already has an fm1-base or Felucca firmware on it, installed over U
 git clone --recursive https://github.com/siddholdenried-del/fm1-eight
 cd fm1-eight/third_party/fm1-base
 python3 -m venv ../../.venv && ../../.venv/bin/pip install pillow==13.0.0 mido==1.3.3 python-rtmidi==1.5.8
-../../.venv/bin/python tools/build.py ../../app --host   # the simulator: app/build/host/eight_host
-../../.venv/bin/python tools/build.py ../../app          # the FM-1 package: app/build/eight.fwsc (needs Docker)
+../../.venv/bin/python tools/build.py ../../app --host   # the simulator: app/build/host/ghettomachine_host
+../../.venv/bin/python tools/build.py ../../app          # the FM-1 package: app/build/ghettomachine.fwsc (needs Docker)
 ../../.venv/bin/python tools/build.py ../../app --web    # the browser emulator: app/build/emu (needs Emscripten)
 cd ../.. && sh site/publish.sh                          # the site: rebuilt, committed, pushed
 ```
@@ -30,13 +32,13 @@ The site at groovebox.bongcult.com is `site/public` as committed: Cloudflare Wor
 push and serves that folder (`wrangler.toml`), with no build of its own.
 
 fm1-base's README has the details (the toolchain runs in Docker; Pillow 13 rasterises the fonts; mido and
-python-rtmidi talk to the FM-1). The tests are scripts for the simulator, run from the repository's top: `app/build/host/eight_host app/tests/acid.txt
+python-rtmidi talk to the FM-1). The tests are scripts for the simulator, run from the repository's top: `app/build/host/ghettomachine_host app/tests/acid.txt
 OUT_DIR` (and the other `app/tests/*.txt`), plus `app/tests/synth_unit.c`, `app/tests/mbus_unit.c` and
 `app/tests/synth_same.sh`; each file says how to run it.
 
 ## Installing on an FM-1
 
-With fm1-base's `tools/fm1_install.py app/build/eight.fwsc` over USB-MIDI, while an fm1-base or Felucca firmware is
+With fm1-base's `tools/fm1_install.py app/build/ghettomachine.fwsc` over USB-MIDI, while an fm1-base or Felucca firmware is
 running. **At your own risk:** save your work first; a cut-off install needs fm1-base's recovery route. See
 MANUAL.md, "Installing it, and getting back".
 

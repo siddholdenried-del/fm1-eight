@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""groovebox.bongcult.com: fm1-eight's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
+"""groovebox.bongcult.com: BongTech GhettoMachine's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
 
   python3 -I site/build.py site/public   (from fm1-eight, after tools/build.py ../../app --web in third_party/fm1-base;
                                          site/publish.sh does this, commits it and pushes)
@@ -36,10 +36,10 @@ def main():
     frame = (
         '<section id="play" style="--c: var(--t2)">\n'
         '    <div class="band"><h2>Play it</h2><span class="tag">IN THE BROWSER</span></div>\n'
-        "    <p>This is fm1-eight itself, compiled to WebAssembly: the same sequencer, drums, synth, effects and screen as on "
+        "    <p>This is GhettoMachine itself, compiled to WebAssembly: the same sequencer, drums, synth, effects and screen as on "
         "the FM-1, drawn as its panel. Press <strong>Switch on</strong>, then play it with the mouse or your computer's "
         "keyboard. Your work is kept in this browser.</p>\n"
-        '    <div class="emu-frame"><iframe src="emu/" title="fm1-eight, running in the browser" allow="midi; autoplay" '
+        '    <div class="emu-frame"><iframe src="emu/" title="GhettoMachine, running in the browser" allow="midi; autoplay" '
         'loading="lazy"></iframe></div>\n'
         f'    <p><a href="emu/">Open it full size</a> · <a href="{REPO}">The source</a> · '
         f'<a href="{REPO}/blob/main/MANUAL.md">The manual</a></p>\n'
@@ -53,7 +53,7 @@ def main():
     head_end = page.index("</style>") + len("</style>")
     doc = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
-           "<meta name=\"description\" content=\"fm1-eight, a four-track groovebox firmware for the M-VAVE FM-1: how it "
+           "<meta name=\"description\" content=\"BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1: how it "
            "works, and the firmware itself running in the browser.\">\n"
            + page[:head_end] + "\n</head>\n<body>\n" + page[head_end:].lstrip("\n") + "\n</body>\n</html>\n")
     doc = doc.replace("</head>", ICON.replace("HREF", "favicon.svg") + "</head>", 1)
@@ -63,8 +63,10 @@ def main():
         shutil.copy(emu_src / f, out / "emu" / f)
     shutil.copytree(emu_src / "parts", out / "emu" / "parts")
     emu_page = (out / "emu" / "index.html").read_text()
-    emu_page = emu_page.replace("<title>EIGHT in the browser</title>", "<title>fm1-eight in the browser</title>")
-    emu_page = emu_page.replace("<h1>EIGHT</h1>", '<h1>fm1-eight</h1>\n  <p><a href="../">How it works</a></p>')
+    emu_page, n1 = re.subn(r"<title>[^<]*</title>", "<title>BongTech GhettoMachine in the browser</title>", emu_page, count=1)
+    emu_page, n2 = re.subn(r"<h1>[^<]*</h1>", '<h1>GhettoMachine</h1>\n  <p><a href="../">How it works</a></p>', emu_page, count=1)
+    if n1 != 1 or n2 != 1:
+        raise SystemExit("site: the emulator's page has no <title> or <h1> to rename")
     # framed in the page: no title of its own (the page has it), less room around it
     emu_page = emu_page.replace("</head>", ICON.replace("HREF", "../favicon.svg") +
                                 '<script>if (self !== top) document.documentElement.classList.add("framed");</script>\n'

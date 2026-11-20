@@ -1,5 +1,5 @@
 # fm1-eight: a demo groove, built by step recording as on the FM-1, then 8 s of it to demo.wav
-#   app/build/host/eight_host app/tests/demo.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/demo.txt OUTDIR
 # T2 SQR BASS (an octave down), T3 PLUCK stabs, T4 SOFT PAD chords; the default beat on the drums
 wait 600
 # T2: REC while stopped, on the KEYS page: a note a step; SELECT skips a step (a rest)

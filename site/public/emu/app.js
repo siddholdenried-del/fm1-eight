@@ -3,4 +3,4 @@ import { compose } from "./parts/parts.js";
 import * as midi from "./parts/midi.js";
 import * as port from "./parts/port.js";
 const own = {};
-export const { attach, message } = compose({ midi, port }, own, { id: "eight", name: "EIGHT", backupExt: "bak" });
+export const { attach, message } = compose({ midi, port }, own, { id: "ghettomachine", name: "GHETTOMACHINE", backupExt: "bak" });

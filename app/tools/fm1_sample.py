@@ -11,8 +11,8 @@
 --track is 2, 3 or 4 (default 2). Any WAV (8 / 16 / 24 / 32-bit, float, mono or stereo, any rate): mixed to mono,
 resampled to 44.1 kHz (or --rate 22050), cut to the room the FM-1 says the track has (its bank is shared by the three
 tracks: about 3 s at 44.1 kHz in all), peak-normalised (--no-normalize keeps the level), then 12-bit. The track becomes
-a SAMPLER playing all of it; C4 plays it at its own pitch. The FM-1 is found over CoreMIDI by its name ("EIGHT",
---port to choose); no packages needed. --serve-cmd "app/build/host/eight_host --serve" talks to the host simulator
+a SAMPLER playing all of it; C4 plays it at its own pitch. The FM-1 is found over CoreMIDI by its name ("GhettoMachine",
+--port to choose); no packages needed. --serve-cmd "app/build/host/ghettomachine_host --serve" talks to the host simulator
 instead. The wire format is fm1-base's companion files (docs/COMPANION.md): begin, data in 512-byte chunks, commit, each
 answered; the FM-1 checks the CRC-32 before the new sample counts.
 """
@@ -322,7 +322,7 @@ def request(link, body, op, tries=4, timeout=1.0):
             a = decode(p)
             if a and a[0] == FILES and len(a[1]) >= 4 and a[1][0] == op:
                 return a[1][1], a[1][4:]
-    sys.exit("no answer from the FM-1 (is fm1-eight running, with its companion?)")
+    sys.exit("no answer from the FM-1 (is GhettoMachine running, with its companion?)")
 
 
 def find_sample(link, track):
@@ -335,7 +335,7 @@ def find_sample(link, track):
         name = b[12:].split(b"\0")[0].decode() if st == 0 and len(b) > 12 else ""
         if name == want:
             return i, struct.unpack_from("<I", b, 4)[0], struct.unpack_from("<I", b, 8)[0]
-    sys.exit(f"the firmware has no {want} file (is it fm1-eight with SAMPLER tracks?)")
+    sys.exit(f"the firmware has no {want} file (is it GhettoMachine with SAMPLER tracks?)")
 
 
 def check(st, what):
@@ -376,8 +376,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("what", choices=["send", "get", "convert", "rm"])
     ap.add_argument("files", nargs="*")
-    ap.add_argument("--port", default="EIGHT", help="part of the FM-1's MIDI name (default EIGHT)")
-    ap.add_argument("--serve-cmd", help="a host simulator instead (eight_host --serve)")
+    ap.add_argument("--port", default="GhettoMachine", help="part of the FM-1's MIDI name (default GhettoMachine)")
+    ap.add_argument("--serve-cmd", help="a host simulator instead (ghettomachine_host --serve)")
     ap.add_argument("--no-normalize", action="store_true", help="keep the WAV's level")
     ap.add_argument("--track", type=int, choices=[2, 3, 4], default=2, help="the SAMPLER track (default 2)")
     ap.add_argument("--rate", type=int, choices=RATES, default=44100, help="the sample's rate (default 44100)")

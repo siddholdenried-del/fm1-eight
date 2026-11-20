@@ -1,6 +1,6 @@
 # Made once with the 0.2 performance update's build (format 1), before the synth update (format 2), to keep two
 # saved projects for app/tests/convert.txt: proj_02.img (the file as 0.2 saved it, the layout on the user's FM-1)
-# and proj_perf.img (the performance update's whole file). Run from fm1-eight: app/build/host/eight_host
+# and proj_perf.img (the performance update's whole file). Run from fm1-eight: app/build/host/ghettomachine_host
 # app/tests/fixtures/make_v1.txt OUTDIR (with the format-1 build only; kept for the record)
 wait 600
 # ---- T2: SQR BASS, CUTOFF 70, saved as USER 1

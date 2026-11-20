@@ -1,6 +1,6 @@
-# fm1-eight 0.4: the manual
+# BongTech GhettoMachine 0.4: the manual
 
-fm1-eight turns the M-VAVE FM-1 into a four-track groovebox:
+The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 
 - **Drums:** a 909 or an 808 kit, every pad editable.
 - **T2, T3, T4:** instrument tracks. Each is a MONO synth, a POLY synth or a SAMPLER.
@@ -21,11 +21,11 @@ fm1-eight turns the M-VAVE FM-1 into a four-track groovebox:
 
 ## Installing it, and getting back
 
-Once fm1-eight (or any fm1-base or Felucca firmware) is on the FM-1, an update needs only the USB cable. The Mac sends
+Once GhettoMachine (or any fm1-base or Felucca firmware) is on the FM-1, an update needs only the USB cable. The Mac sends
 the package over USB-MIDI and the FM-1's loader writes only the 4 KiB sectors that changed:
 
 ```
-cd third_party/fm1-base/tools && ../../../.venv/bin/python fm1_install.py ../../../app/build/eight.fwsc --yes
+cd third_party/fm1-base/tools && ../../../.venv/bin/python fm1_install.py ../../../app/build/ghettomachine.fwsc --yes
 ```
 
 **Tap SAVE first:** an install restarts the FM-1, and the saved project is what comes back. The project and the

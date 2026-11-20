@@ -8204,7 +8204,7 @@ static void draw_live(void)               /* the band's meters; the page too whe
 
 static void speak(void)                   /* a screen reader that has just started listening hears the screen */
 {
-    char t[64];
+    char t[96];
     if (ann_on() && ann_where()) {
         t[0] = 0;
         text_cat(t, APP_NAME ". ");

@@ -1,5 +1,5 @@
 # fm1-eight 0.4 (project format 3: the 303 generator's settings after the rest) loading what 0.3 saved (format 2):
-#   app/build/host/eight_host app/tests/convert3.txt OUTDIR   (from fm1-eight: the image's path is relative)
+#   app/build/host/ghettomachine_host app/tests/convert3.txt OUTDIR   (from fm1-eight: the image's path is relative)
 # app/tests/fixtures/proj_03.img: made by fixtures/make_v2.txt with 0.3's build. T2: notes on steps 1 and 3, its FM at
 # 30, its part 12 steps long; T3: a note on step 2. projfmt: 2 0.3's file, 3 this one's; genN_0: the part's generator's
 # seed (0: never used)

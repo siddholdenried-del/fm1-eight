@@ -5,8 +5,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fm1-eight in the browser</title>
-<meta name="description" content="EIGHT for the M-VAVE FM-1, in the browser: the same code the FM-1 runs.">
+<title>BongTech GhettoMachine in the browser</title>
+<meta name="description" content="GHETTOMACHINE for the M-VAVE FM-1, in the browser: the same code the FM-1 runs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
@@ -83,7 +83,7 @@ kbd { font: 600 .85em ui-monospace, Menlo, monospace; background: var(--card); b
 </head>
 <body>
 <header>
-  <h1>fm1-eight</h1>
+  <h1>GhettoMachine</h1>
   <p><a href="../">How it works</a></p>
 </header>
 <main>
@@ -272,7 +272,7 @@ function fm1Panel(svg) {
 }
 
 const BTN = PANEL_BTN, ENC = PANEL_ENC, WHITE_K = PANEL_WHITE_K, BLACK_K = PANEL_BLACK_K, ROW1 = PANEL_ROW1, ROW2 = PANEL_ROW2;
-const STORE_KEY = "eight-emu-store", PREFS_KEY = "eight-emu-prefs";
+const STORE_KEY = "ghettomachine-emu-store", PREFS_KEY = "ghettomachine-emu-prefs";
 const $ = (id) => document.getElementById(id);
 const prefs = (() => { try { return JSON.parse(localStorage.getItem(PREFS_KEY) || "{}"); } catch { return {}; } })();
 const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch { /* private window */ } };
@@ -332,7 +332,7 @@ function send(m) { if (node) node.port.postMessage(m); }
 function sessionScript(m) {
   const BTN = ["FX", "SEL", "ENV", "LFO", "EDIT", "GLO", "HOME", "SAVE", "ARP", "SEQ", "PLAY", "REC", "OCT-", "OCT+"];
   const ENC = ["SELECT", "ALGO", "PRESET", "K1", "K2", "K3", "K4"];
-  const out = ["# EIGHT emulator session, " + new Date().toISOString() + ", " + navigator.userAgent];
+  const out = ["# GHETTOMACHINE emulator session, " + new Date().toISOString() + ", " + navigator.userAgent];
   let t = 0, keys = 0, btn = 0;
   for (const [at, kind, v] of m.log) {
     if (at > t) { out.push(`wait ${at - t}`); t = at; }
@@ -754,7 +754,7 @@ async function switchOn() {
           if (m.dimOp !== undefined) document.documentElement.style.setProperty("--dimop", m.dimOp);   // APP_DIM_LEVELS
           if (m.said) onSaid(m.said);
           window.emuLast = m;
-          if (m.load !== undefined) cpu.textContent = `EIGHT uses ${m.load}% of this computer's time`;
+          if (m.load !== undefined) cpu.textContent = `GHETTOMACHINE uses ${m.load}% of this computer's time`;
           if (m.store) saveStore(m.store);
         } else if (m.type === "log") {
           sessionScript(m);

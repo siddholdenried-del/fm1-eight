@@ -1,5 +1,5 @@
 # fm1-eight 0.2's master bus (phase 7) in the host simulator: tools/build.py ../../app --host, then
-#   app/build/host/eight_host app/tests/master.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/master.txt OUTDIR
 # fxI: dsp/fx.h FXP_* (12..18 COMP, 21 LIMIT on, 22..25 EQ: low mid high cut, 26..29 EQ 2: low freq, mid freq, mid Q,
 # high freq, 30..33 TAPE: drive warmth tone mix, 34..36 STEREO: width bass-mono balance, 37..39 LIMIT: gain ceiling
 # release, 40 the chain preset, 41 BYPASS); mpre / medit: the preset, a knob of it moved since; stageN: the chain's stage

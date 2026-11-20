@@ -1,5 +1,5 @@
 # fm1-eight 0.1's presets and song (phase 6) in the host simulator: tools/build.py ../../app --host, then
-#   app/build/host/eight_host app/tests/release.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/release.txt OUTDIR
 # presetN: 0..23 the factory sounds (15..23 the synth update's), 24.. USER 1..16; dpreset: 0 909, 1 808, 2.. USER KIT 1..8; usndS / ukitS: slot S used
 # songeS_K: entry S, K 0 its pattern (1-based), 1 its bars; spos: the entry playing (0: none); scur: the SONG page's cursor
 wait 600

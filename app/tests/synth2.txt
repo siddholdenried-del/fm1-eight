@@ -1,5 +1,5 @@
 # fm1-eight's synth update in the host simulator: tools/build.py ../../app --host, then
-#   app/build/host/eight_host app/tests/synth2.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/synth2.txt OUTDIR
 # EDIT pages 5 OSC 2 (WAVE 2, FM, RING, DRIFT), 6 SHAPER (type, AMOUNT, BIAS, PLACE), 7 MACRO (1-4); ENV page 2 MOD ENV;
 # LFO pages 2 LFO 2 (SHAPE, RATE, FADE IN, RESTART), 3 MATRIX (SLOT, SOURCE, DEST, AMOUNT). sndN_ID: 26 WAVE 2 27 FM
 # 28 RING 29 DRIFT | 30 SHAPER 31 AMOUNT 32 BIAS 33 PLACE | 34-37 MACRO 1-4 | 38-41 MOD ENV ADSR | 42-45 LFO 2 |

@@ -1,4 +1,6 @@
-# fm1-eight: a 4-track groovebox firmware for the M-VAVE FM-1
+# BongTech GhettoMachine: a 4-track groovebox firmware for the M-VAVE FM-1
+
+(Called fm1-eight until 0.4, and still in this repository's name and the history below: renamed 2026-11-20.)
 
 Working name only (it started as 8 tracks); rename it any time. Plan drafted 19 Nov 2026, cut to
 4 tracks the same day. **Version 0.2: phases 1 to 7 are built** and pass their simulator tests; none has run on the FM-1
@@ -361,7 +363,7 @@ and STEPS's LENGTH, RATE, SWING; a LENGTH turn makes the line again). It writes 
 
 **Build:** `../../.venv/bin/python tools/build.py ../../app [--host]` from `third_party/fm1-base`, with
 `DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib` and Docker running (the JieLi toolchain is Linux-only).
-**Tests:** `app/build/host/eight_host app/tests/drums.txt OUT` and `app/tests/tracks.txt`.
+**Tests:** `app/build/host/ghettomachine_host app/tests/drums.txt OUT` and `app/tests/tracks.txt`.
 
 ## Built so far (20 Nov)
 
@@ -452,7 +454,7 @@ and STEPS's LENGTH, RATE, SWING; a LENGTH turn makes the line again). It writes 
   - `app/tests/fx_demo.txt`: phase 4's groove through the mixer and FX, to `fx_demo.wav` (nothing clipped).
   - `app/tests/demo.txt`, `sampler_demo.txt` and `mod_demo.txt`: a groove built by step recording; a bar of the beat
     resampled and played back looped; the groove with the pad's cutoff on a 2-bar LFO, an arpeggio and S&H hats.
-- **The FM-1 package (0.4: 0.3 and the 303 generator):** `app/build/eight.fwsc`, identity FM-1_800, image 431 KB
+- **The FM-1 package (0.4: 0.3 and the 303 generator):** `app/build/ghettomachine.fwsc`, identity FM-1_800, image 431 KB
   (RAM 69,860 of 98,304 B; pool 282,780 of 344,064), the second core built in; every build check passes; not installed
   yet. 0.2 itself (up to chord mode) was installed over USB-MIDI twice (`fm1_install.py`) and played. **0.3
   was installed over USB on 20 Nov** (identity FM-1_800, running, no crash logged); the CPU load and redraw rate are

@@ -1,7 +1,7 @@
 # fm1-eight 0.2's master bus, heard: fx_demo.txt's groove (its PUMP left off) through the chain bypassed, then each
 # preset in turn, 4 s (2 bars) each: BYPASS, CLEAN, GLUE, PUNCH, WARM, WIDE, LOUD, LO-FI. MASTER full. 32 s to
 # master_demo.wav; the CHAIN page shows its meters throughout.
-#   app/build/host/eight_host app/tests/master_demo.txt OUTDIR
+#   app/build/host/ghettomachine_host app/tests/master_demo.txt OUTDIR
 wait 600
 # T2: REC while stopped, on the KEYS page: a note a step; SELECT skips a step (a rest)
 turn ALGO 1
