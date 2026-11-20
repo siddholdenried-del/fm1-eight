@@ -18,6 +18,7 @@
 #include "dsp/synth.h"
 #include "dsp/fx.h"
 #include "dsp/uimath.h"
+#include "logo.h"                       /* tools/gen_logo.py: the boot screen's logo */
 #include <stddef.h>
 
 #define NPADS DRUMS_NPADS
@@ -8220,6 +8221,55 @@ static void speak(void)                   /* a screen reader that has just start
     ann_tick(plat_ms());
 }
 
+/* the boot screen: GHETTO / MACHINE in Sedgwick Ave Display, BONGTECH under it, on paper. gen_logo.py drew both
+ * parts (alpha 0..15, two pixels a byte); the platform calls this once at power-on, before app_ui_init. Drawn in
+ * strips of 48 rows, so any canvas size will do. */
+static void logo_part(const uint8_t *a, int32_t x0, int32_t y0, int32_t w, int32_t h, int32_t top, int32_t n,
+                      uint16_t c)
+{
+    uint32_t r = c >> 11, g = (c >> 5) & 63u, b = c & 31u;
+    int32_t y, x;
+    for (y = top; y < top + n; y++) {
+        const uint8_t *row;
+        if (y < y0 || y >= y0 + h)
+            continue;
+        row = a + (y - y0) * ((w + 1) / 2);
+        for (x = 0; x < w; x++) {
+            uint32_t al = (x & 1) ? (row[x >> 1] & 15u) : (row[x >> 1] >> 4u), bg, br, bgg, bb;
+            uint16_t *p;
+            if (!al)
+                continue;
+            p = &cv_px[(uint32_t)(y - top) * 240u + (uint32_t)(x0 + x)];
+            if (al == 15u) {
+                *p = swap16(c);
+                continue;
+            }
+            bg = swap16(*p);
+            br = bg >> 11;
+            bgg = (bg >> 5) & 63u;
+            bb = bg & 31u;
+            *p = swap16((uint16_t)((((r * al + br * (15u - al)) / 15u) << 11) |
+                                   (((g * al + bgg * (15u - al)) / 15u) << 5) | ((b * al + bb * (15u - al)) / 15u)));
+        }
+    }
+}
+
+void app_splash(void)
+{
+    const uint16_t paper = RGB(250, 244, 232);
+    const int32_t top = LOGO_NAME_Y, bot = LOGO_TAG_Y + LOGO_TAG_H;
+    int32_t y, n;
+    lcd_fill(0, 0, 240, 240, paper);
+    for (y = top; y < bot; y += n) {
+        n = bot - y < 48 ? bot - y : 48;
+        cv_begin(240, (uint32_t)n, paper);
+        logo_part(LOGO_NAME, LOGO_NAME_X, LOGO_NAME_Y, LOGO_NAME_W, LOGO_NAME_H, y, n, APP_SPLASH_RGB);
+        logo_part(LOGO_TAG, LOGO_TAG_X, LOGO_TAG_Y, LOGO_TAG_W, LOGO_TAG_H, y, n, RGB(150, 136, 118));
+        cv_blit(0, (uint32_t)y);
+    }
+    lcd_sync();
+}
+
 void app_ui_init(void)
 {
     ui.held_step = -1;
@@ -8413,6 +8463,9 @@ int app_expect(const char *what, int *got)
         *got = proj_file_format();
     } else if (!strcmp(what, "projsize")) {   /* the project's bytes (its file holds 32736) */
         *got = (int)sizeof proj;
+    } else if (!strcmp(what, "splash")) {     /* the boot screen drawn now (a shot straight after sees it) */
+        app_splash();
+        *got = 1;
     } else if (!strcmp(what, "kit"))
         *got = proj.kit;
     else if (!strcmp(what, "pat"))

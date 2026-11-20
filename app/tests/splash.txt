@@ -1,0 +1,5 @@
+# BongTech GhettoMachine's boot screen (app_splash, the logo from tools/gen_logo.py): drawn, and its picture
+#   app/build/host/ghettomachine_host app/tests/splash.txt OUTDIR   (from the repository's top)
+wait 600
+expect splash 1
+shot splash.png

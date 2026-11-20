@@ -7,8 +7,10 @@
 #include "plat.h"
 
 #define APP_NAME "GHETTOMACHINE"         /* BongTech GhettoMachine: the splash, crash and safe-mode screens, the reader */
-#define APP_TAGLINE "BONGTECH"          /* under the name on the splash */
-#define APP_SPLASH_RGB RGB(255, 120, 40)
+#define APP_TAGLINE "BONGTECH"          /* (the platform's plain splash; app_splash draws its own) */
+#define APP_SPLASH_RGB RGB(255, 120, 40)  /* the logo's orange */
+#define APP_SPLASH                       /* the boot screen: the logo in Sedgwick Ave Display (tools/gen_logo.py) */
+void app_splash(void);
 #define APP_BLOCK 256u                   /* frames per audio block: 5.8 ms at 44.1 kHz */
 #define APP_TOUCH                        /* velocity from the keys (lib/touch.h): played pads */
 

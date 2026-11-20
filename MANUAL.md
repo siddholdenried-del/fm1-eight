@@ -16,7 +16,7 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 
 > **0.4 is built, not installed yet; 0.3 is on the FM-1** (installed over USB on 20 Nov). 0.4 is 0.3 plus the 303
 > generator. 0.3 is 0.2 plus the performance update (the scene grid onwards) and the synth update. 0.4 passes its
-> simulator tests (1,400 checks, 39 more on the synth itself and 48 on the master bus's sound). It reads a project
+> simulator tests (1,401 checks, 39 more on the synth itself and 48 on the master bus's sound). It reads a project
 > saved by 0.2 or 0.3.
 
 ## Installing it, and getting back

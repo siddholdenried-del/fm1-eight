@@ -47,4 +47,6 @@ MANUAL.md, "Installing it, and getting back".
 GPL-3.0-only (see [LICENSE](LICENSE)). Built on fm1-base and felucca-bsp (MPL-2.0); the synth voice from
 Felucca-Engines by Leo Kuroshita, Hügelton Instruments (MIT); the 909 and 808 engines from X0X by Charles Vestal
 (GPL-3.0), after 9W9 and 8W8 by athousanddetails; the 909 cymbals from ER-99 by Matthew Cieplak (GPL-3.0); the reverb,
-delay and master from X0X (GPL-3.0), after 9W9. Not affiliated with M-VAVE or Roland.
+delay and master from X0X (GPL-3.0), after 9W9. The logo is set in Sedgwick Ave Display by The Sedgwick Ave Project
+Authors (SIL Open Font License 1.1: [app/assets/fonts](app/assets/fonts)); the firmware carries only its rendered
+pixels. Not affiliated with M-VAVE or Roland.

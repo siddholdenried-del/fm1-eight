@@ -7,7 +7,7 @@
 <title>Inside GhettoMachine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Sedgwick+Ave+Display&display=swap">
 <style>
 /* Layout: one reading column (phone first); each chapter opens with a band in the colour the firmware gives that part of
    itself, ink on colour, the way the FM-1's own screen does it. */
@@ -24,6 +24,7 @@
   --display: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
   --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --logo: "Sedgwick Ave Display", "Marker Felt", "Chalkboard SE", cursive;   /* the wordmark, as on the boot screen */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -67,6 +68,10 @@ strong { font-weight: 600; }
 }
 .hero .screen .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .hero .ver { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+.hero h1 .in { display: block; font-size: 1.35rem; line-height: 1.1; letter-spacing: 0.02em; }
+/* the wordmark: as wide as the screen allows (GhettoMachine is about 5.8 em wide in it), at most 4.6rem */
+.hero h1 .logo { display: block; font-family: var(--logo); font-weight: 400; letter-spacing: 0; line-height: 1.05;
+  font-size: clamp(2.2rem, calc((100vw - 80px) / 6), 4.6rem); padding-top: 2px; }
 .hero .sub { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.25; max-width: 30ch; }
 .specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 4px; }
 .specs div { background: var(--on); color: #F1EFE8; border-radius: 8px; padding: 6px 8px 7px; min-width: 0; }
@@ -179,7 +184,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 <header class="hero">
   <div class="screen">
     <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.4</span></div>
-    <h1>Inside the GhettoMachine</h1>
+    <h1><span class="in">Inside the</span> <span class="logo">GhettoMachine</span></h1>
     <div class="sub">How our four-track groovebox works, from the key you press to the sound in your headphones.</div>
     <div class="specs">
       <div><b>4</b><span>tracks</span></div>
@@ -578,7 +583,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
       <tr><td>convert3</td><td>a project saved by 0.3 loading into 0.4</td><td class="n">28</td></tr>
     </table>
   </div>
-  <p>That's 1,400 checks (with a few demos and a screen tour). Separate C tests feed sine waves through the master bus (48 checks) and through the synth (39: FM's harmonics, each shaper, the matrix, slides and accents, everything at maximum at once, built with a checker that stops on any integer overflow), and compare the old and new synth byte for byte. Another sends a WAV to the simulator over its MIDI link and reads it back byte for byte. Demo scripts render WAV files we can listen to, like the master bus comparison.</p>
+  <p>That's 1,401 checks (with a few demos, a screen tour and the boot screen's picture). Separate C tests feed sine waves through the master bus (48 checks) and through the synth (39: FM's harmonics, each shaper, the matrix, slides and accents, everything at maximum at once, built with a checker that stops on any integer overflow), and compare the old and new synth byte for byte. Another sends a WAV to the simulator over its MIDI link and reads it back byte for byte. Demo scripts render WAV files we can listen to, like the master bus comparison.</p>
   <h3>Installing</h3>
   <p>The build ends in a <code>.fwsc</code> package with an identity, <code>FM-1_800</code>. Installing it over USB works because the firmware already on the FM-1 (X0X the first time, GhettoMachine since) includes an updater. The Mac sends the package over MIDI; the FM-1 checks it, restarts into a small loader, compares the flash 4 KB at a time and rewrites only what changed, then starts the new firmware.</p>
   <p>The <strong>ESP32-S3</strong> board is the rescue route. When an install is cut off and the FM-1 won't start, the S3 talks to the chip's built-in boot mode directly: it can read the whole flash for a backup and write the firmware area back. That's how the FM-1 came back on 18 November.</p>

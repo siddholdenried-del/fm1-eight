@@ -71,7 +71,12 @@ def main():
     emu_page = emu_page.replace("</head>", ICON.replace("HREF", "../favicon.svg") +
                                 '<script>if (self !== top) document.documentElement.classList.add("framed");</script>\n'
                                 "<style>.framed body > header { display: none; } "
-                                ".framed body { padding-block: 14px 14px; }</style>\n</head>", 1)
+                                ".framed body { padding-block: 14px 14px; }\n"
+                                # the name in the logo's face (the boot screen's, Sedgwick Ave Display, SIL OFL 1.1)
+                                'body > header h1 { font: 400 2.4rem/1.05 "Sedgwick Ave Display", "Marker Felt", '
+                                'cursive; }</style>\n'
+                                '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
+                                'family=Sedgwick+Ave+Display&display=swap">\n</head>', 1)
     (out / "emu" / "index.html").write_text(emu_page)
     (out / "favicon.svg").write_text(FAVICON)
 
