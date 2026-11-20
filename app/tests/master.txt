@@ -1,0 +1,233 @@
+# fm1-eight 0.2's master bus (phase 7) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/master.txt OUTDIR
+# fxI: dsp/fx.h FXP_* (12..18 COMP, 21 LIMIT on, 22..25 EQ: low mid high cut, 26..29 EQ 2: low freq, mid freq, mid Q,
+# high freq, 30..33 TAPE: drive warmth tone mix, 34..36 STEREO: width bass-mono balance, 37..39 LIMIT: gain ceiling
+# release, 40 the chain preset, 41 BYPASS); mpre / medit: the preset, a knob of it moved since; stageN: the chain's stage
+# N (0 EQ 1 COMP 2 TAPE 3 STEREO 4 LIMIT) at work; eqdbHZ: the EQ's curve at HZ, dB x 10; inpk / outpk: the bus's peak in
+# / out since the last look, dB x 10; lgr: the limiter's reduction, dB x 10; lufs: short-term loudness x 10; corr x 100
+wait 600
+master 4096
+# ---- the defaults: CLEAN, the compressor and the limiter at work, the rest flat
+expect mpre 0
+expect medit 0
+expect fx41 0
+expect stage0 0
+expect stage1 1
+expect stage2 0
+expect stage3 0
+expect stage4 1
+expect fx12 79
+expect fx16 16
+expect fx37 0
+expect fx38 3
+# ---- GLO: the mixer's four pages, then the master bus's CHAIN; SELECT runs on along the same row both ways
+tap GLO
+wait 30
+expect page 9
+tap GLO
+wait 30
+tap GLO
+wait 30
+tap GLO
+wait 30
+expect mixpage 3
+tap GLO
+wait 30
+expect page 12
+expect mstpage 0
+shot master_chain_idle.png
+turn SELECT -1
+wait 30
+expect page 9
+expect mixpage 3
+turn SELECT 1
+wait 30
+expect page 12
+expect mstpage 0
+# ---- EQ: LOW +6 dB (80 Hz): the curve up at the bottom only; HIGH -3 dB; LOW CUT 30 Hz under it
+turn SELECT 1
+wait 30
+expect mstpage 1
+spin K1 12
+wait 30
+expect fx22 36
+expect stage0 1
+expect medit 1
+expect eqdb25 >55
+expect eqdb80 >25
+expect eqdb80 <35
+expect eqdb2000 >-5
+expect eqdb2000 <5
+spin K3 -6
+wait 30
+expect fx24 18
+expect eqdb16000 <-25
+expect eqdb200 >-5
+spin K4 3
+wait 30
+expect fx25 3
+expect eqdb15 <0
+expect eqdb60 >40
+shot master_eq.png
+# EQ 2: LOW FREQ from 80 to 120 Hz: its half-way point (+3 dB) moves up with it
+turn SELECT 1
+wait 30
+expect mstpage 2
+spin K1 2
+wait 30
+expect fx26 4
+expect eqdb120 >25
+expect eqdb120 <35
+shot master_eq2.png
+# ---- TAPE: DRIVE +6 dB
+turn SELECT 3
+wait 30
+expect mstpage 5
+spin K1 64
+wait 30
+expect fx30 64
+expect stage2 1
+shot master_tape.png
+# ---- STEREO: WIDTH 140 %, BASS MONO 120 Hz
+turn SELECT 1
+wait 30
+expect mstpage 6
+spin K1 8
+wait 30
+expect fx34 28
+spin K2 4
+wait 30
+expect fx35 4
+expect stage3 1
+# ---- LIMIT: GAIN +12 dB, CEILING -1.0 dB; every track loud at once: nothing over -1 dBFS, the limiter at work
+turn SELECT 1
+wait 30
+expect mstpage 7
+spin K1 24
+wait 30
+expect fx37 24
+spin K2 7
+wait 30
+expect fx38 10
+tap PLAY
+midi 91 24 7F
+midi 92 3C 7F
+midi 92 40 7F
+midi 92 43 7F
+midi 93 3C 7F
+midi 93 3F 7F
+midi 93 43 7F
+midi 93 48 7F
+wait 500
+expect outpk <0
+wait 2000
+expect outpk <-9
+expect pkl <-9
+expect pkr <-9
+expect lgr >5
+expect clips 0
+shot master_limit.png
+# the STEREO page: the correlation, wider than the mix was
+turn SELECT -1
+wait 1000
+expect mstpage 6
+expect corr <98
+expect corr >0
+shot master_stereo.png
+# the CHAIN page: loudness measured, every stage lit
+press SEL
+wait 20
+tap GLO
+wait 20
+release SEL
+wait 3200
+expect page 12
+expect mstpage 0
+expect lufs >-200
+expect lufs <-30
+shot master_chain.png
+# ---- BYPASS (K4): the chain out, the limiter kept at 0 dB GAIN; back in
+spin K4 1
+wait 30
+expect fx41 1
+expect stage0 0
+expect stage1 0
+expect stage2 0
+expect stage3 0
+expect stage4 1
+expect gr 0
+wait 300
+shot master_bypass.png
+spin K4 -1
+wait 30
+expect fx41 0
+expect stage0 1
+tap PLAY
+midi 81 24 00
+midi 82 3C 00
+midi 82 40 00
+midi 82 43 00
+midi 83 3C 00
+midi 83 3F 00
+midi 83 43 00
+midi 83 48 00
+wait 1000
+# ---- presets (K1): PUNCH, all its knobs at once and nothing moved yet; LOUD; back to CLEAN: the defaults again
+spin K1 2
+wait 30
+expect mpre 2
+expect medit 0
+expect fx12 74
+expect fx13 4
+expect fx22 28
+expect fx35 3
+expect fx37 10
+expect fx38 3
+shot master_preset.png
+spin K1 3
+wait 30
+expect mpre 5
+expect fx37 20
+spin K1 -5
+wait 30
+expect mpre 0
+expect medit 0
+expect fx22 24
+expect fx30 0
+expect fx34 20
+expect fx37 0
+expect fx38 3
+expect stage0 0
+expect stage2 0
+expect stage3 0
+# a knob after it: CLEAN*
+spin K2 1
+wait 30
+expect fx37 1
+expect medit 1
+# ---- the FX button: the sends and the DJ filter only
+tap FX
+wait 30
+expect page 10
+expect fxpage 0
+tap FX
+wait 30
+tap FX
+wait 30
+tap FX
+wait 30
+expect fxpage 3
+tap FX
+wait 30
+expect page 0
+# ---- saved with the project
+tap SAVE
+wait 200
+expect dirty 0
+reboot
+wait 600
+expect fx37 1
+expect mpre 0
+expect medit 1
+expect fx22 24
+expect fx41 0

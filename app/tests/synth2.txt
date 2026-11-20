@@ -1,0 +1,313 @@
+# fm1-eight's synth update in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/synth2.txt OUTDIR
+# EDIT pages 5 OSC 2 (WAVE 2, FM, RING, DRIFT), 6 SHAPER (type, AMOUNT, BIAS, PLACE), 7 MACRO (1-4); ENV page 2 MOD ENV;
+# LFO pages 2 LFO 2 (SHAPE, RATE, FADE IN, RESTART), 3 MATRIX (SLOT, SOURCE, DEST, AMOUNT). sndN_ID: 26 WAVE 2 27 FM
+# 28 RING 29 DRIFT | 30 SHAPER 31 AMOUNT 32 BIAS 33 PLACE | 34-37 MACRO 1-4 | 38-41 MOD ENV ADSR | 42-45 LFO 2 |
+# 46 + 3 (slot - 1): the slot's SOURCE (0 OFF 3 MOD ENV 9 MACRO 1), +1 DEST (0 PITCH 3 CUTOFF), +2 AMOUNT.
+# probeN_W: the newest voice, 0 its pitch (1/16 st), 1 its cutoff, 2 MOD ENV x1000, 3 LFO 2 x1000, 100 + ID: that
+# parameter as the voice plays it. T2 starts as SQR BASS (MONO; key 7 plays C3: pitch 768)
+wait 600
+master 4096
+turn ALGO 1
+wait 30
+expect trk 2
+# ---- OSC 2: a sine OSC 2, FM 40 on it; the voice plays them
+tap EDIT
+wait 30
+expect page 1
+turn SELECT 5
+wait 30
+expect epage 5
+spin K1 4
+wait 30
+spin K2 40
+wait 30
+expect snd2_26 4
+expect snd2_27 40
+shot osc2.png
+key 7 down
+wait 200
+expect probe2_127 40
+expect probe2_126 4
+peakreset
+wait 200
+expect peak_db_min -30
+expect peak_db_max -0.5
+key 7 up
+wait 400
+spin K2 -40
+wait 30
+spin K1 -4
+wait 30
+expect snd2_27 0
+# ---- SHAPER: RECTIFY, AMOUNT 60, BIAS 20 (SELECT: the next page)
+turn SELECT 1
+wait 30
+expect epage 6
+spin K1 2
+wait 30
+spin K2 60
+wait 30
+spin K3 20
+wait 30
+expect snd2_30 2
+expect snd2_31 60
+expect snd2_32 20
+shot shaper.png
+key 7 down
+wait 200
+expect probe2_131 60
+peakreset
+wait 200
+expect peak_db_min -30
+expect peak_db_max -0.5
+key 7 up
+wait 400
+spin K2 -60
+wait 30
+expect snd2_31 0
+# ---- MACRO: MACRO 1 at 100
+turn SELECT 1
+wait 30
+expect epage 7
+spin K1 100
+wait 30
+expect snd2_34 100
+# ---- ENV: the third page, MOD ENV; DECAY 60 -> 40
+tap ENV
+wait 30
+expect page 6
+turn SELECT 2
+wait 30
+expect envpage 2
+spin K2 -20
+wait 30
+expect snd2_39 40
+shot modenv.png
+# ---- LFO: LFO 1, LFO 1 MORE, LFO 2 (SQUARE, RATE 40), MATRIX
+tap LFO
+wait 30
+expect page 7
+expect lfopage 0
+tap LFO
+wait 30
+expect lfopage 1
+tap LFO
+wait 30
+expect lfopage 2
+spin K1 4
+wait 30
+spin K2 -51
+wait 30
+expect snd2_42 4
+expect snd2_43 40
+shot lfo2.png
+tap LFO
+wait 30
+expect lfopage 3
+expect mslot 1
+# slot 1: MOD ENV > PITCH 32 (an octave at its peak): up as the note starts, the note's own pitch later
+spin K2 3
+wait 30
+spin K4 32
+wait 30
+expect snd2_46 3
+expect snd2_47 0
+expect snd2_48 32
+key 7 down
+wait 8
+expect probe2_0 >800
+expect probe2_2 >300
+wait 1200
+expect probe2_0 768
+key 7 up
+wait 400
+# slot 2: MACRO 1 > CUTOFF 40: MACRO 1 at 100 opens SQR BASS's filter 100 x 40 / 64 steps (16000)
+spin K1 1
+wait 30
+expect mslot 2
+spin K2 9
+wait 30
+spin K3 3
+wait 30
+spin K4 40
+wait 30
+expect snd2_49 9
+expect snd2_50 3
+expect snd2_51 40
+shot matrix.png
+key 7 down
+wait 1200
+expect probe2_1 >27000
+expect probe2_1 <30500
+spin K4 -40
+wait 30
+expect probe2_1 <14000
+spin K4 40
+wait 30
+key 7 up
+wait 400
+# slot 3: LFO 2 > CUTOFF 32: the SQUARE's two halves, 100 ms apart, move it 32 x 127 / 64 steps each way
+spin K1 1
+wait 30
+spin K2 2
+wait 30
+spin K3 3
+wait 30
+spin K4 32
+wait 30
+expect snd2_52 2
+key 7 down
+wait 400
+expect probe2_3 1000
+wait 1600
+expect probe2_3 -1000
+key 7 up
+wait 400
+spin K4 -32
+wait 30
+spin K2 -2
+wait 30
+expect snd2_52 0
+# ---- a step held: MATRIX's AMOUNT locks for it; its SOURCE does not
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 20
+key 0 up
+wait 20
+expect nsteps2 1
+key 0 down
+wait 30
+tap LFO
+wait 30
+expect page 7
+expect lfopage 3
+turn SELECT -2
+wait 30
+turn SELECT 2
+wait 30
+expect lfopage 3
+spin K1 -1
+wait 30
+expect mslot 2
+spin K4 10
+wait 30
+expect ilock2_1_51 50
+expect snd2_51 40
+spin K2 1
+wait 30
+expect ilock2_1_49 -1000
+expect snd2_49 9
+shot matrix_lock.png
+key 0 up
+wait 30
+# ---- motion: MACRO 1 turned while recording: locks on the steps it was turned on
+tap EDIT
+wait 30
+expect page 1
+expect epage 7
+shot macro.png
+expect inlk2 1
+tap PLAY
+wait 100
+tap REC
+wait 30
+expect rec 1
+spin K1 5
+wait 400
+spin K1 5
+wait 300
+tap REC
+wait 30
+tap PLAY
+wait 200
+expect rec 0
+expect inlk2 >2
+expect snd2_34 110
+# ---- the update's factory sounds: FM BELL (15), FOLD LEAD (18), WOBBLE (23); each sounds, none clips
+turn PRESET 15
+wait 30
+expect preset2 15
+expect type2 1
+expect snd2_27 15
+expect snd2_46 3
+expect snd2_47 10
+key 7 down
+wait 50
+peakreset
+wait 300
+expect peak_db_min -36
+expect peak_db_max -0.5
+key 7 up
+wait 1500
+turn PRESET 3
+wait 30
+expect preset2 18
+expect type2 0
+expect snd2_31 50
+key 7 down
+wait 300
+peakreset
+wait 300
+expect peak_db_min -30
+expect peak_db_max -0.5
+key 7 up
+wait 600
+turn PRESET 5
+wait 30
+expect preset2 23
+expect snd2_43 80
+key 7 down
+wait 300
+peakreset
+wait 300
+expect peak_db_min -36
+expect peak_db_max -0.5
+key 7 up
+wait 600
+# ---- a user sound keeps the update's parameters: WOBBLE with DRIFT 30, saved as USER 1; PLUCK, then USER 1 again
+tap EDIT
+wait 30
+expect page 5
+tap EDIT
+wait 30
+expect epage 0
+turn SELECT 5
+wait 30
+expect epage 5
+spin K4 30
+wait 30
+expect snd2_29 30
+press SAVE
+wait 20
+turn PRESET 1
+wait 30
+release SAVE
+wait 300
+expect usnd1 1
+expect preset2 24
+turn PRESET -15
+wait 30
+expect preset2 9
+expect snd2_29 0
+turn PRESET 15
+wait 30
+expect preset2 24
+expect snd2_29 30
+expect snd2_43 80
+# ---- saved (format 3, 0.4's) and after a power cycle: all of it kept
+tap SAVE
+wait 400
+expect dirty 0
+expect projfmt 3
+reboot
+wait 600
+expect preset2 24
+expect snd2_29 30
+expect snd2_43 80
+expect snd2_46 2
+expect usnd1 1
+expect ilock2_1_51 50
+expect inlk2 >2

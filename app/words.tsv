@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MPL-2.0
+# fm1-eight's words for a screen reader (fm1-reader): the text on the screen <TAB> what to say.
+# url: https://example.invalid/fm1-eight/words/
+EIGHT	eight
+BD	bass drum
+SD	snare drum
+LT	low tom
+MT	mid tom
+HT	high tom
+RS	rim shot
+CP	clap
+CH	closed hat
+OH	open hat
+CR	crash
+RD	ride
+CY	cymbal
+CB	cowbell
+T2	track 2
+T3	track 3
+T4	track 4
+DR	drums

@@ -1,0 +1,152 @@
+# fm1-eight's scene grid (HOME) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/scenes.txt OUTDIR
+# clipN: the pattern track N plays (1-based, 0 stopped); qclipN: one waiting (0 none, -1 to stop); launch: 0 BAR 1 BEAT
+# 2 NOW; tmute: a bit a track. Keys: black 1, 3, 5, 8 are the track keys (DR T2 T3 T4); white 0, 2, 4 patterns 1-3
+wait 600
+master 4096
+expect clip1 1
+expect clip2 1
+expect clip3 1
+expect clip4 1
+expect launch 0
+# ---- T2: a note in pattern 1 (step 1), another in pattern 2 (step 3), step-recorded; T2 then on pattern 2's part
+turn ALGO 1
+wait 30
+expect trk 2
+tap REC
+wait 30
+key 7 down
+wait 30
+key 7 up
+wait 30
+tap REC
+wait 30
+expect note2_1 >0
+tap HOME
+wait 30
+expect page 3
+# stopped: a track key held + a white key: T2's clip is pattern 2 at once; the key let go mutes nothing
+key 3 down
+wait 30
+key 2 down
+wait 30
+key 2 up
+wait 30
+key 3 up
+wait 30
+expect clip2 2
+expect clip1 1
+expect tmute 0
+expect note2_1 0
+# that's pattern 2's T2 part being edited now: a note on its step 3
+tap SEQ
+wait 30
+key 4 down
+wait 30
+key 4 up
+wait 30
+expect note2_3 >0
+expect pat 1
+# a tap of a track key still mutes
+tap HOME
+wait 30
+key 3 down
+wait 30
+key 3 up
+wait 30
+expect tmute 2
+key 3 down
+wait 30
+key 3 up
+wait 30
+expect tmute 0
+# ---- playing: T3 to pattern 3 at the bar; T4 stopped at the bar
+tap PLAY
+wait 200
+key 5 down
+wait 30
+key 4 down
+wait 30
+key 4 up
+wait 30
+key 5 up
+wait 30
+expect qclip3 3
+expect clip3 1
+key 8 down
+wait 30
+tap OCT-
+wait 30
+key 8 up
+wait 30
+expect qclip4 -1
+expect clip4 1
+expect tmute 0
+shot scenes_waiting.png
+wait 2000
+expect clip3 3
+expect qclip3 0
+expect clip4 0
+expect qclip4 0
+expect clip2 2
+shot scenes_playing.png
+# ---- a scene: white key 1 (pattern 1): every track on it at the bar, T4 too
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect clip3 3
+wait 2100
+expect clip1 1
+expect clip2 1
+expect clip3 1
+expect clip4 1
+# ---- LAUNCH NOW (SONG page, K3): a clip starts at once
+tap HOME
+wait 30
+expect page 11
+spin K3 2
+wait 30
+expect launch 2
+tap HOME
+wait 30
+expect page 13
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 3
+wait 300
+key 3 down
+wait 30
+key 2 down
+wait 30
+key 2 up
+wait 30
+key 3 up
+wait 30
+expect clip2 2
+expect qclip2 0
+# and a scene at once
+key 4 down
+wait 30
+key 4 up
+wait 30
+expect clip1 3
+expect clip2 3
+expect pat 3
+tap PLAY
+wait 200
+# ---- stopped, a scene sets every track; undo follows the clip edited
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect clip2 1
+expect clip3 1
+tap HOME
+wait 30
+expect page 11
+spin K3 -2
+wait 30
+expect launch 0

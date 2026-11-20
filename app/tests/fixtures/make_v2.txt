@@ -1,0 +1,48 @@
+# Made once with 0.3's build (project format 2), before the 303 generator (format 3), to keep a project as 0.3 saved
+# it for app/tests/convert3.txt: proj_03.img. Run from fm1-eight: app/build/host/eight_host
+# app/tests/fixtures/make_v2.txt OUTDIR (with the format-2 build only; kept for the record)
+wait 600
+expect projsize 31544
+# ---- T2: two notes (steps 1 and 3: keys are numbered across white and black), its sound's FM at 30 (an update
+# parameter), the part 12 steps long
+turn ALGO 1
+wait 30
+expect trk 2
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 20
+key 0 up
+wait 20
+key 4 down
+wait 20
+key 4 up
+wait 20
+expect nsteps2 2
+spin K1 -4
+wait 30
+tap EDIT
+wait 30
+turn SELECT 5
+wait 30
+expect epage 5
+spin K2 30
+wait 30
+expect snd2_27 30
+# ---- T3: one note on step 2
+turn ALGO 1
+wait 30
+expect trk 3
+tap SEQ
+wait 30
+key 2 down
+wait 20
+key 2 up
+wait 20
+expect nsteps3 1
+tap SAVE
+wait 400
+expect dirty 0
+expect projfmt 2
+flash_dump app/tests/fixtures/proj_03.img

@@ -1,0 +1,191 @@
+# fm1-eight 0.1's presets and song (phase 6) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/release.txt OUTDIR
+# presetN: 0..23 the factory sounds (15..23 the synth update's), 24.. USER 1..16; dpreset: 0 909, 1 808, 2.. USER KIT 1..8; usndS / ukitS: slot S used
+# songeS_K: entry S, K 0 its pattern (1-based), 1 its bars; spos: the entry playing (0: none); scur: the SONG page's cursor
+wait 600
+# ---- a user sound: T2's SQR BASS with its CUTOFF up 20, saved as USER 1 (hold SAVE, turn PRESETS, let go)
+turn ALGO 1
+wait 30
+expect trk 2
+expect preset2 0
+tap EDIT
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+spin K1 20
+wait 30
+expect snd2_8 70
+expect edited2 1
+press SAVE
+wait 20
+turn PRESET 1
+wait 30
+shot save_preset.png
+release SAVE
+wait 300
+expect usnd1 1
+expect usnd2 0
+expect preset2 24
+expect edited2 0
+# PRESETS: back to the factory's last (WOBBLE, MONO), WIND (POLY) ten before it, then USER 1 again (MONO, its
+# cutoff); nothing after it
+turn PRESET -1
+wait 30
+expect preset2 23
+expect type2 0
+turn PRESET -9
+wait 30
+expect preset2 14
+expect type2 1
+turn PRESET 10
+wait 30
+expect preset2 24
+expect type2 0
+expect snd2_8 70
+turn PRESET 1
+wait 30
+expect preset2 24
+shot user_preset.png
+# ---- a user kit: the 808 with the snare's TONE at 84, saved as KIT 1
+press SEL
+wait 20
+key 1 down
+wait 20
+key 1 up
+wait 20
+release SEL
+wait 30
+expect trk 1
+turn PRESET 1
+wait 30
+expect dpreset 1
+expect kit 1
+key 3 down
+wait 20
+key 3 up
+wait 30
+turn SELECT -4
+wait 30
+expect page 1
+expect epage 0
+spin K2 20
+wait 30
+expect pot1_1 84
+press SAVE
+wait 20
+turn PRESET 1
+wait 30
+release SAVE
+wait 300
+expect ukit1 1
+expect dpreset 2
+# the tone changed after, then the 909, then the user kit: the 808 and its saved tone again
+spin K2 -40
+wait 30
+expect pot1_1 44
+turn PRESET -2
+wait 30
+expect dpreset 0
+expect kit 0
+turn PRESET 2
+wait 30
+expect dpreset 2
+expect kit 1
+expect pot1_1 84
+# ---- the song: HOME, then HOME again; the white keys add entries: P1, P2, P1
+tap HOME
+wait 30
+expect page 3
+tap HOME
+wait 30
+expect page 11
+expect songn 0
+key 0 down
+wait 20
+key 0 up
+wait 20
+key 2 down
+wait 20
+key 2 up
+wait 20
+key 0 down
+wait 20
+key 0 up
+wait 30
+expect songn 3
+expect songe1_0 1
+expect songe2_0 2
+expect songe3_0 1
+expect scur 4
+# the second entry 2 bars (SELECT to it, K2); SONG on (K4)
+turn SELECT -2
+wait 30
+expect scur 2
+spin K2 1
+wait 30
+expect songe2_1 2
+spin K4 1
+wait 30
+expect songon 1
+# OCT+ copies the entry, OCT- deletes it
+tap OCT+
+wait 30
+expect songn 4
+expect songe3_0 2
+expect scur 3
+tap OCT-
+wait 30
+expect songn 3
+expect songe3_0 1
+shot song.png
+# PLAY from the first entry: P1 a bar (2 s at 120), P2 two bars, P1 a bar, then round again
+turn SELECT -5
+wait 30
+expect scur 1
+tap PLAY
+wait 1000
+expect spos 1
+expect pat 1
+wait 1200
+expect spos 2
+expect pat 2
+shot song_playing.png
+wait 2000
+expect spos 2
+wait 2000
+expect spos 3
+expect pat 1
+wait 2000
+expect spos 1
+tap PLAY
+wait 200
+expect spos 0
+expect playing 0
+# ---- SONG off: PLAY plays the pattern as before
+spin K4 -1
+wait 30
+expect songon 0
+tap PLAY
+wait 3000
+expect spos 0
+expect pat 1
+tap PLAY
+wait 200
+spin K4 1
+wait 30
+# ---- saved: the song with the project (SAVE), the user presets in their own store (already)
+tap SAVE
+wait 200
+expect dirty 0
+reboot
+wait 600
+expect songn 3
+expect songon 1
+expect songe2_1 2
+expect usnd1 1
+expect ukit1 1
+expect preset2 24
+expect dpreset 2
+expect kit 1
+expect pot1_1 84

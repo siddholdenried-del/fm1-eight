@@ -1,0 +1,152 @@
+# fm1-eight: a demo groove, built by step recording as on the FM-1, then 8 s of it to demo.wav
+#   app/build/host/eight_host app/tests/demo.txt OUTDIR
+# T2 SQR BASS (an octave down), T3 PLUCK stabs, T4 SOFT PAD chords; the default beat on the drums
+wait 600
+# T2: REC while stopped, on the KEYS page: a note a step; SELECT skips a step (a rest)
+turn ALGO 1
+wait 30
+tap REC
+wait 30
+key 7 down
+wait 20
+key 7 up
+wait 20
+turn SELECT 1
+wait 20
+key 7 down
+wait 20
+key 7 up
+wait 20
+key 19 down
+wait 20
+key 19 up
+wait 20
+turn SELECT 1
+wait 20
+key 7 down
+wait 20
+key 7 up
+wait 20
+key 10 down
+wait 20
+key 10 up
+wait 20
+turn SELECT 1
+wait 20
+key 7 down
+wait 20
+key 7 up
+wait 20
+turn SELECT 1
+wait 20
+key 14 down
+wait 20
+key 14 up
+wait 20
+turn SELECT 1
+wait 20
+key 5 down
+wait 20
+key 5 up
+wait 20
+turn SELECT 1
+wait 20
+key 2 down
+wait 20
+key 2 up
+wait 20
+expect nsteps2 9
+# T3: C minor stabs on steps 3, 7 and 11, B flat on 15
+turn ALGO 1
+wait 30
+turn SELECT 2
+wait 20
+key 7 down
+key 10 down
+key 14 down
+wait 30
+key 7 up
+key 10 up
+key 14 up
+wait 20
+turn SELECT 3
+wait 20
+key 7 down
+key 10 down
+key 14 down
+wait 30
+key 7 up
+key 10 up
+key 14 up
+wait 20
+turn SELECT 3
+wait 20
+key 7 down
+key 10 down
+key 14 down
+wait 30
+key 7 up
+key 10 up
+key 14 up
+wait 20
+turn SELECT 3
+wait 20
+key 5 down
+key 9 down
+key 12 down
+wait 30
+key 5 up
+key 9 up
+key 12 up
+wait 20
+expect nsteps3 4
+# T4: C minor on step 1 and A flat on step 9, each held for 8 steps (SEQ, hold the step, K3 GATE)
+turn ALGO 1
+wait 30
+key 7 down
+key 10 down
+key 14 down
+wait 30
+key 7 up
+key 10 up
+key 14 up
+wait 20
+turn SELECT 7
+wait 20
+key 3 down
+key 7 down
+key 10 down
+wait 30
+key 3 up
+key 7 up
+key 10 up
+wait 20
+expect nsteps4 2
+tap REC
+wait 30
+tap SEQ
+wait 30
+key 0 down
+wait 30
+spin K3 58
+wait 30
+key 0 up
+wait 30
+key 14 down
+wait 30
+spin K3 58
+wait 30
+key 14 up
+wait 30
+expect gate4_1 64
+expect gate4_9 64
+shot demo_pad.png
+tap SEQ
+wait 30
+# play 4 bars
+tap PLAY
+wav demo.wav
+wait 8000
+wavstop
+tap PLAY
+wait 2000

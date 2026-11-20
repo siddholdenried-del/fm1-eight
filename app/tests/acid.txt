@@ -1,0 +1,415 @@
+# fm1-eight's 303 generator (0.4): the ACID pages, SEQ after STEPS on T2..T4. tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/acid.txt OUTDIR   (from fm1-eight)
+# page 14: ACID. genpage 0: DENSITY WHOLE SLIDE ACCENT; 1 NOTES: ROOT SCALE NOTES OCTAVE; 2 LINE: SEED LENGTH RATE
+# SWING. genN_K: track N's part's generator, K 0 seed (0: never) 1 mutates 2 root 3 scale 4 notes 5 density 6 slide
+# 7 accent 8 octave 9 whole. naccN / nslideN / nwholeN / noffscaleN: the part's accents, slides, WHOLE notes, notes off
+# its scale; iaccN_S / islideN_S: a step's marks; linemarkN / linesameN: its steps remembered / as remembered; ilenN
+# its length; probeN_8: the newest voice accented; voicesN: its voices sounding
+wait 600
+master 4096
+turn ALGO 1
+wait 30
+expect trk 2
+turn PRESET 1
+wait 30
+expect preset2 1
+# ---- ACID's sound: LEGATO SLIDE, GLIDE 25; CUTOFF and the matrix as 0.3's
+expect snd2_15 2
+expect snd2_17 25
+expect snd2_8 42
+expect snd2_46 0
+# ---- SEQ: STEPS, ACID (SELECT: NOTES, LINE and back), then the keys
+tap SEQ
+wait 30
+expect page 0
+tap SEQ
+wait 30
+expect page 14
+expect genpage 0
+turn SELECT 1
+wait 30
+expect genpage 1
+turn SELECT 1
+wait 30
+expect genpage 2
+turn SELECT 1
+wait 30
+expect genpage 2
+turn SELECT -2
+wait 30
+expect genpage 0
+tap SEQ
+wait 30
+expect page 5
+tap SEQ
+wait 30
+expect page 0
+tap SEQ
+wait 30
+expect page 14
+expect genpage 0
+# ---- nothing made yet: the part empty, its generator unset
+expect gen2_0 0
+expect nsteps2 0
+expect undo 0
+# ---- OCT+: a line (the defaults: seed 1, the next is 2; C2 MINOR, 4 notes, 75 % of the steps, 20 % WHOLE)
+tap OCT+
+wait 30
+expect gen2_0 2
+expect gen2_1 0
+expect gen2_2 36
+expect gen2_3 0
+expect gen2_4 4
+expect gen2_5 75
+expect gen2_9 20
+expect nsteps2 >7
+expect nsteps2 <16
+expect note2_1_0 >0
+expect noffscale2 0
+expect nslide2 >0
+expect nacc2 >0
+expect chance2_1 100
+expect undo 1
+expect dirty 1
+# ---- DENSITY: all, none, and back to the same line
+expect linemark2 0
+spin K1 25
+wait 30
+expect gen2_5 100
+expect nsteps2 16
+spin K1 -100
+wait 30
+expect gen2_5 0
+expect nsteps2 0
+spin K1 75
+wait 30
+expect gen2_5 75
+expect linesame2 1
+expect undo 2
+# ---- every step on. SLIDE 0, WHOLE 100: every note WHOLE (to just before the next: 7/8); WHOLE 0: every one HALF
+spin K1 25
+wait 30
+spin K3 -25
+wait 30
+expect gen2_6 0
+expect nslide2 0
+spin K2 80
+wait 30
+expect gen2_9 100
+expect nwhole2 16
+expect gate2_1 7
+expect gate2_16 7
+spin K2 -100
+wait 30
+expect gen2_9 0
+expect nwhole2 0
+expect gate2_1 4
+# ---- SLIDE 100: every step slides into the next (marked, a gate past the next step's start); then none
+spin K3 100
+wait 30
+expect gen2_6 100
+expect nslide2 16
+expect gate2_1 10
+expect islide2_1 1
+expect islide2_9 1
+spin K3 -100
+wait 30
+expect nslide2 0
+expect islide2_1 0
+expect gate2_1 4
+# ---- ACCENT 100: every step accented (marked, velocity 127); then none (90)
+spin K4 70
+wait 30
+expect gen2_7 100
+expect nacc2 16
+expect vel2_1 127
+expect iacc2_1 1
+spin K4 -100
+wait 30
+expect nacc2 0
+expect vel2_1 90
+expect iacc2_1 0
+# ---- fewer notes, all WHOLE: each held over the rests after it (more than a step: 15/8, 23/8 ...)
+spin K1 -60
+wait 30
+expect gen2_5 40
+spin K2 100
+wait 30
+expect nwhole2 >2
+expect gate2_1 >6
+expect noffscale2 0
+spin K2 -100
+wait 30
+spin K1 60
+wait 30
+expect gen2_5 100
+# ---- NOTES: OCTAVE 0 and NOTES 1, the root on every step
+turn SELECT 1
+wait 30
+expect genpage 1
+spin K4 -20
+wait 30
+expect gen2_8 0
+spin K3 -3
+wait 30
+expect gen2_4 1
+expect note2_1_0 36
+expect note2_7_0 36
+expect note2_16_0 36
+# ---- ROOT up a fifth: G2 on every step
+spin K1 7
+wait 30
+expect gen2_2 43
+expect note2_1_0 43
+expect note2_9_0 43
+# ---- every scale, all its notes, OCTAVE 40: never off the scale
+spin K3 6
+wait 30
+expect gen2_4 7
+spin K4 40
+wait 30
+expect gen2_8 40
+spin K2 1
+wait 30
+expect gen2_3 1
+expect noffscale2 0
+spin K2 1
+wait 30
+expect gen2_3 2
+expect noffscale2 0
+spin K2 1
+wait 30
+expect gen2_3 3
+expect gen2_4 7
+expect noffscale2 0
+spin K2 1
+wait 30
+expect noffscale2 0
+spin K2 1
+wait 30
+expect noffscale2 0
+spin K2 1
+wait 30
+expect noffscale2 0
+spin K2 1
+wait 30
+expect gen2_3 7
+expect noffscale2 0
+spin K2 5
+wait 30
+expect gen2_3 7
+spin K2 -7
+wait 30
+expect gen2_3 0
+# ---- LINE: the SEED knob back to seed 2's line; a new seed, a new line; back again, the same
+turn SELECT 1
+wait 30
+expect genpage 2
+spin K1 -1
+wait 30
+expect gen2_0 1
+spin K1 1
+wait 30
+expect gen2_0 2
+expect linemark2 0
+tap OCT+
+wait 30
+expect gen2_0 3
+expect linesame2 0
+spin K1 -1
+wait 30
+expect gen2_0 2
+expect linesame2 1
+# ---- OCT-: MUTATE changes a few steps; undo (EDIT + OCT-) takes the steps and the generator back; redo again
+tap OCT-
+wait 30
+expect gen2_1 >0
+expect linesame2 0
+press EDIT
+tap OCT-
+release EDIT
+wait 30
+expect gen2_1 0
+expect linesame2 1
+press EDIT
+tap OCT+
+release EDIT
+wait 30
+expect gen2_1 >0
+expect linesame2 0
+# ---- LENGTH (LINE's K2, as on STEPS): an 8-step part, and a line made for it
+spin K2 -8
+wait 30
+expect ilen2 8
+expect note2_8_0 >0
+expect linemark2 0
+# ---- on STEPS, a held step + OCT+: HALF, WHOLE, SLIDE, round; its VELOCITY past 127: ACCENT
+tap SEQ
+wait 30
+expect page 5
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 30
+expect gate2_1 4
+tap OCT+
+wait 30
+expect gate2_1 >6
+expect islide2_1 0
+tap OCT+
+wait 30
+expect gate2_1 10
+expect islide2_1 1
+tap OCT+
+wait 30
+expect gate2_1 4
+expect islide2_1 0
+spin K2 40
+wait 30
+expect vel2_1 127
+expect iacc2_1 1
+spin K2 -1
+wait 30
+expect vel2_1 127
+expect iacc2_1 0
+key 0 up
+wait 30
+expect note2_1_0 >0
+tap SEQ
+wait 30
+expect page 14
+# ---- another track keeps the page; T3's part is its own
+turn ALGO 1
+wait 30
+expect trk 3
+expect page 14
+expect gen3_0 0
+turn ALGO -1
+wait 30
+expect trk 2
+# ---- the drums: SEQ is their steps only
+turn ALGO -1
+wait 30
+expect trk 1
+expect page 0
+tap SEQ
+wait 30
+expect page 0
+turn ALGO 1
+wait 30
+expect trk 2
+# ---- the marks on any sound: PLUCK (POLY, LEGATO off). Every step slid: one voice glides from note to note;
+# none slid: a voice each note, the last ones still ringing
+turn PRESET 8
+wait 30
+expect preset2 9
+expect type2 1
+expect snd2_15 0
+tap SEQ
+wait 30
+tap SEQ
+wait 30
+expect page 14
+turn SELECT -2
+wait 30
+expect genpage 0
+spin K3 100
+wait 30
+expect nslide2 8
+tap PLAY
+wait 400
+expect voices2 1
+wait 170
+expect voices2 1
+wait 130
+expect voices2 1
+tap PLAY
+wait 300
+spin K3 -100
+wait 30
+expect nslide2 0
+tap PLAY
+wait 400
+expect voices2 >1
+tap PLAY
+wait 300
+# ---- accents: every note accented, then none
+spin K4 100
+wait 30
+tap PLAY
+wait 300
+expect probe2_8 1
+tap PLAY
+wait 300
+spin K4 -100
+wait 30
+tap PLAY
+wait 300
+expect probe2_8 0
+tap PLAY
+wait 300
+# ---- a pattern copied (SAVE held + a white key; keys are numbered across white and black: 2 is pattern 2's)
+# takes the generator with it
+expect linemark2 0
+press SAVE
+wait 20
+key 2 down
+wait 20
+key 2 up
+wait 20
+release SAVE
+wait 30
+tap HOME
+wait 30
+key 2 down
+wait 20
+key 2 up
+wait 30
+expect pat 2
+expect gen2_0 >0
+expect linesame2 1
+# ---- an empty part: its first turn starts from the track's last settings (G2, SLIDE 0 + 10)
+key 4 down
+wait 20
+key 4 up
+wait 30
+expect pat 3
+tap HOME
+wait 30
+tap HOME
+wait 30
+tap HOME
+wait 30
+tap SEQ
+wait 30
+tap SEQ
+wait 30
+expect page 14
+expect gen2_0 0
+expect nsteps2 0
+spin K3 10
+wait 30
+expect gen2_0 >0
+expect gen2_6 10
+expect gen2_2 43
+expect nsteps2 >0
+# ---- playing: the line plays, and is made again while it does
+tap PLAY
+wait 500
+spin K1 5
+wait 300
+expect playing 1
+tap PLAY
+wait 100
+# ---- saved: format 3; after a power cycle the generator and its line (marks and all) are there
+tap SAVE
+wait 400
+expect dirty 0
+expect projfmt 3
+expect linemark2 0
+reboot
+wait 600
+expect gen2_6 10
+expect gen2_2 43
+expect linesame2 1

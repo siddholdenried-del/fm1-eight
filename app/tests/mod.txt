@@ -1,0 +1,312 @@
+# fm1-eight's modulation (phase 4) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/mod.txt OUTDIR
+# lsetN_K: 0 shape 1 rate 2 div 3 sync 4 retrig 5 fade 6 phase 7 dest 8 depth 9 pad; arpsetN_K: 0 mode 1 rate 2 oct 3 gate 4 latch
+# lfoN: the LFO now x 1000; probeN_0: the newest voice's pitch (1/16 semitone, the LFO in), probeN_1: its cutoff (<< 8)
+wait 600
+# ---- T2's LFO on PITCH, restarted by each note a quarter of the way in (a sine's top)
+turn ALGO 1
+wait 30
+expect trk 2
+tap LFO
+wait 30
+expect page 7
+expect lfopage 0
+expect lset2_0 0
+expect lset2_7 0
+expect lset2_8 0
+spin K4 1
+wait 30
+expect lset2_7 1
+spin K3 20
+wait 30
+expect lset2_8 20
+shot lfo.png
+tap LFO
+wait 30
+expect lfopage 1
+spin K2 1
+wait 30
+expect lset2_4 1
+spin K4 32
+wait 30
+expect lset2_6 32
+shot lfo2.png
+key 7 down
+wait 20
+expect lfo2 >950
+expect probe2_0 >820
+wait 400
+expect lfo2 <-900
+expect probe2_0 <720
+key 7 up
+wait 400
+# ---- T3's LFO on CUTOFF, synced (1 BAR) and restarted at the bar: a quarter bar in it is at its top, three quarters at its bottom
+turn ALGO 1
+wait 30
+expect trk 3
+expect page 7
+expect lfopage 1
+spin K1 1
+wait 30
+expect lset3_3 1
+spin K2 2
+wait 30
+expect lset3_4 2
+turn SELECT -1
+wait 30
+expect lfopage 0
+spin K2 -3
+wait 30
+expect lset3_2 2
+spin K3 30
+wait 30
+expect lset3_8 30
+key 7 down
+tap PLAY
+wait 420
+expect lfo3 >980
+expect probe3_1 >12000
+wait 1000
+expect lfo3 <-980
+expect probe3_1 <4000
+tap PLAY
+wait 30
+key 7 up
+wait 400
+# ---- the drums' LFO: the 808 snare's TONE (knob 1, 64), SQUARE, 1 BAR, from the bar: +30 on the first snare, -30 on the second
+press SEL
+wait 20
+key 1 down
+wait 20
+key 1 up
+wait 20
+release SEL
+wait 30
+expect trk 1
+expect page 7
+turn PRESET 1
+wait 30
+expect kit 1
+key 3 down
+wait 20
+key 3 up
+wait 30
+expect pad 1
+spin K4 2
+wait 30
+expect lset1_7 1
+expect lset1_9 1
+spin K1 4
+wait 30
+expect lset1_0 4
+spin K3 30
+wait 30
+tap LFO
+wait 30
+expect lfopage 1
+spin K1 1
+wait 30
+spin K2 1
+wait 30
+expect lset1_4 2
+turn SELECT -1
+wait 30
+spin K2 -3
+wait 30
+expect lset1_2 2
+shot lfo_drums.png
+tap PLAY
+wait 600
+expect pot1_1 94
+wait 1000
+expect pot1_1 34
+tap PLAY
+wait 100
+expect pot1_1 64
+# a pad played by hand moves too, but SAVE keeps the knob's own value
+key 3 down
+wait 20
+key 3 up
+wait 30
+tap SAVE
+wait 200
+reboot
+wait 600
+expect pot1_1 64
+expect lset1_7 1
+expect lset1_8 30
+# ---- T3's arpeggiator: UP over C4 E4 G4, a note every sixteenth (125 ms at 120)
+press SEL
+wait 20
+key 5 down
+wait 20
+key 5 up
+wait 20
+release SEL
+wait 30
+expect trk 3
+tap ARP
+wait 30
+expect page 8
+spin K1 1
+wait 30
+expect arpset3_0 1
+expect arpset3_1 3
+shot arp.png
+key 7 down
+key 11 down
+key 14 down
+wait 60
+expect arpn3 3
+expect probe3_0 960
+wait 125
+expect probe3_0 1024
+wait 125
+expect probe3_0 1072
+wait 125
+expect probe3_0 960
+key 7 up
+key 11 up
+key 14 up
+wait 30
+expect arpn3 0
+wait 300
+# DOWN over two octaves: C4 E4 starts at E5
+spin K1 1
+wait 30
+expect arpset3_0 2
+spin K3 1
+wait 30
+expect arpset3_2 2
+key 7 down
+key 11 down
+wait 60
+expect probe3_0 1216
+wait 125
+expect probe3_0 1152
+key 7 up
+key 11 up
+wait 300
+# LATCH: the notes stay after the keys; a new key starts a new set
+tap ARP
+wait 30
+expect arppage 1
+spin K1 1
+wait 30
+expect arpset3_4 1
+key 7 down
+wait 40
+key 7 up
+wait 200
+expect arpn3 1
+key 14 down
+wait 40
+key 14 up
+wait 40
+expect arpn3 1
+expect probe3_0 >1070
+spin K1 -1
+wait 30
+expect arpn3 0
+# OFF, then UP at 1/32 over a chord on step 1 (step-recorded): its notes for its gate (6/8 of a step)
+turn SELECT -1
+wait 30
+spin K1 -5
+wait 30
+expect arpset3_0 0
+spin K1 1
+wait 30
+spin K2 2
+wait 30
+spin K3 -1
+wait 30
+expect arpset3_1 5
+tap REC
+wait 30
+tap ARP
+wait 30
+tap ARP
+wait 30
+expect page 5
+key 7 down
+key 11 down
+key 14 down
+wait 30
+key 7 up
+key 11 up
+key 14 up
+wait 30
+tap REC
+wait 30
+expect nsteps3 1
+expect arpn3 0
+tap PLAY
+expect arpn3 3
+wait 100
+expect arpn3 0
+tap PLAY
+wait 300
+# ---- locks on T2's steps: hold step 1, EDIT, FILTER, K1: its CUTOFF for that step only
+press SEL
+wait 20
+key 3 down
+wait 20
+key 3 up
+wait 20
+release SEL
+wait 30
+expect trk 2
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 20
+key 0 up
+wait 20
+key 7 down
+wait 20
+key 7 up
+wait 20
+expect nsteps2 2
+key 0 down
+wait 30
+expect held 1
+tap EDIT
+wait 30
+expect page 1
+expect held 1
+turn SELECT -4
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+expect chance2_1 100
+spin K1 30
+wait 30
+expect ilock2_1_8 80
+expect snd2_8 50
+shot lock.png
+key 0 up
+wait 30
+expect held 0
+expect nsteps2 2
+expect inlk2 1
+tap SEQ
+wait 30
+shot lock_roll.png
+tap PLAY
+wait 100
+expect syn2_8 80
+wait 450
+expect syn2_8 50
+tap PLAY
+wait 200
+# held + OCT-: the step's locks go
+key 0 down
+wait 30
+tap OCT-
+wait 30
+key 0 up
+wait 30
+expect inlk2 0
+expect nsteps2 2

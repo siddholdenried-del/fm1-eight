@@ -1,0 +1,283 @@
+# fm1-eight's synth (phase 2) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/synth.txt OUTDIR
+# the sound's parameters (sndN_ID): 0 WAVE 1 DETUNE 2 MIX 3 INTERVAL | 4 SUB 5 NOISE 6 PWM 7 DRIVE | 8 CUTOFF 9 RESO
+# 10 ENV AMT 11 FILTER | 12 KEYTRACK 13 VELOCITY 14 SPREAD 15 LEGATO | 16 VOICES 17 GLIDE | 18-21 AMP ADSR | 22-25 FILTER ADSR
+# T2 starts as SQR BASS (MONO, an octave down: key 7 is C3, 48, pitch 768), T3 PLUCK, T4 SOFT PAD (POLY)
+wait 600
+# MASTER full: the master bus's output as it is (0.2: the volume comes after the chain)
+master 4096
+expect pool 16
+expect preset2 0
+expect preset3 9
+expect preset4 7
+expect type2 0
+expect type3 1
+turn ALGO 1
+wait 30
+expect trk 2
+expect snd2_0 1
+expect snd2_8 50
+# PRESETS: ACID (MONO), then SOFT PAD (POLY: the TYPE follows), back to SQR BASS
+turn PRESET 1
+wait 30
+expect preset2 1
+expect type2 0
+expect snd2_9 108
+turn PRESET 6
+wait 30
+expect preset2 7
+expect type2 1
+turn PRESET -7
+wait 30
+expect preset2 0
+expect type2 0
+expect edited2 0
+# MONO: a second key takes over, letting it go goes back to the first, tied (one voice throughout)
+key 7 down
+wait 40
+expect pitch2 768
+expect voices2 1
+key 11 down
+wait 40
+expect pitch2 832
+expect voices2 1
+key 11 up
+wait 40
+expect pitch2 768
+expect voices2 1
+key 7 up
+wait 400
+expect voices2 0
+# EDIT, page 1 (VOICE): K4 GLIDE to 60; the pitch slides from C3 to E3
+tap EDIT
+wait 30
+expect page 1
+expect epage 0
+spin K4 60
+wait 30
+expect snd2_17 60
+expect edited2 1
+key 7 down
+wait 60
+key 11 down
+wait 40
+expect pitch2 >768
+expect pitch2 <832
+wait 1200
+expect pitch2 832
+key 11 up
+key 7 up
+wait 400
+# K3 on a MONO track is UNISON: 4 at most
+spin K3 6
+wait 30
+expect snd2_16 4
+key 7 down
+wait 40
+expect voices2 4
+wav unison.wav
+wait 400
+wavstop
+expect peak_db_min -24
+shot voice.png
+key 7 up
+wait 400
+expect voices2 0
+spin K3 -3
+wait 30
+expect snd2_16 1
+spin K4 -60
+wait 30
+expect snd2_17 0
+# EDIT taps through OSC, TONE, FILTER, MORE, then back to the keys
+tap EDIT
+wait 30
+expect epage 1
+shot osc.png
+tap EDIT
+wait 30
+expect epage 2
+tap EDIT
+wait 30
+expect epage 3
+shot filter.png
+tap EDIT
+wait 30
+expect epage 4
+# the synth update's pages after MORE: OSC 2, SHAPER, MACRO; then the keys
+tap EDIT
+wait 30
+expect epage 5
+tap EDIT
+wait 30
+expect epage 6
+tap EDIT
+wait 30
+expect epage 7
+tap EDIT
+wait 30
+expect page 5
+expect epage 0
+# SELECT picks the page: FILTER; CUTOFF from 50 to 0 makes the held note much quieter once its envelope closes
+tap EDIT
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+key 7 down
+wait 200
+peakreset
+wait 300
+expect peak_db_min -26
+key 7 up
+wait 400
+spin K1 -60
+wait 30
+expect snd2_8 0
+key 7 down
+wait 200
+peakreset
+wait 300
+expect peak_db_max -40
+key 7 up
+wait 400
+spin K1 50
+wait 30
+expect snd2_8 50
+# ENV: the amp's ADSR, then the filter's, MOD ENV, then the keys; a 5 s attack is quiet 150 ms in
+tap ENV
+wait 30
+expect page 6
+expect envpage 0
+shot env.png
+spin K1 127
+wait 30
+expect snd2_18 127
+key 7 down
+wait 150
+peakreset
+wait 50
+expect peak_db_max -30
+key 7 up
+wait 30
+spin K1 -127
+wait 30
+expect snd2_18 0
+wait 2000
+tap ENV
+wait 30
+expect envpage 1
+spin K4 5
+wait 30
+expect snd2_25 35
+tap ENV
+wait 30
+expect envpage 2
+tap ENV
+wait 30
+expect page 5
+expect envpage 0
+# T3 (POLY): VOICES 3 caps it: four keys, three voices
+turn ALGO 1
+wait 30
+expect trk 3
+tap EDIT
+wait 30
+expect page 1
+expect epage 0
+spin K3 -5
+wait 30
+expect snd3_16 3
+key 7 down
+key 9 down
+key 11 down
+key 12 down
+wait 40
+expect voices3 3
+key 7 up
+key 9 up
+key 11 up
+key 12 up
+wait 800
+expect voices3 0
+spin K3 5
+wait 30
+expect snd3_16 8
+tap SEQ
+wait 30
+tap SEQ
+wait 30
+# (past the 303 generator, 0.4)
+tap SEQ
+wait 30
+expect page 5
+# the pool: 8 notes on T3 and 8 on T4 over MIDI fill the 16 voices; T2's unison of 4 then takes 4 of them
+spin K3 0
+midi 92 30 64
+midi 92 32 64
+midi 92 34 64
+midi 92 35 64
+midi 92 37 64
+midi 92 39 64
+midi 92 3B 64
+midi 92 3C 64
+midi 93 40 64
+midi 93 42 64
+midi 93 44 64
+midi 93 45 64
+midi 93 47 64
+midi 93 49 64
+midi 93 4B 64
+midi 93 4C 64
+wait 40
+expect voices3 8
+expect voices4 8
+expect voices 16
+turn ALGO -1
+wait 30
+tap EDIT
+wait 30
+spin K3 3
+wait 30
+expect snd2_16 4
+midi 91 30 64
+wait 40
+expect voices2 4
+expect voices 16
+wav pool.wav
+wait 300
+wavstop
+midi 81 30 00
+midi 82 30 00
+midi 82 32 00
+midi 82 34 00
+midi 82 35 00
+midi 82 37 00
+midi 82 39 00
+midi 82 3B 00
+midi 82 3C 00
+midi 83 40 00
+midi 83 42 00
+midi 83 44 00
+midi 83 45 00
+midi 83 47 00
+midi 83 49 00
+midi 83 4B 00
+midi 83 4C 00
+wait 5000
+expect voices 0
+# the sound is saved with the project
+expect preset2 0
+expect edited2 1
+tap SAVE
+wait 200
+expect dirty 0
+reboot
+wait 600
+expect preset2 0
+expect edited2 1
+expect snd2_16 4
+expect snd2_8 50
+expect snd2_25 35
+expect snd3_16 8
+expect type2 0

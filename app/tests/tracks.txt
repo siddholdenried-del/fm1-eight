@@ -1,0 +1,337 @@
+# fm1-eight's four tracks in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/tracks.txt OUTDIR
+# keys: white 0 2 4 6 7 9 11 12 14 16 18 19 21 23 24 26, black 1 3 5 8 10 13 15 17 20 22 25
+# key 7 is C (C4 at octave 0); T2 starts an octave down (MONO, SQR BASS), T3 PLUCK and T4 SOFT PAD (POLY)
+wait 600
+expect trk 1
+expect type2 0
+expect type3 1
+expect type4 1
+expect oct2 -1
+# ALGORITHM picks T2: its KEYS page
+turn ALGO 1
+wait 30
+expect trk 2
+expect page 5
+# a note on the keys: C3 (48), heard, sent on channel 2, let go
+key 7 down
+wait 40
+expect voices2 1
+wav t2_note.wav
+wait 300
+wavstop
+expect peak_db_min -30
+shot keys.png
+key 7 up
+wait 30
+expect_out USB 81 30 00
+wait 300
+expect voices2 0
+# MONO: two keys, one voice
+key 7 down
+wait 30
+key 11 down
+wait 30
+expect voices2 1
+key 11 up
+key 7 up
+wait 300
+# SEL held + pad key 3: T3 (POLY), three keys, three voices
+press SEL
+wait 20
+key 5 down
+wait 20
+key 5 up
+wait 20
+release SEL
+wait 30
+expect trk 3
+expect page 5
+key 7 down
+key 11 down
+key 14 down
+wait 40
+expect voices3 3
+key 7 up
+key 11 up
+key 14 up
+wait 700
+expect voices3 0
+# the step page (SEQ): step 1 on, with the last note played (G4, 67)
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect nsteps3 1
+expect note3_1_0 67
+expect gate3_1 6
+expect vel3_1 100
+expect chance3_1 100
+# hold it: K1 note +2, K2 velocity -10, K3 gate +2, SELECT chance 75 %; it stays on at the release
+key 0 down
+wait 30
+expect held 1
+turn K1 2
+wait 30
+turn K2 -10
+wait 30
+turn K3 2
+wait 30
+turn SELECT -5
+wait 30
+shot held.png
+key 0 up
+wait 30
+expect note3_1_0 69
+expect vel3_1 90
+expect gate3_1 8
+expect chance3_1 75
+expect nsteps3 1
+# held + OCT-: the chance back to 100 %
+key 0 down
+wait 30
+tap OCT-
+wait 30
+key 0 up
+wait 30
+expect chance3_1 100
+expect nsteps3 1
+# a plain press and release: off; undo brings it back
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect nsteps3 0
+press EDIT
+wait 20
+tap OCT-
+wait 20
+release EDIT
+wait 30
+expect nsteps3 1
+# step recording (REC, stopped, KEYS page): a chord into step 1, then D4 into step 2
+tap SEQ
+wait 30
+# (past the 303 generator, 0.4)
+tap SEQ
+wait 30
+expect page 5
+tap REC
+wait 30
+expect rec 1
+expect cursor3 1
+key 7 down
+key 11 down
+key 14 down
+wait 40
+shot steprec.png
+key 7 up
+key 11 up
+wait 20
+expect cursor3 1
+key 14 up
+wait 30
+expect cursor3 2
+expect note3_1_0 60
+expect note3_1_1 64
+expect note3_1_2 67
+expect note3_1_3 0
+key 9 down
+wait 30
+key 9 up
+wait 30
+expect note3_2_0 62
+expect note3_2_1 0
+expect cursor3 3
+expect nsteps3 2
+tap REC
+wait 30
+expect rec 0
+tap SEQ
+wait 30
+shot roll.png
+tap SEQ
+wait 30
+# (past the 303 generator, 0.4)
+tap SEQ
+wait 30
+# the chord plays from the sequencer
+tap PLAY
+wait 30
+expect voices3 3
+wav chord.wav
+wait 1000
+wavstop
+expect peak_db_min -30
+tap PLAY
+wait 400
+# live recording on T2 (MONO): REC while playing, C3 pressed early in step 3, held about 1.6 steps
+# (a tap takes 80 ms: PLAY starts at its first frame)
+turn ALGO -1
+wait 30
+expect trk 2
+tap REC
+wait 20
+tap PLAY
+wait 190
+key 7 down
+wait 200
+key 7 up
+wait 200
+tap PLAY
+wait 300
+tap REC
+wait 30
+expect note2_3_0 48
+expect gate2_3 >10
+expect gate2_3 <16
+expect nsteps2 1
+# and it plays back
+tap PLAY
+wait 290
+expect voices2 1
+tap PLAY
+wait 400
+# polymeter: T4 12 steps long (K1 on its KEYS page), the drums 16
+turn ALGO 2
+wait 30
+expect trk 4
+turn K1 -4
+wait 30
+expect tlen4 12
+expect tlen1 16
+tap PLAY
+wait 1480
+expect tstep1 13
+expect tstep3 13
+expect tstep4 1
+tap PLAY
+wait 400
+# a pattern change waits for the bar (2 s at 120), then every track starts again
+tap PLAY
+wait 300
+tap HOME
+wait 30
+expect page 3
+key 2 down
+wait 20
+key 2 up
+wait 30
+expect queued 2
+expect pat 1
+wait 1600
+expect pat 2
+expect queued 0
+expect tstep4 <3
+key 0 down
+wait 20
+key 0 up
+wait 30
+expect queued 1
+tap PLAY
+wait 400
+expect pat 1
+# HOME + pad key 2: T2 muted, so its recorded note stays silent
+key 3 down
+wait 20
+key 3 up
+wait 30
+expect tmute 2
+shot home4.png
+tap PLAY
+wait 290
+expect voices2 0
+tap PLAY
+wait 400
+key 3 down
+wait 20
+key 3 up
+wait 30
+expect tmute 0
+tap HOME
+wait 30
+expect page 11
+tap HOME
+wait 30
+expect page 13
+tap HOME
+wait 30
+expect page 5
+# T4's EDIT page: TYPE to SAMPLER (silent for now), back to POLY; LEVEL down 20; SEQ three times (STEPS,
+# ACID): back to the keys
+tap EDIT
+wait 30
+expect page 1
+turn K1 2
+wait 30
+expect type4 2
+key 7 down
+wait 40
+expect voices4 0
+key 7 up
+wait 30
+turn K1 -1
+wait 30
+expect type4 1
+turn K2 -20
+wait 30
+expect level4 80
+shot iedit.png
+tap SEQ
+wait 30
+tap SEQ
+wait 30
+# (past the 303 generator, 0.4)
+tap SEQ
+wait 30
+expect page 5
+# OCT+ on the KEYS page
+tap OCT+
+wait 30
+expect oct4 1
+# MIDI in on channel 3 plays T3
+midi 92 3C 64
+wait 30
+expect voices3 1
+midi 82 3C 00
+wait 700
+expect voices3 0
+# SAVE held + white key 6: pattern 1 copied to 6, all four tracks
+press SAVE
+wait 20
+key 9 down
+wait 20
+key 9 up
+wait 20
+release SAVE
+wait 30
+tap HOME
+wait 30
+key 9 down
+wait 20
+key 9 up
+wait 30
+expect pat 6
+expect nsteps3 2
+expect note3_1_1 64
+expect note2_3_0 48
+expect hits0 4
+# saved, then a power cycle: the project comes back
+tap SAVE
+wait 200
+expect dirty 0
+reboot
+wait 600
+expect pat 6
+expect note3_1_1 64
+expect note2_3_0 48
+expect tlen4 12
+expect type4 1
+expect level4 80
+expect oct4 1
+expect oct2 -1
+expect tmute 0
+expect hits0 4

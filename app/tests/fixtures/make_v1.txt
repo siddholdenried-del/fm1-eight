@@ -1,0 +1,116 @@
+# Made once with the 0.2 performance update's build (format 1), before the synth update (format 2), to keep two
+# saved projects for app/tests/convert.txt: proj_02.img (the file as 0.2 saved it, the layout on the user's FM-1)
+# and proj_perf.img (the performance update's whole file). Run from fm1-eight: app/build/host/eight_host
+# app/tests/fixtures/make_v1.txt OUTDIR (with the format-1 build only; kept for the record)
+wait 600
+# ---- T2: SQR BASS, CUTOFF 70, saved as USER 1
+turn ALGO 1
+wait 30
+expect trk 2
+tap EDIT
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+spin K1 20
+wait 30
+expect snd2_8 70
+press SAVE
+wait 20
+turn PRESET 1
+wait 30
+release SAVE
+wait 300
+expect usnd1 1
+expect preset2 15
+# ---- two notes, a CUTOFF lock on step 1 (100)
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 20
+key 0 up
+wait 20
+key 7 down
+wait 20
+key 7 up
+wait 20
+expect nsteps2 2
+key 0 down
+wait 30
+tap EDIT
+wait 30
+turn SELECT -4
+wait 30
+turn SELECT 3
+wait 30
+spin K1 30
+wait 30
+expect ilock2_1_8 100
+key 0 up
+wait 30
+expect note2_1_0 >0
+expect vel2_1 >0
+expect gate2_1 >0
+expect chance2_1 100
+# ---- T3: its sound edited too (PLUCK's RESO 40 -> 60)
+turn ALGO 1
+wait 30
+expect trk 3
+tap EDIT
+wait 30
+expect page 1
+turn SELECT -4
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+spin K2 20
+wait 30
+expect snd3_9 60
+# ---- saved as 0.2 saved it: proj_02.img
+expect saveold 0
+flash_dump app/tests/fixtures/proj_02.img
+# ---- SOUNDS PER PATTERN on, T2 ACID on pattern 2, scene 1 follows NEXT after a bar; saved whole: proj_perf.img
+tap HOME
+wait 30
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 13
+spin K2 1
+wait 30
+expect sounds 1
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 3
+turn ALGO -1
+wait 30
+expect trk 2
+key 3 down
+wait 30
+key 2 down
+wait 30
+key 2 up
+wait 30
+key 3 up
+wait 30
+expect clip2 2
+turn PRESET -14
+wait 30
+expect preset2 1
+key 0 down
+wait 30
+spin K1 1
+wait 30
+key 0 up
+wait 30
+expect follow1 1
+expect psnd2_2 1
+tap SAVE
+wait 400
+expect dirty 0
+flash_dump app/tests/fixtures/proj_perf.img

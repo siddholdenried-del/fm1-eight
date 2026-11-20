@@ -1,0 +1,251 @@
+# fm1-eight 0.2's recording help in the host simulator: the metronome, the count-in, recording to a grid, QUANTIZE and
+# LEGATO, all on REC held.  tools/build.py ../../app --host, then  app/build/host/eight_host app/tests/rec.txt OUTDIR
+# click: 0 OFF 1 ON 2 REC; countin: bars; recq: 0 a step 1 two 2 four; counting: in the count-in; clicks: since the
+# last look; noteN_S / gateN_S: track N, step S (1-based; gate in eighths of a step); nstepsN: steps with notes
+wait 600
+master 4096
+expect click 0
+expect countin 0
+expect recq 0
+expect clevel 10
+# ---- hold REC: its page after a moment; K1..K4: the metronome, the count-in, the grid, the click's level
+press REC
+wait 400
+expect recpage 1
+spin K1 2
+wait 30
+expect click 2
+spin K2 1
+wait 30
+expect countin 1
+spin K3 2
+wait 30
+expect recq 2
+spin K4 -3
+wait 30
+expect clevel 7
+shot rec_page.png
+release REC
+wait 30
+expect recpage 0
+expect rec 0
+# a tap is still recording on / off
+tap REC
+wait 30
+expect rec 1
+tap REC
+wait 30
+expect rec 0
+# ---- the metronome at REC: none while playing without recording
+expect clicks 0
+tap PLAY
+wait 2000
+expect clicks 0
+tap PLAY
+wait 200
+# at ON: a click a beat, 4 a bar
+press REC
+wait 30
+spin K1 -1
+wait 30
+release REC
+wait 30
+expect click 1
+expect clicks 0
+tap PLAY
+wait 1850
+expect clicks 4
+wait 2000
+expect clicks 4
+tap PLAY
+wait 200
+# ---- the count-in: recording on, PLAY counts a bar first; PLAY in it: no start
+tap REC
+wait 30
+expect rec 1
+tap PLAY
+wait 500
+expect counting 1
+expect playing 0
+tap PLAY
+wait 30
+expect counting 0
+expect playing 0
+expect clicks >0
+wait 300
+# ---- T2: recorded to 1/4 after the count-in; a note in its last half beat lands on step 1
+turn ALGO 1
+wait 30
+expect trk 2
+expect page 5
+expect nsteps2 0
+expect clicks >-1
+tap PLAY
+wait 1000
+shot count_in.png
+wait 850
+expect counting 1
+expect playing 0
+key 7 down
+wait 100
+key 7 up
+wait 50
+expect counting 0
+expect playing 1
+expect clicks 5
+# 0.58 s into the bar: nearest beat 2 (step 5); 1.23 s: beat 3 (step 9)
+wait 500
+key 9 down
+wait 100
+key 9 up
+wait 550
+key 11 down
+wait 100
+key 11 up
+wait 300
+tap PLAY
+wait 200
+expect nsteps2 3
+expect note2_1 >0
+expect note2_5 >0
+expect note2_9 >0
+expect note2_6 0
+tap REC
+wait 30
+expect rec 0
+# ---- QUANTIZE: T3, notes put on steps 2, 3 and 7 (step recording), then to 1/4: steps 1, 5, 9
+turn ALGO 1
+wait 30
+expect trk 3
+expect nsteps3 0
+tap REC
+wait 30
+turn SELECT 1
+wait 30
+key 7 down
+wait 30
+key 7 up
+wait 30
+key 9 down
+wait 30
+key 9 up
+wait 30
+turn SELECT 3
+wait 30
+key 11 down
+wait 30
+key 11 up
+wait 30
+tap REC
+wait 30
+expect note3_2 >0
+expect note3_3 >0
+expect note3_7 >0
+press REC
+wait 30
+tap OCT-
+wait 30
+release REC
+wait 30
+expect rec 0
+expect nsteps3 3
+expect note3_1 >0
+expect note3_5 >0
+expect note3_9 >0
+expect note3_2 0
+expect note3_7 0
+# ---- LEGATO: each to the next, the last round to the first (a little past each)
+press REC
+wait 30
+tap OCT+
+wait 30
+shot legato.png
+release REC
+wait 30
+expect gate3_1 33
+expect gate3_5 33
+expect gate3_9 65
+# undone (EDIT + OCT-): as before LEGATO
+press EDIT
+wait 20
+tap OCT-
+wait 20
+release EDIT
+wait 30
+expect gate3_1 6
+expect note3_5 >0
+# ---- the drums: QUANTIZE moves hits; LEGATO says it's for T2-T4
+turn ALGO -2
+wait 30
+expect trk 1
+press REC
+wait 30
+tap OCT+
+wait 30
+release REC
+wait 30
+expect rec 0
+# ---- chord mode (ARP 2): T4, MIN7, first inversion: one key, four notes, step-recorded as one chord
+turn ALGO 3
+wait 30
+expect trk 4
+tap ARP
+wait 30
+tap ARP
+wait 30
+expect arppage 1
+spin K2 5
+wait 30
+expect chord4 5
+spin K3 1
+wait 30
+expect chordinv4 1
+shot chord.png
+tap ARP
+wait 30
+expect page 5
+expect nsteps4 0
+tap REC
+wait 30
+key 7 down
+wait 40
+key 7 up
+wait 30
+tap REC
+wait 30
+expect nsteps4 1
+expect note4_1_0 >0
+expect note4_1_3 >0
+shot chord_keys.png
+# ---- gates past 8 steps: hold step 1, K3 a step a detent over 2 steps, up to 31.9
+tap SEQ
+wait 30
+expect page 0
+key 0 down
+wait 30
+turn K3 15
+wait 30
+expect gate4_1 56
+turn K3 30
+wait 30
+expect gate4_1 255
+key 0 up
+wait 30
+expect gate4_1 255
+tap PLAY
+wait 2200
+tap PLAY
+wait 300
+# ---- kept with the project
+tap SAVE
+wait 200
+reboot
+wait 600
+expect click 1
+expect countin 1
+expect recq 2
+expect clevel 7
+expect gate3_1 6
+expect chord4 5
+expect chordinv4 1
+expect gate4_1 255

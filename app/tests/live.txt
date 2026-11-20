@@ -1,0 +1,752 @@
+# fm1-eight 0.2's performance update in the host simulator: SOUNDS PER PATTERN, follow actions, RELOAD, motion
+# recording, MIDI CLOCK, tap tempo, solo and a project saved before the update.  tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/live.txt OUTDIR
+# sounds: SOUNDS PER PATTERN; psndP_N: pattern P keeps track N's sound (the drums: their kit + 1); followP / fbarsP: scene
+# P's follow action (0 OFF 1 NEXT 2 PREV 3 FIRST 4 RANDOM) and its bars; mclock: MIDI CLOCK 0 off 1 sent 2 followed;
+# clocks_out: clocks sent; inlkN / nlk: track N's / the drums' locks; projfmt: the saved file's format (3: 0.4's;
+# 0.2's own files: app/tests/convert.txt; 0.3's: convert3.txt)
+# Keys: white 0, 2 patterns 1, 2; black 1, 3 the track keys DR, T2 on HOME
+wait 600
+master 4096
+expect sounds 0
+expect mclock 0
+expect follow1 0
+expect psnd1_2 0
+expect bpm 120
+expect clocks_out 0
+# ---- SETUP (HOME three times), K2: SOUNDS PER PATTERN on; each track's sound kept with the pattern it's on (1)
+tap HOME
+wait 30
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 13
+spin K2 1
+wait 30
+expect sounds 1
+expect psnd1_1 1
+expect psnd1_2 1
+expect psnd1_4 1
+expect psnd2_2 0
+expect dirty 1
+shot setup.png
+# ---- T2 ACID on pattern 1; to pattern 2 (stopped: at once) it takes the sound it had; there SQR BASS
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 3
+turn ALGO 1
+wait 30
+expect trk 2
+expect page 3
+turn PRESET 1
+wait 30
+expect preset2 1
+key 3 down
+wait 30
+key 2 down
+wait 30
+key 2 up
+wait 30
+key 3 up
+wait 30
+expect clip2 2
+expect clip1 1
+expect preset2 1
+expect psnd2_2 1
+turn PRESET -1
+wait 30
+expect preset2 0
+# back to pattern 1: ACID; to pattern 2: SQR BASS
+key 3 down
+wait 30
+key 0 down
+wait 30
+key 0 up
+wait 30
+key 3 up
+wait 30
+expect clip2 1
+expect preset2 1
+expect snd2_9 108
+key 3 down
+wait 30
+key 2 down
+wait 30
+key 2 up
+wait 30
+key 3 up
+wait 30
+expect clip2 2
+expect preset2 0
+# ---- the drums' kit: a scene (every track to pattern 2), the 808 there; pattern 1 keeps the 909
+key 2 down
+wait 30
+key 2 up
+wait 30
+expect clip1 2
+expect clip3 2
+expect pat 2
+turn ALGO -1
+wait 30
+expect trk 1
+turn PRESET 1
+wait 30
+expect kit 1
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect pat 1
+expect kit 0
+expect preset2 1
+expect psnd2_1 2
+key 2 down
+wait 30
+key 2 up
+wait 30
+expect kit 1
+expect preset2 0
+shot home_sounds.png
+# ---- follow actions (a scene key held: K1 the action, K2 after how many bars): 1 NEXT after a bar, 2 FIRST after 2
+key 0 down
+wait 30
+spin K1 1
+wait 30
+key 0 up
+wait 30
+expect follow1 1
+expect fbars1 1
+key 2 down
+wait 30
+spin K1 3
+wait 30
+spin K2 1
+wait 30
+shot follow.png
+key 2 up
+wait 30
+expect follow2 3
+expect fbars2 2
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect pat 1
+tap PLAY
+wait 1000
+expect pat 1
+wait 1200
+expect pat 2
+expect clip3 2
+expect preset2 0
+expect kit 1
+wait 3000
+expect pat 2
+wait 1000
+expect pat 1
+expect preset2 1
+expect kit 0
+tap PLAY
+wait 200
+# the actions off again
+key 0 down
+wait 30
+spin K1 -1
+wait 30
+key 0 up
+wait 30
+key 2 down
+wait 30
+spin K1 -3
+wait 30
+key 2 up
+wait 30
+expect follow1 0
+expect follow2 0
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect pat 1
+# ---- motion: recording while playing, T2's CUTOFF turned three times: a lock on each step it was turned on
+turn ALGO 1
+wait 30
+expect trk 2
+tap EDIT
+wait 30
+expect page 1
+turn SELECT -6
+wait 30
+turn SELECT 3
+wait 30
+expect epage 3
+expect inlk2 0
+tap PLAY
+wait 100
+tap REC
+wait 30
+expect rec 1
+spin K1 10
+wait 400
+spin K1 10
+wait 400
+spin K1 10
+wait 300
+tap REC
+wait 30
+tap PLAY
+wait 200
+expect rec 0
+expect inlk2 3
+# not recording: no lock
+tap PLAY
+wait 300
+spin K1 -5
+wait 300
+tap PLAY
+wait 200
+expect inlk2 3
+# the drums too (EDIT, the kick's first knob)
+turn ALGO -1
+wait 30
+expect trk 1
+expect nlk 0
+tap PLAY
+wait 100
+tap REC
+wait 30
+spin K1 5
+wait 400
+spin K1 5
+wait 300
+tap REC
+wait 30
+tap PLAY
+wait 200
+expect nlk 2
+# ---- saved; RELOAD (SAVE + OCT-): T2's sound as saved with its pattern
+tap SAVE
+wait 200
+expect dirty 0
+turn ALGO 1
+wait 30
+turn PRESET 2
+wait 30
+expect preset2 3
+press SAVE
+wait 30
+tap OCT-
+wait 30
+release SAVE
+wait 30
+expect preset2 1
+expect snd2_9 108
+# ---- after a power cycle: the sounds with their patterns, the locks
+reboot
+wait 600
+expect sounds 1
+expect pat 1
+expect preset2 1
+expect kit 0
+expect psnd2_2 1
+expect psnd2_1 2
+expect inlk2 3
+expect nlk 2
+tap HOME
+wait 30
+expect page 3
+key 2 down
+wait 30
+key 2 up
+wait 30
+expect preset2 0
+expect kit 1
+key 0 down
+wait 30
+key 0 up
+wait 30
+expect preset2 1
+# ---- solo (HOME, a track key + OCT+): only it heard; again: as before
+key 3 down
+wait 30
+tap OCT+
+wait 30
+key 3 up
+wait 30
+expect solo 2
+expect tmute 13
+key 3 down
+wait 30
+tap OCT+
+wait 30
+key 3 up
+wait 30
+expect solo 0
+expect tmute 0
+# ---- MIDI CLOCK sent (SETUP, K1): 24 a beat while playing
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 13
+spin K1 1
+wait 30
+expect mclock 1
+expect clocks_out 0
+tap PLAY
+wait 2000
+tap PLAY
+wait 100
+expect clocks_out >95
+expect clocks_out <102
+# followed (K1 again): Start, then the first clock starts it; 4 beats of clocks 25 ms apart: 100 BPM, the groove on
+# the clock's beat (mclkerr: ms x 10 from the last 16th clock); then 20 ms apart: 125 BPM, caught up with in 4 beats
+spin K1 1
+wait 30
+expect mclock 2
+midi FA
+wait 10
+expect playing 0
+midi F8
+wait 23
+expect playing 1
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+midi F8
+wait 23
+expect bpm >99
+expect bpm <101
+expect mclkerr >-100
+expect mclkerr <100
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+midi F8
+wait 18
+expect bpm >124
+expect bpm <126
+expect mclkerr >-100
+expect mclkerr <100
+shot clock_follow.png
+midi FC
+wait 50
+expect playing 0
+spin K1 -2
+wait 30
+expect mclock 0
+# ---- tap tempo (HOME, OCT-): four taps 400 ms apart, 150 BPM
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 3
+tap OCT-
+wait 320
+tap OCT-
+wait 320
+tap OCT-
+wait 320
+tap OCT-
+wait 320
+expect bpm >148
+expect bpm <152
+# ---- SOUNDS PER PATTERN off, saved (format 2) and loaded again: the settings and the locks kept
+tap HOME
+wait 30
+tap HOME
+wait 30
+expect page 13
+spin K2 -1
+wait 30
+expect sounds 0
+expect playing 0
+tap SAVE
+wait 400
+expect dirty 0
+expect projfmt 3
+reboot
+wait 600
+expect sounds 0
+expect mclock 0
+expect bpm >148
+expect bpm <152
+expect psnd1_2 1
+expect inlk2 3
+expect nlk 2
+expect clip2 1

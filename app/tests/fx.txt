@@ -1,0 +1,260 @@
+# fm1-eight's mixer and FX (phase 5) in the host simulator: tools/build.py ../../app --host, then
+#   app/build/host/eight_host app/tests/fx.txt OUTDIR
+# mixN_K: track N, K 0 level 1 pan 2 reverb send 3 delay send; fxI: dsp/fx.h FXP_* (0..3 reverb, 4..7 delay, 8..11
+# delay 2, 19..20 FILTER: filter reso; on the master bus (tests/master.txt has the rest): 12..15 COMP: threshold ratio
+# attack release, 16..18 COMP 2: makeup mix pump, 21 the limiter's switch, 37 its GAIN);
+# pkl / pkr: each side's peak since the last look, dB x 10; gr: the compressor's reduction now, dB x 10
+wait 600
+# MASTER full: what the master bus puts out (0.2: the volume comes after it)
+master 4096
+# ---- GLO: the mixer, LEVEL first; K1..K4 are the drums, T2, T3, T4
+tap GLO
+wait 30
+expect page 9
+expect mixpage 0
+expect mix1_0 100
+expect mix2_0 100
+expect mix3_1 52
+expect mix3_2 45
+expect mix4_2 60
+spin K2 -20
+wait 30
+expect mix2_0 80
+expect level2 80
+shot mix_level.png
+# PAN: the drums hard right, so the left side is silent (their pads send nothing to the FX)
+tap GLO
+wait 30
+expect mixpage 1
+spin K1 63
+wait 30
+expect mix1_1 127
+shot mix_pan.png
+tap PLAY
+wait 30
+expect pkl <0
+expect pkr <0
+wait 600
+expect pkl <-900
+expect pkr >-200
+tap PLAY
+wait 300
+spin K1 -63
+wait 30
+expect mix1_1 64
+# ---- the sends: T3's PLUCK, a short note: its reverb and echoes ring on after it has gone (SELECT back to LEVEL, SEQ:
+# the drums' steps; then T3: its keys)
+turn SELECT -1
+wait 30
+expect mixpage 0
+tap SEQ
+wait 30
+expect page 0
+turn ALGO 2
+wait 30
+expect trk 3
+expect page 5
+key 7 down
+wait 40
+key 7 up
+wait 700
+peakreset
+wait 200
+expect peak_db_min -75
+wait 3000
+# no sends: nothing after it
+tap GLO
+wait 30
+turn SELECT 2
+wait 30
+expect mixpage 2
+spin K3 -45
+wait 30
+tap GLO
+wait 30
+spin K3 -35
+wait 30
+expect mix3_2 0
+expect mix3_3 0
+key 7 down
+wait 40
+key 7 up
+wait 700
+peakreset
+wait 200
+expect peak_db_max -90
+# ---- the delay: T3 all delay, FX > DELAY: TIME 1/4 (500 ms at 120), FEEDBACK 0: one echo, then nothing
+spin K3 127
+wait 30
+expect mix3_3 127
+tap FX
+wait 30
+expect page 10
+expect fxpage 0
+tap FX
+wait 30
+expect fxpage 1
+expect fx4 7
+spin K1 1
+wait 30
+expect fx4 8
+spin K2 -127
+wait 30
+expect fx5 0
+shot fx_delay.png
+key 7 down
+wait 40
+key 7 up
+wait 410
+peakreset
+wait 150
+expect peak_db_min -50
+wait 400
+peakreset
+wait 200
+expect peak_db_max -80
+# ---- sampling borrows the delay's line: out of the chain from REC + SEL until done (here, given up)
+press SEL
+wait 20
+key 8 down
+wait 20
+key 8 up
+wait 20
+release SEL
+wait 30
+expect trk 4
+tap EDIT
+wait 30
+turn SELECT -4
+wait 30
+spin K1 1
+wait 30
+expect type4 2
+expect dlyon 1
+press REC
+wait 20
+tap SEL
+wait 20
+release REC
+wait 30
+expect rstate 1
+expect dlyon 0
+tap FX
+wait 30
+expect page 10
+shot fx_paused.png
+tap SEL
+wait 60
+expect rstate 0
+expect dlyon 1
+# ---- FX > REVERB: DECAY; COMP: on by default, 2:1 over -12 dB; RATIO up to 4:1 and back; MASTER
+turn SELECT -3
+wait 30
+expect fxpage 0
+spin K1 10
+wait 30
+expect fx0 83
+turn SELECT 3
+wait 30
+expect fxpage 3
+shot fx_filter.png
+press SEL
+wait 20
+tap GLO
+wait 20
+release SEL
+wait 30
+expect page 12
+expect mstpage 0
+turn SELECT 3
+wait 30
+expect mstpage 3
+expect fx12 79
+expect fx13 2
+expect fx14 85
+expect fx15 69
+spin K2 2
+wait 30
+expect fx13 4
+shot fx_comp.png
+spin K2 -2
+wait 30
+expect fx13 2
+turn SELECT 4
+wait 30
+expect mstpage 7
+# ---- the limiter and the compressor: GAIN +12 dB into it, every track loud at once (MIDI chords on T2..T4, the beat):
+# nothing past the ceiling, and the compressor at work
+spin K1 24
+wait 30
+expect fx37 24
+shot fx_master.png
+expect fx21 1
+tap PLAY
+midi 91 24 7F
+midi 92 3C 7F
+midi 92 40 7F
+midi 92 43 7F
+midi 93 3C 7F
+midi 93 3F 7F
+midi 93 43 7F
+midi 93 48 7F
+wait 30
+expect clips 0
+wait 1500
+expect clips 0
+expect gr >20
+# RATIO 1:1: the compressor off, no reduction
+turn SELECT -3
+wait 30
+expect mstpage 4
+shot fx_comp2.png
+turn SELECT -1
+wait 30
+expect mstpage 3
+spin K2 -2
+wait 30
+expect fx13 0
+wait 500
+expect gr <5
+spin K2 2
+wait 30
+turn SELECT 4
+wait 30
+expect mstpage 7
+# LIMIT off: past it
+spin K4 -1
+wait 30
+expect fx21 0
+wait 1500
+expect clips >0
+spin K4 1
+wait 30
+expect fx21 1
+spin K1 -24
+wait 30
+expect fx37 0
+tap PLAY
+midi 81 24 00
+midi 82 3C 00
+midi 82 40 00
+midi 82 43 00
+midi 83 3C 00
+midi 83 3F 00
+midi 83 43 00
+midi 83 48 00
+master 2048
+wait 3000
+# ---- saved with the project
+tap SAVE
+wait 200
+reboot
+wait 600
+expect mix2_0 80
+expect mix3_2 0
+expect mix3_3 127
+expect fx0 83
+expect fx4 8
+expect fx5 0
+expect fx13 2
+expect fx21 1

@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""groovebox.bongcult.com: fm1-eight's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
+
+  python3 -I site/build.py OUT_DIR      (from fm1-eight, after tools/build.py ../../app --web in third_party/fm1-base)
+
+OUT_DIR/index.html   the page, a whole HTML document, its "Play it" section framing emu/
+OUT_DIR/emu/         the emulator: app/build/emu (the page, app.wasm, the audio worklet, its parts)
+OUT_DIR/_headers     Cloudflare Pages' headers (wasm's type, caching)
+"""
+import re
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+REPO = "https://github.com/siddholdenried-del/fm1-eight"
+ICON = '<link rel="icon" href="HREF" type="image/svg+xml">\n'
+FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#5AD282"/>'
+           '<text x="32" y="47" font-family="Arial Narrow, Arial, sans-serif" font-weight="700" font-size="44" '
+           'text-anchor="middle" fill="#16171B">8</text></svg>\n')
+
+
+def main():
+    if len(sys.argv) != 2:
+        raise SystemExit(__doc__)
+    out = Path(sys.argv[1]).resolve()
+    emu_src = ROOT / "app" / "build" / "emu"
+    if not (emu_src / "app.wasm").exists():
+        raise SystemExit("site: no app/build/emu/app.wasm (tools/build.py ../../app --web first)")
+    if out.exists():
+        shutil.rmtree(out)
+    (out / "emu").mkdir(parents=True)
+
+    page = (ROOT / "docs" / "how-it-works.html").read_text()
+    frame = (
+        '<section id="play" style="--c: var(--t2)">\n'
+        '    <div class="band"><h2>Play it</h2><span class="tag">IN THE BROWSER</span></div>\n'
+        "    <p>This is fm1-eight itself, compiled to WebAssembly: the same sequencer, drums, synth, effects and screen as on "
+        "the FM-1, drawn as its panel. Press <strong>Switch on</strong>, then play it with the mouse or your computer's "
+        "keyboard. Your work is kept in this browser.</p>\n"
+        '    <div class="emu-frame"><iframe src="emu/" title="fm1-eight, running in the browser" allow="midi; autoplay" '
+        'loading="lazy"></iframe></div>\n'
+        f'    <p><a href="emu/">Open it full size</a> · <a href="{REPO}">The source</a> · '
+        f'<a href="{REPO}/blob/main/MANUAL.md">The manual</a></p>\n'
+        "  </section>")
+    page, n = re.subn(r"<!-- emu:start -->.*?<!-- emu:end -->", frame, page, flags=re.S)
+    if n != 1:
+        raise SystemExit("site: the page has no <!-- emu:start --> ... <!-- emu:end --> block")
+    page = page.replace("It's about 430 KB of code, and the same code runs in your browser, right below.",
+                        "It's about 430 KB of code, and the same code runs in your browser, right here.")
+    page = re.sub(r'<meta name="claude:[^>]*>\n', "", page)
+    head_end = page.index("</style>") + len("</style>")
+    doc = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
+           "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
+           "<meta name=\"description\" content=\"fm1-eight, a four-track groovebox firmware for the M-VAVE FM-1: how it "
+           "works, and the firmware itself running in the browser.\">\n"
+           + page[:head_end] + "\n</head>\n<body>\n" + page[head_end:].lstrip("\n") + "\n</body>\n</html>\n")
+    doc = doc.replace("</head>", ICON.replace("HREF", "favicon.svg") + "</head>", 1)
+    (out / "index.html").write_text(doc)
+
+    for f in ("index.html", "app.js", "app.wasm", "app_worklet.js", "worklet.js"):
+        shutil.copy(emu_src / f, out / "emu" / f)
+    shutil.copytree(emu_src / "parts", out / "emu" / "parts")
+    emu_page = (out / "emu" / "index.html").read_text()
+    emu_page = emu_page.replace("<title>EIGHT in the browser</title>", "<title>fm1-eight in the browser</title>")
+    emu_page = emu_page.replace("<h1>EIGHT</h1>", '<h1>fm1-eight</h1>\n  <p><a href="../">How it works</a></p>')
+    # framed in the page: no title of its own (the page has it), less room around it
+    emu_page = emu_page.replace("</head>", ICON.replace("HREF", "../favicon.svg") +
+                                '<script>if (self !== top) document.documentElement.classList.add("framed");</script>\n'
+                                "<style>.framed body > header { display: none; } "
+                                ".framed body { padding-block: 14px 14px; }</style>\n</head>", 1)
+    (out / "emu" / "index.html").write_text(emu_page)
+    (out / "favicon.svg").write_text(FAVICON)
+
+    (out / "_headers").write_text("/emu/*.wasm\n  Content-Type: application/wasm\n  Cache-Control: public, max-age=3600\n")
+    total = sum(f.stat().st_size for f in out.rglob("*") if f.is_file())
+    print(f"site: {out} ({total // 1024} KB)")
+
+
+if __name__ == "__main__":
+    main()

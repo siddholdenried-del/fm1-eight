@@ -1,0 +1,45 @@
+# fm1-eight
+
+A four-track groovebox firmware for the **M-VAVE FM-1**: one drum track (909 or 808, every pad editable) and three
+instrument tracks, each a mono synth, a poly synth or a sampler. A 64-step sequencer with 16 patterns, a scene grid
+for playing live, an LFO on every track, an arpeggiator and chord mode, a reverb, a tempo delay and a master bus with a
+mastering chain, a deeper synth (FM, ring, a wave shaper, a mod matrix, macros) and a **303 pattern generator** whose
+slides and accents play on any sound.
+
+- **Play it in the browser:** <https://groovebox.bongcult.com> (the firmware compiled to WebAssembly)
+- **The manual:** [MANUAL.md](MANUAL.md)
+- **How it works:** [docs/how-it-works.html](docs/how-it-works.html), the page at the site above
+- **Design notes and history:** [PLAN.md](PLAN.md)
+
+It's built on [fm1-base](https://github.com/charlesvestal/fm1-base) (the FM-1 platform, a submodule here) and runs on
+an FM-1 that already has an fm1-base or Felucca firmware on it, installed over USB.
+
+## Building
+
+```sh
+git clone --recursive https://github.com/siddholdenried-del/fm1-eight
+cd fm1-eight/third_party/fm1-base
+python3 -m venv ../../.venv && ../../.venv/bin/pip install pillow==13.0.0 mido==1.3.3 python-rtmidi==1.5.8
+../../.venv/bin/python tools/build.py ../../app --host   # the simulator: app/build/host/eight_host
+../../.venv/bin/python tools/build.py ../../app          # the FM-1 package: app/build/eight.fwsc (needs Docker)
+../../.venv/bin/python tools/build.py ../../app --web    # the browser emulator: app/build/emu (needs Emscripten)
+cd ../.. && python3 -I site/build.py site/out            # the site: the page and the emulator
+```
+
+fm1-base's README has the details (the toolchain runs in Docker; Pillow 13 rasterises the fonts; mido and
+python-rtmidi talk to the FM-1). The tests are scripts for the simulator, run from the repository's top: `app/build/host/eight_host app/tests/acid.txt
+OUT_DIR` (and the other `app/tests/*.txt`), plus `app/tests/synth_unit.c`, `app/tests/mbus_unit.c` and
+`app/tests/synth_same.sh`; each file says how to run it.
+
+## Installing on an FM-1
+
+With fm1-base's `tools/fm1_install.py app/build/eight.fwsc` over USB-MIDI, while an fm1-base or Felucca firmware is
+running. **At your own risk:** save your work first; a cut-off install needs fm1-base's recovery route. See
+MANUAL.md, "Installing it, and getting back".
+
+## Licence and credits
+
+GPL-3.0-only (see [LICENSE](LICENSE)). Built on fm1-base and felucca-bsp (MPL-2.0); the synth voice from
+Felucca-Engines by Leo Kuroshita, Hügelton Instruments (MIT); the 909 and 808 engines from X0X by Charles Vestal
+(GPL-3.0), after 9W9 and 8W8 by athousanddetails; the 909 cymbals from ER-99 by Matthew Cieplak (GPL-3.0); the reverb,
+delay and master from X0X (GPL-3.0), after 9W9. Not affiliated with M-VAVE or Roland.
