@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  * Copyright (C) 2026 Leo Kuroshita (@kurogedelic), Hügelton Instruments */
-/* Changed for fm1-eight (19 Nov 2026), in analog_osc (WAVE 0..4) only: OSC 2 also moves by the host's P_INTV semitones
+/* Changed for GhettoMachine (19 Nov 2026), in analog_osc (WAVE 0..4) only: OSC 2 also moves by the host's P_INTV semitones
  * (-12..12) and takes the unison fine tune (m->fine) as OSC 1 does; and a sub oscillator, a square an octave below
  * OSC 1 at the host's P_SUB level (0..127), joins the mix before the drive and the filter (its phase in ph[2]).
  * Changed again (20 Nov 2026, the synth update): analog_render_r (WAVE 0..4 with OSC 2's own wave, FM, RING, the
@@ -57,7 +57,7 @@ static void analog_note_on(track_t *t, voice_t *v)
     v->s[3] = 0;                                      /* SYNC: no restart pending */
 }
 
-/* fm1-eight's synth update (20 Nov 2026): the SHAPER, OSC 2's own wave, FM and RING.
+/* GhettoMachine's synth update (20 Nov 2026): the SHAPER, OSC 2's own wave, FM and RING.
  * The SHAPER (P_SHT type, P_SHA amount, 0 off: the loops as they were; P_BIAS; P_SHPOS 0 before the drive and the
  * filter, 1 after the filter), a voice's state in s[4..7]:
  *   FOLD     Felucca's PHASE engine's sine folder (eng_phase.c FOLD, MIT): sin(pi/2 x gain), the gain 0.64x (a soft
@@ -244,7 +244,7 @@ static __attribute__((noinline)) void analog_render_x(track_t *t, voice_t *v, in
     }
     uint32_t ft = (uint32_t)p[P_FTYPE];
     int32_t fk = ANALOG_K(p[P_E5]);
-    uint32_t shp = p[P_SHA] ? 1u + (uint32_t)(p[P_SHPOS] != 0) : 0u;   /* fm1-eight: the SHAPER */
+    uint32_t shp = p[P_SHA] ? 1u + (uint32_t)(p[P_SHPOS] != 0) : 0u;   /* GhettoMachine: the SHAPER */
     shp_t sh;
     if (shp)
         shp_begin(&sh, p, v, inc1);
@@ -307,7 +307,7 @@ static inline __attribute__((always_inline)) void analog_osc(track_t *t, voice_t
     uint32_t inc1 = m->inc;
     int32_t intv = p[P_INTV];
     uint32_t inc2 = det || intv ? cents_inc(clamp(m->pitch16 + intv * 16, 0, 2047), det, m->fine) : inc1;   /* DTN in cents */
-    int32_t sbl = p[P_SUB] * 200;                               /* fm1-eight: the sub's level */
+    int32_t sbl = p[P_SUB] * 200;                               /* GhettoMachine: the sub's level */
     uint32_t ph2 = v->ph[2], incs = inc1 >> 1;
     uint32_t pw = 0x80000000u + ((uint32_t)(m->shape - (64 << 8)) << 15);
     int32_t m2 = mix * 258, m1 = 32767 - m2;                    /* osc mix Q15 */
@@ -379,7 +379,7 @@ static void analog_render(track_t *t, voice_t *v, int32_t *out, uint32_t n, cons
     const int16_t *p = t->p;
     if (p[P_E0] >= AW_SYNC)
         analog_render_x(t, v, out, n, m);
-    else if (p[P_WAVE2] || p[P_FM] || p[P_RING] || p[P_SHA] || p[P_O2])   /* fm1-eight: the synth update's loop */
+    else if (p[P_WAVE2] || p[P_FM] || p[P_RING] || p[P_SHA] || p[P_O2])   /* GhettoMachine: the synth update's loop */
         analog_render_r(t, v, out, n, m);
     else if (t->p[P_FTYPE])
         analog_render_f(t, v, out, n, m);

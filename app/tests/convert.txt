@@ -1,5 +1,5 @@
-# fm1-eight's synth update (project format 2) loading what 0.2 saved (format 1): tools/build.py ../../app --host, then
-#   app/build/host/ghettomachine_host app/tests/convert.txt OUTDIR   (run from fm1-eight: the images' paths are relative)
+# GhettoMachine's synth update (project format 2) loading what 0.2 saved (format 1): tools/build.py ../../app --host, then
+#   app/build/host/ghettomachine_host app/tests/convert.txt OUTDIR   (run from the repository's top: the images' paths are relative)
 # app/tests/fixtures/proj_02.img: a 0.2 project as 0.2 saved it (the layout on the user's FM-1) and USER 1;
 # proj_perf.img: the performance update's whole file. Both made by fixtures/make_v1.txt with the format-1 build.
 # projfmt: the saved file's format (1 0.2's, 2 0.3's, 3 0.4's: this one's); sndN_ID: 8 CUTOFF 9 RESO; the update's: 26 WAVE 2,

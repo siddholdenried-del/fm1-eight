@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MPL-2.0
-"""fm1-eight's SAMPLER tracks from a Mac: a WAV in, a 12-bit sample out (and back).
+"""GhettoMachine's SAMPLER tracks from a Mac: a WAV in, a 12-bit sample out (and back).
 
     python3 -I tools/fm1_sample.py send LOOP.wav --track 3       convert it and send it to T3 (the FM-1 stopped)
     python3 -I tools/fm1_sample.py send PAD.wav --rate 22050     at 22.05 kHz: twice as long fits, a little darker

@@ -1,4 +1,4 @@
-# fm1-eight's perform keys (HOME) in the host simulator, over fx_demo.txt's groove, recorded to perform.wav: ROLL,
+# GhettoMachine's perform keys (HOME) in the host simulator, over fx_demo.txt's groove, recorded to perform.wav: ROLL,
 # FILL, STUTTER, FILTER, THROW, WASH, CRUSH (black keys 10 13 15 17 20 22 25), TAPE STOP (OCT+), solo (a track key +
 # OCT+), tap tempo (OCT-), nudge (SEL + SELECT).  app/build/host/ghettomachine_host app/tests/perform.txt OUTDIR
 # pfon: the effects on (bits: 1 ROLL 2 FILL 4 STUTTER 8 FILTER 16 THROW 32 WASH 64 CRUSH 128 TAPE STOP)

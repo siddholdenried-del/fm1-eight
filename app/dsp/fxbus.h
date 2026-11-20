@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); fm1-eight adds dl_off (the delay out of the chain). */
+/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); GhettoMachine adds dl_off (the delay out of the chain). */
 /* X0X send FX and master, shared by the drum and bass parts: a send reverb, and a
  * port of 9W9's (GPL-3.0) tempo-synced delay and master stage:
  *
@@ -113,7 +113,7 @@ struct fxbus {
     d9_biquad_t dl_hp;
     int16_t *dbuf;
     int32_t dlen, w, dl_quiet;
-    int32_t dl_off;                   /* fm1-eight: 1 = the delay out of the chain (its line lent to sampling) */
+    int32_t dl_off;                   /* GhettoMachine: 1 = the delay out of the chain (its line lent to sampling) */
     float dcur, lp, tape_hp;
     uint32_t wow_ph, flut_ph;
     int32_t dl_ping;                  /* X0X: ping-pong (PING WIDTH above 0), a second tap at twice the time */

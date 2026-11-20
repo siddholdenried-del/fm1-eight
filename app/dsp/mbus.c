@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight's master bus stages (see mbus.h). */
+/* GhettoMachine's master bus stages (see mbus.h). */
 #include "mbus.h"
 #include "fastmath.h"
 

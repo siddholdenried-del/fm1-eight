@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MPL-2.0
  * Copyright (C) 2026 Charles Vestal (fm1-base's template, which this starts from) */
-/* fm1-eight: four tracks (PLAN.md, phase 1).
+/* GhettoMachine: four tracks (PLAN.md, phase 1).
  *
  * T1 is the drum track, X0X-style: two kits (909 / 808, PRESETS), 11 pads on the black keys, accents (SEQ held +
  * steps), per-pad editing (EDIT), per-step chance (a step held + SELECT) and locks (EDIT, a step held + a knob), and a
@@ -5956,7 +5956,7 @@ static void lights(void)
 }
 
 /* ------------------------------------------------------------------- screen --- */
-/* fm1-eight's look (0.2): bright colour blocks, clear controls, meters everywhere. The page and the knob strip are
+/* GhettoMachine's look (0.2): bright colour blocks, clear controls, meters everywhere. The page and the knob strip are
  * the section's colour (the track's; cream for HOME, SONG and the mixer; cyan for FX; rose for the master bus), drawn
  * on in ink; the band above and the knob cards are dark, in that colour. Top to bottom:
  *   the band (240 x 44, y 0): big, what this is; then the page and what it's on; the pattern and the tempo; the

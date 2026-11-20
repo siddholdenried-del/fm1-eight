@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight: the instrument tracks' synth (PLAN.md, phase 2). Felucca-Engines' ANALOG voice (MIT, dsp/felucca/: two
+/* GhettoMachine: the instrument tracks' synth (PLAN.md, phase 2). Felucca-Engines' ANALOG voice (MIT, dsp/felucca/: two
  * band-limited oscillators, a sub, noise, drive and a trapezoidal state-variable filter) played by a host of our own:
  * a pool of 16 voices shared by T2..T4, an amp and a filter ADSR, glide, unison, a mono note stack with legato, voice
  * caps and stealing, and a pool size the app lowers when the CPU is short (shedding).

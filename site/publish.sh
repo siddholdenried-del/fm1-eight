@@ -1,6 +1,6 @@
 #!/bin/sh
 # groovebox.bongcult.com: Cloudflare Workers Builds deploys this repository's main branch on every push, serving
-# site/public (wrangler.toml). From fm1-eight, after the --web build: sh site/publish.sh rebuilds site/public from the
+# site/public (wrangler.toml). From the repository's top, after the --web build: sh site/publish.sh rebuilds site/public from the
 # committed source, commits it if it changed, and pushes main.
 set -e
 DIRTY=$(git status --porcelain --untracked-files=no -- . ':!site/public' | head -1)

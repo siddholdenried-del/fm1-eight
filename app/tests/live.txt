@@ -1,4 +1,4 @@
-# fm1-eight 0.2's performance update in the host simulator: SOUNDS PER PATTERN, follow actions, RELOAD, motion
+# GhettoMachine 0.2's performance update in the host simulator: SOUNDS PER PATTERN, follow actions, RELOAD, motion
 # recording, MIDI CLOCK, tap tempo, solo and a project saved before the update.  tools/build.py ../../app --host, then
 #   app/build/host/ghettomachine_host app/tests/live.txt OUTDIR
 # sounds: SOUNDS PER PATTERN; psndP_N: pattern P keeps track N's sound (the drums: their kit + 1); followP / fbarsP: scene

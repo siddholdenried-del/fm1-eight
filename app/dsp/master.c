@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); fm1-eight's changes are in master.h's head. */
+/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); GhettoMachine's changes are in master.h's head. */
 /* X0X master: bus compressor (+ PUMP), resonant multimode filter, volume, limiter.
  *
  * Compressor: feed-forward, peak detector, gain computed in dB with a 6 dB soft knee
@@ -38,7 +38,7 @@ static const x0x_param_t MST_P[MST_NPARAMS] = {
     {"LIMIT", 1, 1, ONOFF_N},
     {"COMP", 127, 0, 0},              /* X0X: one knob over THRESH, RATIO, MAKEUP (0 = off) */
     {"FILTER", 127, 64, 0},           /* X0X: one knob over MODE, CUTOFF (64 = off) */
-    {"GAIN", 24, 0, 0},               /* fm1-eight: 0 .. +12 dB into the limiter, 0.5 dB a step */
+    {"GAIN", 24, 0, 0},               /* GhettoMachine: 0 .. +12 dB into the limiter, 0.5 dB a step */
     {"CEILING", 60, 3, 0},            /* 0 .. -6 dB, 0.1 dB a step: 3 = -0.3 dB */
     {"RELEASE", 127, 75, 0},          /* 10 .. 1000 ms, exponential: 75 = ~150 ms (X0X's) */
 };

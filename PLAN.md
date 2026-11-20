@@ -1,6 +1,6 @@
 # BongTech GhettoMachine: a 4-track groovebox firmware for the M-VAVE FM-1
 
-(Called fm1-eight until 0.4, and still in this repository's name and the history below: renamed 2026-11-20.)
+(Called fm1-eight until 0.4, as in the history below: renamed 2026-11-20.)
 
 Working name only (it started as 8 tracks); rename it any time. Plan drafted 19 Nov 2026, cut to
 4 tracks the same day. **Version 0.2: phases 1 to 7 are built** and pass their simulator tests; none has run on the FM-1

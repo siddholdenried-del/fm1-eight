@@ -1,4 +1,4 @@
-# fm1-eight's synth (phase 2) in the host simulator: tools/build.py ../../app --host, then
+# GhettoMachine's synth (phase 2) in the host simulator: tools/build.py ../../app --host, then
 #   app/build/host/ghettomachine_host app/tests/synth.txt OUTDIR
 # the sound's parameters (sndN_ID): 0 WAVE 1 DETUNE 2 MIX 3 INTERVAL | 4 SUB 5 NOISE 6 PWM 7 DRIVE | 8 CUTOFF 9 RESO
 # 10 ENV AMT 11 FILTER | 12 KEYTRACK 13 VELOCITY 14 SPREAD 15 LEGATO | 16 VOICES 17 GLIDE | 18-21 AMP ADSR | 22-25 FILTER ADSR

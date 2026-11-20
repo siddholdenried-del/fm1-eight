@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight: the drum track's two kits (see drums.h). */
+/* GhettoMachine: the drum track's two kits (see drums.h). */
 #include "drums.h"
 #include "drum909.h"
 #include "drum808.h"

@@ -1,4 +1,4 @@
-# fm1-eight 0.2's recording help in the host simulator: the metronome, the count-in, recording to a grid, QUANTIZE and
+# GhettoMachine 0.2's recording help in the host simulator: the metronome, the count-in, recording to a grid, QUANTIZE and
 # LEGATO, all on REC held.  tools/build.py ../../app --host, then  app/build/host/ghettomachine_host app/tests/rec.txt OUTDIR
 # click: 0 OFF 1 ON 2 REC; countin: bars; recq: 0 a step 1 two 2 four; counting: in the count-in; clicks: since the
 # last look; noteN_S / gateN_S: track N, step S (1-based; gate in eighths of a step); nstepsN: steps with notes

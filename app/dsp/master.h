@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* From X0X v1.2.2 (Charles Vestal, GPL-3.0). fm1-eight's changes: the limiter's GAIN, CEILING and RELEASE
+/* From X0X v1.2.2 (Charles Vestal, GPL-3.0). GhettoMachine's changes: the limiter's GAIN, CEILING and RELEASE
  * (MST_LGAIN..), a bypass (byp), its reduction for the screen (lgr_view), and master_process_st in two halves
  * (master_pre_st, master_post_st) so the master bus's own stages (mbus.c) go between them. */
 /* X0X master section, after the send FX: compressor (with kick-keyed PUMP), resonant
@@ -13,7 +13,7 @@ enum {
     MST_MAKEUP, MST_MIX, MST_PUMP, MST_PUMPSRC,         /* page COMP 2 */
     MST_MODE, MST_CUTOFF, MST_RESO, MST_LIMIT,          /* page FILTER (+ the limiter switch) */
     MST_COMP1, MST_DJF,                                 /* X0X: one-knob COMP and FILTER (set the pots above) */
-    MST_LGAIN, MST_CEIL, MST_LREL,                      /* fm1-eight: the limiter's GAIN in, CEILING out, RELEASE */
+    MST_LGAIN, MST_CEIL, MST_LREL,                      /* GhettoMachine: the limiter's GAIN in, CEILING out, RELEASE */
     MST_NPARAMS
 };
 enum { PUMP_909, PUMP_808, PUMP_BOTH };
@@ -45,7 +45,7 @@ typedef struct {
     float env, gain, inv_env;         /* inv_env = 1 / env, kept up as env moves (no divide a sample) */
     float la[MST_LA], la_r[MST_LA];
     int la_pos, hold;
-    /* fm1-eight: GAIN (linear, into the limiter with the volume); CEILING c: the gain aims at lim_thr (c - 0.5 dB), a
+    /* GhettoMachine: GAIN (linear, into the limiter with the volume); CEILING c: the gain aims at lim_thr (c - 0.5 dB), a
      * soft knee from knee_k (c - 0.3 dB) rounds what gets past toward c; RELEASE: env's fall a sample, and 1 / it */
     float lgain, ceil_c, lim_thr, knee_k, env_dec, inv_dec;
     float lg_cur;                     /* GAIN as it glides (< 0: unset) */
@@ -69,7 +69,7 @@ void master_key(master_t *m, int kit, float vel);
 /* in place, mono: compressor, filter, volume (0..1+), limiter */
 void master_process(master_t *m, float *x, int n, float volume);
 /* X0X stereo: the compressor reads both sides' power, the limiter the louder side, and each moves
- * both together; the filter runs on each. It is master_pre_st, master_post_st, then master_volume_st (fm1-eight: the
+ * both together; the filter runs on each. It is master_pre_st, master_post_st, then master_volume_st (GhettoMachine: the
  * volume last, after the limiter, where X0X had it before) */
 void master_process_st(master_t *m, float *l, float *r, int n, float volume);
 void master_pre_st(master_t *m, float *l, float *r, int n);                  /* the compressor, the filter */

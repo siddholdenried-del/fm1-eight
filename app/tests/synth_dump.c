@@ -1,4 +1,4 @@
-/* fm1-eight: the synth's output for 0.2's 15 factory sounds, raw floats (L, R, reverb send, delay send a block), to
+/* GhettoMachine: the synth's output for 0.2's 15 factory sounds, raw floats (L, R, reverb send, delay send a block), to
  * show the synth update leaves them as they were: built once against app/attic/synth_v1 and once against app/dsp,
  * the two files must be the same byte for byte (app/tests/synth_same.sh). Uses only what both versions have; ACID is
  * played with 0.2's values (0.4 retuned the preset, not the engine). */

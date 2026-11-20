@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight: the drum track's two kits behind one small interface.
+/* GhettoMachine: the drum track's two kits behind one small interface.
  *
  * The 909 (X0X's drum909, after 9W9) and the 808 (X0X's drum808, after 8W8) share one pad layout,
  * so a pattern keeps its meaning when the kit changes:

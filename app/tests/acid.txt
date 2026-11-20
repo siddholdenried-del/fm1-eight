@@ -1,5 +1,5 @@
-# fm1-eight's 303 generator (0.4): the ACID pages, SEQ after STEPS on T2..T4. tools/build.py ../../app --host, then
-#   app/build/host/ghettomachine_host app/tests/acid.txt OUTDIR   (from fm1-eight)
+# GhettoMachine's 303 generator (0.4): the ACID pages, SEQ after STEPS on T2..T4. tools/build.py ../../app --host, then
+#   app/build/host/ghettomachine_host app/tests/acid.txt OUTDIR   (from the repository's top)
 # page 14: ACID. genpage 0: DENSITY WHOLE SLIDE ACCENT; 1 NOTES: ROOT SCALE NOTES OCTAVE; 2 LINE: SEED LENGTH RATE
 # SWING. genN_K: track N's part's generator, K 0 seed (0: never) 1 mutates 2 root 3 scale 4 notes 5 density 6 slide
 # 7 accent 8 octave 9 whole. naccN / nslideN / nwholeN / noffscaleN: the part's accents, slides, WHOLE notes, notes off

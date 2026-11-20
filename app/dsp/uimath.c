@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight: see uimath.h */
+/* GhettoMachine: see uimath.h */
 #include "uimath.h"
 #include "fastmath.h"
 

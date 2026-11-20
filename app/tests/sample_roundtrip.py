@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""fm1-eight: a WAV to T3 and T4 and back through the host simulator, as tools/fm1_sample.py does over USB.
+"""GhettoMachine: a WAV to T3 and T4 and back through the host simulator, as tools/fm1_sample.py does over USB.
 
     python3 -I app/tests/sample_roundtrip.py app/tools app/build/host/ghettomachine_host OUTDIR
 

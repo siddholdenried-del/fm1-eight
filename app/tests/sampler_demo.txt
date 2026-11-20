@@ -1,4 +1,4 @@
-# fm1-eight: resampling, heard. One bar of the default beat recorded into T3 (2 s at 120), looped, played on the keys:
+# GhettoMachine: resampling, heard. One bar of the default beat recorded into T3 (2 s at 120), looped, played on the keys:
 # C4 (its own pitch) for two bars, then A3 (three semitones down, slower) for two. To sampler_demo.wav
 #   app/build/host/ghettomachine_host app/tests/sampler_demo.txt OUTDIR
 wait 600

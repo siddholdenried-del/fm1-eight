@@ -1,7 +1,7 @@
 # groovebox.bongcult.com: Cloudflare Workers Builds deploys this repository's main branch on every push (no build
 # command, deploy command "npx wrangler deploy"). It serves site/public as it is, with no Worker code: the site is
 # built here, not there (the emulator needs Emscripten), by site/publish.sh. The name must be the Worker's own.
-name = "fm1-eight"
+name = "ghettomachine"
 compatibility_date = "2025-09-01"
 
 [assets]

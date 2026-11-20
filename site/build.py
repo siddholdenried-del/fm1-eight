@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """groovebox.bongcult.com: BongTech GhettoMachine's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
 
-  python3 -I site/build.py site/public   (from fm1-eight, after tools/build.py ../../app --web in third_party/fm1-base;
+  python3 -I site/build.py site/public   (from the repository's top, after tools/build.py ../../app --web in third_party/fm1-base;
                                          site/publish.sh does this, commits it and pushes)
 
 site/public/index.html   the page, a whole HTML document, its "Play it" section framing emu/
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO = "https://github.com/siddholdenried-del/fm1-eight"
+REPO = "https://github.com/siddholdenried-del/ghettomachine"
 ICON = '<link rel="icon" href="HREF" type="image/svg+xml">\n'
 FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#5AD282"/>'
            '<text x="32" y="47" font-family="Arial Narrow, Arial, sans-serif" font-weight="700" font-size="44" '

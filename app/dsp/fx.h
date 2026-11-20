@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight's effects and master bus (PLAN.md, phases 5 and 7), X0X's (GPL-3.0) and its own behind one small interface:
+/* GhettoMachine's effects and master bus (PLAN.md, phases 5 and 7), X0X's (GPL-3.0) and its own behind one small interface:
  *   the sends: a reverb (ROOM: four diffusers into an 8-line feedback network) and a tempo-synced delay (DIGI or TAPE,
  *   ping-pong by its WIDTH), added to the dry mix (fxbus.c; its own glue compressor, distortion and volume left at off
  *   and unity);

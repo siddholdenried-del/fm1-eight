@@ -1,4 +1,4 @@
-/* fm1-eight's master bus stages (dsp/mbus.c) and the limiter (dsp/master.c), measured with sines:
+/* GhettoMachine's master bus stages (dsp/mbus.c) and the limiter (dsp/master.c), measured with sines:
  *   cc -std=c99 -O2 -ffp-contract=off -Iapp/dsp app/tests/mbus_unit.c app/dsp/mbus.c app/dsp/master.c -lm -o mbus_unit
  *   ./mbus_unit            (exit 0: every check passed; it prints each)
  * The EQ's response is checked against its own drawn curve (mbus_eq_db) and against the cookbook's targets; TAPE,

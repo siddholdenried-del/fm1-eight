@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); fm1-eight skips the delay while dl_off. */
+/* From X0X v1.2.2 (Charles Vestal, GPL-3.0); GhettoMachine skips the delay while dl_off. */
 /* Send reverb (ROOM, X0X's own), synced delay and master stage. The delay and the master are a port
  * of 9W9's er99_dly_tick, master distortion and master_glue (GPL-3.0). See fxbus.h. */
 #include "fxbus.h"
@@ -846,7 +846,7 @@ void fxbus_process_st(fxbus_t *f, const float *dry_l, const float *dry_r, const 
         out_r[i] = dry_r[i];
     }
     fx_room(f, rev, out_l, out_r, n);
-    if (!f->dl_off)                   /* fm1-eight */
+    if (!f->dl_off)                   /* GhettoMachine */
         fx_delay(f, dly, out_l, out_r, n);
     if (f->dist_mode >= 1) {
         const float k = f->drive;

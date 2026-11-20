@@ -1,16 +1,16 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight: the instrument tracks' synth (see synth.h).
+/* GhettoMachine: the instrument tracks' synth (see synth.h).
  *
  * The voice is Felucca-Engines' ANALOG (MIT, Leo Kuroshita / Hügelton Instruments: dsp/felucca/, built as the engines
  * ask, in one unit with their host; eng_analog.c gained a sub level and an interval for OSC 2). The host around it, the
- * envelopes, glide, unison, the note stack, the caps and the pool, is fm1-eight's. The factory sounds are after
+ * envelopes, glide, unison, the note stack, the caps and the pool, is GhettoMachine's. The factory sounds are after
  * Felucca's ANALOG presets, retuned to this host's envelope times. */
 #include "synth.h"
 
 /* ---------------------------------------------- the engine, as it asks to be built --- */
 #define NVOICE SYN_VOICES
 #define NPART SYN_TRACKS
-/* P_WAVE2 .. P_O2: fm1-eight's synth update (eng_analog.c): OSC 2's wave (0 OSC 1's), FM, RING, the SHAPER (type,
+/* P_WAVE2 .. P_O2: GhettoMachine's synth update (eng_analog.c): OSC 2's wave (0 OSC 1's), FM, RING, the SHAPER (type,
  * amount, bias, PRE / POST) and OSC 2's pitch moved by the matrix (1/16 semitone; a voice's own, 0 in the track's) */
 enum { P_E0, P_E1, P_E2, P_E3, P_E4, P_E5, P_E6, P_E7, P_FTYPE, P_SUB, P_INTV, P_ATK, P_REL,
        P_WAVE2, P_FM, P_RING, P_SHT, P_SHA, P_BIAS, P_SHPOS, P_O2, P_NUM };

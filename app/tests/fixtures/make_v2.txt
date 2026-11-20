@@ -1,5 +1,5 @@
 # Made once with 0.3's build (project format 2), before the 303 generator (format 3), to keep a project as 0.3 saved
-# it for app/tests/convert3.txt: proj_03.img. Run from fm1-eight: app/build/host/ghettomachine_host
+# it for app/tests/convert3.txt: proj_03.img. Run from the repository's top: app/build/host/ghettomachine_host
 # app/tests/fixtures/make_v2.txt OUTDIR (with the format-2 build only; kept for the record)
 wait 600
 expect projsize 31544

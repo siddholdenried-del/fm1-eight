@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight's master bus: the mastering stages around X0X's compressor and limiter (fx.c puts them in order):
+/* GhettoMachine's master bus: the mastering stages around X0X's compressor and limiter (fx.c puts them in order):
  *
  *   EQ      a low cut (12 dB/oct), a low shelf, a mid bell and a high shelf: RBJ biquads, transposed direct form II,
  *           before the compressor. A band at 0 dB (the cut at OFF) is skipped, sample for sample.

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MPL-2.0
  * Copyright (C) 2026 Charles Vestal (fm1-base's template, which this starts from) */
-/* fm1-eight: four tracks, the drums and T2..T4. The app's half of the contract with the platform
+/* GhettoMachine: four tracks, the drums and T2..T4. The app's half of the contract with the platform
  * (device/unity.c, host/plat_host.c). */
 #pragma once
 #include <stdint.h>

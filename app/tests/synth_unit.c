@@ -1,6 +1,6 @@
-/* fm1-eight's synth update checked on app/dsp/synth.c alone: OSC 2's wave, FM, RING, the SHAPER, the matrix, MOD ENV,
+/* GhettoMachine's synth update checked on app/dsp/synth.c alone: OSC 2's wave, FM, RING, the SHAPER, the matrix, MOD ENV,
  * LFO 2, DRIFT and MACRO do what they say, and nothing overflows (built with the undefined-behaviour sanitizer: a
- * signed overflow stops it). From fm1-eight, after a host build (app/build/gen/fe_tables.h):
+ * signed overflow stops it). From the repository's top, after a host build (app/build/gen/fe_tables.h):
  *   cc -std=c99 -O1 -g -fsanitize=undefined,address -fno-sanitize-recover=all -Iapp/build/gen -Iapp/dsp \
  *      app/tests/synth_unit.c app/dsp/synth.c -lm -o "$TMPDIR/su" && "$TMPDIR/su"
  * It also times a plain voice against one with FM and the SHAPER (the host's CPU: a ratio, not the FM-1's load). */

@@ -1,4 +1,4 @@
-# BongTech GhettoMachine (this repository: fm1-eight): build settings (fm1-base tools/build.py). Four tracks: the drums, then T2..T4 (PLAN.md).
+# BongTech GhettoMachine: build settings (fm1-base tools/build.py). Four tracks: the drums, then T2..T4 (PLAN.md).
 name = "GHETTOMACHINE"         # the build's file names (lower case): build/ghettomachine.fwsc
 id_prefix = "FM-1_8"           # package identity: dev builds FM-1_800 (three digits, as M-UPGRADE and the Unbricker read it)
 usb_manufacturer = "BongTech"
@@ -13,7 +13,7 @@ cpu2_fallback = true           # one core (8 voices) after a failure of it, inst
 companion = true              # the project file (plat_file_*); the samples over USB later (tools/fm1_sample.py)
 # the site and firmware.json
 tagline = "a 4-track groovebox for the FM-1: a 909 / 808 drum track and three instrument tracks"
-repo = "https://github.com/siddholdenried-del/fm1-eight"
+repo = "https://github.com/siddholdenried-del/ghettomachine"
 licence = "GPL-3.0-only"
 credits = "Built on fm1-base and felucca-bsp (MPL-2.0); the synth voice from Felucca-Engines by Leo Kuroshita, Hügelton Instruments (MIT); the 909 and 808 engines from X0X by Charles Vestal (GPL-3.0), after 9W9 and 8W8 by athousanddetails; the 909 cymbals from ER-99 by Matthew Cieplak (GPL-3.0); the reverb, delay and master from X0X (GPL-3.0), after 9W9."
 author = ""

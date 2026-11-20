@@ -1,4 +1,4 @@
-# fm1-eight's mixer and FX (phase 5) in the host simulator: tools/build.py ../../app --host, then
+# GhettoMachine's mixer and FX (phase 5) in the host simulator: tools/build.py ../../app --host, then
 #   app/build/host/ghettomachine_host app/tests/fx.txt OUTDIR
 # mixN_K: track N, K 0 level 1 pan 2 reverb send 3 delay send; fxI: dsp/fx.h FXP_* (0..3 reverb, 4..7 delay, 8..11
 # delay 2, 19..20 FILTER: filter reso; on the master bus (tests/master.txt has the rest): 12..15 COMP: threshold ratio

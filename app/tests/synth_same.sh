@@ -1,6 +1,6 @@
 #!/bin/sh
-# fm1-eight: 0.2's factory sounds render the same, byte for byte, before (app/attic/synth_v1) and after the synth
-# update (app/dsp). From fm1-eight: sh app/tests/synth_same.sh  (needs app/build/gen/fe_tables.h: a host build first)
+# GhettoMachine: 0.2's factory sounds render the same, byte for byte, before (app/attic/synth_v1) and after the synth
+# update (app/dsp). From the repository's top: sh app/tests/synth_same.sh  (needs app/build/gen/fe_tables.h: a host build first)
 set -e
 T=$(mktemp -d)
 mkdir -p "$T/old/felucca"

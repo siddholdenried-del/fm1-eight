@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* fm1-eight's effects and master bus: X0X's fxbus and master, and mbus, behind fx.h. */
+/* GhettoMachine's effects and master bus: X0X's fxbus and master, and mbus, behind fx.h. */
 #include "fx.h"
 #include "fxbus.h"
 #include "master.h"

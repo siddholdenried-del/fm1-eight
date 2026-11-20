@@ -1,4 +1,4 @@
-# fm1-eight's SAMPLER tracks (phase 3) in the host simulator: tools/build.py ../../app --host, then
+# GhettoMachine's SAMPLER tracks (phase 3) in the host simulator: tools/build.py ../../app --host, then
 #   app/build/host/ghettomachine_host app/tests/sampler.txt OUTDIR
 # sshapeN_K: 0 start, 1 end (thousandths), 2 loop, 3 loop start, 4 root, 5 tune, 6 the next recording's rate (1: 22 kHz)
 # the sound to sample: the bass drum over MIDI (channel 10, note 36)

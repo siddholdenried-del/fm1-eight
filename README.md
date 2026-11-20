@@ -6,7 +6,7 @@ for playing live, an LFO on every track, an arpeggiator and chord mode, a reverb
 mastering chain, a deeper synth (FM, ring, a wave shaper, a mod matrix, macros) and a **303 pattern generator** whose
 slides and accents play on any sound.
 
-It was called fm1-eight until 0.4, and this repository still is.
+It was called fm1-eight until 0.4.
 
 - **Play it in the browser:** <https://groovebox.bongcult.com> (the firmware compiled to WebAssembly)
 - **The manual:** [MANUAL.md](MANUAL.md)
@@ -19,8 +19,8 @@ an FM-1 that already has an fm1-base or Felucca firmware on it, installed over U
 ## Building
 
 ```sh
-git clone --recursive https://github.com/siddholdenried-del/fm1-eight
-cd fm1-eight/third_party/fm1-base
+git clone --recursive https://github.com/siddholdenried-del/ghettomachine
+cd ghettomachine/third_party/fm1-base
 python3 -m venv ../../.venv && ../../.venv/bin/pip install pillow==13.0.0 mido==1.3.3 python-rtmidi==1.5.8
 ../../.venv/bin/python tools/build.py ../../app --host   # the simulator: app/build/host/ghettomachine_host
 ../../.venv/bin/python tools/build.py ../../app          # the FM-1 package: app/build/ghettomachine.fwsc (needs Docker)

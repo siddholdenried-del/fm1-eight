@@ -1,4 +1,4 @@
-# fm1-eight: phase 5, heard: phase 4's groove through the mixer and FX (the pluck and the pad sent to the reverb and
+# GhettoMachine: phase 5, heard: phase 4's groove through the mixer and FX (the pluck and the pad sent to the reverb and
 # the delay, as the default mixer has them; the delay ping-pong; PUMP ducking to the kick; MASTER as it comes, the limiter
 # on). Built from mod_demo.txt.
 # phase 4: The demo groove's bass (T2) and pad (T4), the pad's CUTOFF swept by its LFO over 2 bars;
