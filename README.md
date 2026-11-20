@@ -8,7 +8,7 @@ slides and accents play on any sound.
 
 It was called fm1-eight until 0.4.
 
-- **Play it in the browser:** <https://groovebox.bongcult.com> (the firmware compiled to WebAssembly)
+- **Play it in the browser:** <https://ghettomachine.bongcult.com> (the firmware compiled to WebAssembly)
 - **The manual:** [MANUAL.md](MANUAL.md)
 - **How it works:** [docs/how-it-works.html](docs/how-it-works.html), the page at the site above
 - **Design notes and history:** [PLAN.md](PLAN.md)
@@ -28,7 +28,7 @@ python3 -m venv ../../.venv && ../../.venv/bin/pip install pillow==13.0.0 mido==
 cd ../.. && sh site/publish.sh                          # the site: rebuilt, committed, pushed
 ```
 
-The site at groovebox.bongcult.com is `site/public` as committed: Cloudflare Workers Builds deploys `main` on every
+The site at ghettomachine.bongcult.com is `site/public` as committed: Cloudflare Workers Builds deploys `main` on every
 push and serves that folder (`wrangler.toml`), with no build of its own.
 
 fm1-base's README has the details (the toolchain runs in Docker; Pillow 13 rasterises the fonts; mido and

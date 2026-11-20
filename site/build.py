@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""groovebox.bongcult.com: BongTech GhettoMachine's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
+"""ghettomachine.bongcult.com: BongTech GhettoMachine's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
 
   python3 -I site/build.py site/public   (from the repository's top, after tools/build.py ../../app --web in third_party/fm1-base;
                                          site/publish.sh does this, commits it and pushes)

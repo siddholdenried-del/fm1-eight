@@ -21,6 +21,6 @@ author = ""
 description = "A 909 / 808 drum track with per-pad editing and per-pattern mutes, and three instrument tracks (mono, poly or sampler)."
 tags = ["drum-machine", "groovebox"]
 install = ""
-site = "https://groovebox.bongcult.com"
+site = "https://ghettomachine.bongcult.com"
 title = "BongTech GhettoMachine"
 screenshot = ""

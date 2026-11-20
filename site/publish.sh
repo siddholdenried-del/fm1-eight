@@ -1,5 +1,5 @@
 #!/bin/sh
-# groovebox.bongcult.com: Cloudflare Workers Builds deploys this repository's main branch on every push, serving
+# ghettomachine.bongcult.com: Cloudflare Workers Builds deploys this repository's main branch on every push, serving
 # site/public (wrangler.toml). From the repository's top, after the --web build: sh site/publish.sh rebuilds site/public from the
 # committed source, commits it if it changed, and pushes main.
 set -e
