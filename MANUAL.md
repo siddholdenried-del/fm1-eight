@@ -14,8 +14,8 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
   analog drift, a third envelope, a second LFO for each note, a six-slot mod matrix and four macro knobs.
 - **A 303 pattern generator** on T2–T4: acid lines with slides and accents, made from a few knobs.
 
-> **0.4 is built, not installed yet; 0.3 is on the FM-1** (installed over USB on 20 Nov). 0.4 is 0.3 plus the 303
-> generator. 0.3 is 0.2 plus the performance update (the scene grid onwards) and the synth update. 0.4 passes its
+> **0.4 is on the FM-1** (installed over USB on 20 Nov, as BongTech GhettoMachine, after 0.3 the same day). 0.4 is
+> 0.3 plus the 303 generator, the new name and the boot screen's logo. 0.3 is 0.2 plus the performance update (the scene grid onwards) and the synth update. 0.4 passes its
 > simulator tests (1,401 checks, 39 more on the synth itself and 48 on the master bus's sound). It reads a project
 > saved by 0.2 or 0.3.
 
