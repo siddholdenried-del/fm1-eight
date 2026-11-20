@@ -13,3 +13,5 @@ third_party/fm1-x0x/
 third_party/Felucca-Engines/
 # the developer's own backups
 app/attic/
+
+# (site/publish.sh: the built site goes to the "site" branch)
