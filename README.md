@@ -23,8 +23,11 @@ python3 -m venv ../../.venv && ../../.venv/bin/pip install pillow==13.0.0 mido==
 ../../.venv/bin/python tools/build.py ../../app --host   # the simulator: app/build/host/eight_host
 ../../.venv/bin/python tools/build.py ../../app          # the FM-1 package: app/build/eight.fwsc (needs Docker)
 ../../.venv/bin/python tools/build.py ../../app --web    # the browser emulator: app/build/emu (needs Emscripten)
-cd ../.. && python3 -I site/build.py site/out            # the site: the page and the emulator
+cd ../.. && sh site/publish.sh                          # the site: rebuilt, committed, pushed
 ```
+
+The site at groovebox.bongcult.com is `site/public` as committed: Cloudflare Workers Builds deploys `main` on every
+push and serves that folder (`wrangler.toml`), with no build of its own.
 
 fm1-base's README has the details (the toolchain runs in Docker; Pillow 13 rasterises the fonts; mido and
 python-rtmidi talk to the FM-1). The tests are scripts for the simulator, run from the repository's top: `app/build/host/eight_host app/tests/acid.txt

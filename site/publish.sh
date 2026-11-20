@@ -1,19 +1,17 @@
 #!/bin/sh
-# groovebox.bongcult.com: the built site (site/build.py) pushed to this repository's "site" branch, which Cloudflare
-# Pages deploys (production branch "site", no build command, output directory "/"). From fm1-eight, after the --web
-# build: sh site/publish.sh
+# groovebox.bongcult.com: Cloudflare Workers Builds deploys this repository's main branch on every push, serving
+# site/public (wrangler.toml). From fm1-eight, after the --web build: sh site/publish.sh rebuilds site/public from the
+# committed source, commits it if it changed, and pushes main.
 set -e
-SRC=$(git rev-parse --short HEAD)
-DIRTY=$(git status --porcelain --untracked-files=no | head -1)
+DIRTY=$(git status --porcelain --untracked-files=no -- . ':!site/public' | head -1)
 [ -z "$DIRTY" ] || { echo "publish: commit the source first (the site must match a commit)"; exit 1; }
-T=$(mktemp -d)
-python3 -I site/build.py "$T/out"
-cd "$T/out"
-git init -q -b site
-git config user.name "$(git -C "$OLDPWD" config user.name)"
-git config user.email "$(git -C "$OLDPWD" config user.email)"
-git add -A
-git commit -q -m "groovebox.bongcult.com, built from $SRC"
-git push -q -f "$(git -C "$OLDPWD" remote get-url origin)" site
-echo "publish: the site branch is $SRC's site"
-rm -rf "$T"
+SRC=$(git rev-parse --short HEAD)
+python3 -I site/build.py site/public
+git add -A site/public
+if git diff --cached --quiet; then
+  echo "publish: site/public already matches $SRC"
+else
+  git commit -q -m "The site, built from $SRC"
+fi
+git push -q origin main
+echo "publish: main pushed; Cloudflare deploys it in a minute or two"

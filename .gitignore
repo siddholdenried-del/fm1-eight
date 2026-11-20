@@ -1,6 +1,5 @@
 # builds and tools made on the machine
 app/build/
-site/out/
 .emsdk/
 .venv/
 __pycache__/
@@ -14,4 +13,4 @@ third_party/Felucca-Engines/
 # the developer's own backups
 app/attic/
 
-# (site/publish.sh: the built site goes to the "site" branch)
+# (site/public is kept: it is the site Cloudflare serves, built by site/publish.sh)

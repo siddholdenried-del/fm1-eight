@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """groovebox.bongcult.com: fm1-eight's page (docs/how-it-works.html) with the emulator framed in it, and the emulator.
 
-  python3 -I site/build.py OUT_DIR      (from fm1-eight, after tools/build.py ../../app --web in third_party/fm1-base)
+  python3 -I site/build.py site/public   (from fm1-eight, after tools/build.py ../../app --web in third_party/fm1-base;
+                                         site/publish.sh does this, commits it and pushes)
 
-OUT_DIR/index.html   the page, a whole HTML document, its "Play it" section framing emu/
-OUT_DIR/emu/         the emulator: app/build/emu (the page, app.wasm, the audio worklet, its parts)
-OUT_DIR/_headers     Cloudflare Pages' headers (wasm's type, caching)
+site/public/index.html   the page, a whole HTML document, its "Play it" section framing emu/
+site/public/emu/         the emulator: app/build/emu (the page, app.wasm, the audio worklet, its parts)
+site/public/_headers     the headers Cloudflare serves with it (wasm's type, caching)
 """
 import re
 import shutil
