@@ -1,0 +1,155 @@
+/* The Bong Cult frame wraps the GhettoMachine guide. Its chapter colours and
+   the separate /emu/ app still belong to the instrument. */
+:root {
+  color-scheme: dark;
+  background: #8500ff;
+}
+body.gm-bong-cult {
+  --bg: #8500ff;
+  --fg: #fff5fa;
+  --muted: #e5c9ee;
+  --rule: #aa7dc2;
+  --panel: #341052;
+  --card: #230337;
+  --bc-purple: #8500ff;
+  --bc-panel: #290744;
+  --bc-sidebar: #bb8ced;
+  --bc-white: #fff5fa;
+  --bc-yellow: #fff477;
+  --bc-rule: #daadf6;
+  --bc-paper: #d9b1f9;
+  --bc-highlight: #f5dfff;
+  --bc-shadow: #7a5996;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 0 clamp(1.8rem, 5vw, 4.5rem);
+}
+.gm-bong-cult :focus-visible {
+  outline: 3px dashed currentColor;
+  outline-offset: 4px;
+}
+.bc-skip {
+  position: absolute;
+  z-index: 2;
+  top: .6rem;
+  left: .6rem;
+  transform: translateY(calc(-100% - 1rem));
+  padding: .45rem .8rem;
+  color: var(--bc-white);
+  background: var(--bc-panel);
+}
+.bc-skip:focus { transform: none; }
+.bc-masthead {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: clamp(.55rem, 1.55vw, 1.25rem);
+  width: min(94%, 73rem);
+  margin: 0 auto;
+  padding: 1.4rem 0 0;
+  font-family: "Times New Roman", Times, serif;
+}
+.bc-masthead > :not(.bc-stars) { z-index: 1; }
+.bc-name {
+  width: min(65%, 20rem);
+  display: block;
+}
+.bc-name img { display: block; width: 100%; height: auto; }
+.bc-badge {
+  margin: 0;
+  padding: .28rem clamp(.9rem, 3vw, 1.55rem);
+  border: 3px ridge var(--bc-rule);
+  background: #09060a;
+  color: #7dff38;
+  font: 700 clamp(.72rem, 1.4vw, .95rem)/1.2 "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  text-align: center;
+}
+.bc-rainbow {
+  width: 88%;
+  height: 6px;
+  margin: .15rem auto 0;
+  background: linear-gradient(90deg,#ff0626,#ff9559,#ffe45c,#a3ef5f,#4cf9e9,#5fa8ff,#ff57fc);
+}
+.bc-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--bc-white);
+  font: bold 1rem/1 monospace;
+}
+.bc-stars span { position: absolute; }
+.bc-stars span:nth-child(1) { top: 36%; left: 11%; }
+.bc-stars span:nth-child(2) { top: 67%; left: 21%; color: var(--bc-yellow); }
+.bc-stars span:nth-child(3) { top: 68%; left: 6%; }
+.bc-stars span:nth-child(4) { top: 39%; right: 11%; color: var(--bc-yellow); }
+.bc-stars span:nth-child(5) { top: 66%; right: 20%; }
+.bc-stars span:nth-child(6) { top: 74%; right: 5%; }
+.bc-frame {
+  display: grid;
+  grid-template-columns: clamp(10rem, 16vw, 13rem) minmax(0,1fr);
+  width: min(94%, 73rem);
+  margin: 1.65rem auto 0;
+  border: 7px ridge var(--bc-paper);
+  background: var(--bc-panel);
+}
+.bc-sidebar {
+  min-width: 0;
+  padding: clamp(.7rem, 1.65vw, 1.25rem);
+  border-right: 6px ridge var(--bc-paper);
+  background: var(--bc-sidebar);
+  color: #160d1e;
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+}
+.bc-sidebar nav {
+  display: grid;
+  gap: .6rem;
+}
+.bc-sidebar a {
+  display: grid;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: .25rem;
+  border: 4px solid;
+  border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
+  background: #d0acf0;
+  color: #160d1e;
+  text-decoration: none;
+  font-size: clamp(.95rem, 1.45vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.bc-sidebar a:hover { background: #ebcaff; }
+.bc-sidebar a:active { border-color: var(--bc-shadow) var(--bc-highlight) var(--bc-highlight) var(--bc-shadow); }
+.gm-bong-cult .wrap {
+  width: min(100%, 54rem);
+  min-width: 0;
+  max-width: none;
+  padding: 0 clamp(.85rem, 2.3vw, 1.75rem) clamp(1.25rem, 3vw, 2.25rem);
+  overflow-wrap: anywhere;
+}
+.gm-bong-cult .hero .screen { border: 4px ridge #ffa86f; border-radius: 0; }
+.gm-bong-cult .band { border: 2px solid #ffffff35; border-radius: 0; }
+.gm-bong-cult .band .tag { white-space: normal; text-align: right; }
+.gm-bong-cult .wrap a { color: var(--bc-yellow); }
+.gm-bong-cult .emu-frame {
+  width: 100%;
+  margin: 14px 0 6px;
+  transform: none;
+  border: 3px ridge var(--bc-rule);
+  border-radius: 0;
+}
+.gm-bong-cult .emu-frame iframe { height: clamp(610px, 72vw, 740px); }
+@media (max-width: 47rem) {
+  .bc-frame { display: block; margin-top: 1.1rem; border-width: 5px; }
+  .bc-sidebar { border-right: 0; border-bottom: 5px ridge var(--bc-paper); }
+  .bc-sidebar nav { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .4rem; }
+  .bc-sidebar a { border-width: 3px; }
+  .bc-rainbow { height: 4px; }
+  .gm-bong-cult .hero { padding-top: 1rem; }
+}
+@media (max-width: 27rem) {
+  .gm-bong-cult .hero .screen { padding-inline: .65rem; }
+  .gm-bong-cult .hero h1 .logo { font-size: clamp(1.6rem, 7vw, 2.35rem); }
+}

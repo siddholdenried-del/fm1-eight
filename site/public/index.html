@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8500ff">
 <meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1: how it works, and the firmware itself running in the browser.">
 <title>Inside GhettoMachine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -177,10 +178,26 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="bong-cult-shell.css">
 </head>
-<body>
-<div class="wrap">
-
+<body class="gm-bong-cult">
+<a class="bc-skip" href="#gm-main">Skip to the guide</a>
+<header class="bc-masthead">
+  <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
+  <p class="bc-badge">BongTech · Project site</p>
+  <a class="bc-name" href="https://bongcult.com/"><img src="bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
+  <div class="bc-rainbow" aria-hidden="true"></div>
+</header>
+<div class="bc-frame">
+  <aside class="bc-sidebar">
+    <nav aria-label="GhettoMachine">
+      <a href="#play">Play it</a>
+      <a href="#platform">Read the guide</a>
+      <a href="#story">Project history</a>
+      <a href="https://bongcult.com/">Bong Cult journal</a>
+    </nav>
+  </aside>
+  <main class="wrap" id="gm-main" tabindex="-1">
 <header class="hero">
   <div class="screen">
     <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.4</span></div>
@@ -636,7 +653,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 </section>
 
 <footer>BongTech GhettoMachine 0.4, as of 20 November 2026. Built on fm1-base (Charles Vestal), with X0X's drum models and effects and Felucca-Engines' ANALOG voice. It's free software under the GPL-3.0: the source and the full manual are at <a href="https://github.com/siddholdenried-del/ghettomachine">github.com/siddholdenried-del/GhettoMachine</a>.</footer>
+  </main>
 </div>
-
 </body>
 </html>
