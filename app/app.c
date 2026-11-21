@@ -3459,6 +3459,53 @@ static void legato(void)
     app_say("LEGATO", n ? t : "NO NOTES");
 }
 
+/* REC held + GLO: the selected track's part of the pattern it plays (or, stopped, would play) emptied, to record it
+ * again: its notes or hits, accents, chance and locks go; its LENGTH, RATE, pad mutes and ACID settings stay. Recording
+ * stays armed or not as it was, the transport runs on, and the step recording's cursor goes back to step 1. Undo (EDIT +
+ * OCT-) brings it back */
+static void part_erase(void)
+{
+    int tr = ui.trk, n = clip_of(tr), s;
+    char t[16];
+    uint32_t f;
+    undo_mark(0);                         /* (the pattern clip_of(tr): edit_pat's) */
+    f = plat_lock();
+    if (tr == TR_DRUM) {
+        dpart_t *p = &proj.p[n].d;
+        for (s = 0; s < NPADS; s++) {
+            p->hit[s][0] = p->hit[s][1] = 0;
+            sq.skip_once[s] = -1;
+        }
+        p->acc[0] = p->acc[1] = 0;
+        p->nlk = 0;
+        locks_release();                  /* a knob a lock held: its own value again */
+        ck.pre_pads = 0;
+    } else {
+        ipart_t *p = &proj.p[n].t[tr - 1], none;
+        for (s = 0; s < NSTEPS; s++)
+            nstep_clear(&p->st[s]);
+        p->nlk = 0;
+        none.nlk = 0;
+        ilocks_apply(tr, &none, -1);      /* a knob a lock held: its own value again */
+        sq.iskip[tr] = -1;
+        ck.pre &= (uint8_t)~(1u << tr);
+        ui.cursor[tr] = 0;
+        ui.srec_held = ui.srec_n = 0;
+    }
+    plat_unlock(f);
+    ui.held_step = -1;
+    {
+        char u[4];
+        u[0] = 'P';                       /* (no initialiser: the device links no memcpy) */
+        two_digits(n + 1, u + 1);
+        t[0] = 0;
+        text_cat(t, TRK_NAME[tr]);
+        text_cat(t, " ");
+        text_cat(t, u);
+    }
+    app_say("ERASED", t);
+}
+
 static void note_down(int key)            /* a key on the KEYS (or EDIT) page of an instrument track */
 {
     int tr = ui.trk, note, vel;
@@ -5664,7 +5711,11 @@ static void input(void)
         ui.page = (uint8_t)(ui.page == PG_HOME ? PG_SONG : ui.page == PG_SONG ? PG_SETUP
                             : ui.page == PG_SETUP ? home_page(ui.trk) : PG_HOME);
     if (pressed >> B_GLO & 1u) {          /* the mixer: LEVEL, PAN, REVERB, DELAY; the master bus's pages; then back */
-        if (btn >> B_SEL & 1u) {          /* SEL + GLO: the master bus, at once */
+        if ((btn >> B_REC & 1u) && rec.state == RS_IDLE) {   /* REC + GLO: the track's part erased, to record again */
+            ui.rec_used = ui.rec_shown = 1;
+            part_erase();
+            ui.redraw = 1;
+        } else if (btn >> B_SEL & 1u) {   /* SEL + GLO: the master bus, at once */
             ui.sel_used = 1;
             ui.page = PG_MST;
             ui.mstpage = 0;
@@ -8164,7 +8215,7 @@ static void page_rec(void)                /* REC held: the metronome, the count-
     int tr = ui.trk, g = recq_steps(), k, i, inst = tr != TR_DRUM;
     const char *grid = GRID_NAME[*part_rate(tr) % NRATES][recq_grid()];
     char t[32];
-    band_set(C_RECCOL, "REC", ui.rec ? "RECORDING ON" : "RECORDING OFF", "TAP REC: ON / OFF", 0, 0);
+    band_set(C_RECCOL, "REC", ui.rec ? "RECORDING ON" : "RECORDING OFF", "GLO: ERASE PART", 0, 0);   /* (REC + GLO) */
     /* the two things it does to the notes there now */
     rrect(3, 2, 115, 44, 6, C_TILE);
     cv_text(10, 3, &FONT_XS, "OCT-", C_TILET2);

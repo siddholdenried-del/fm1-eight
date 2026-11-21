@@ -15,10 +15,11 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 - **A 303 pattern generator** on T2–T4: acid lines with slides and accents, made from a few knobs.
 - **Stems over USB:** a computer records the master and each track on its own pair of inputs, all at once.
 
-> **0.5 is on the FM-1** (installed over USB on 20 Nov, after 0.4 the same day). A real recording from it clicked now
-> and then, so 0.5 now keeps a deeper USB buffer, and MASTER no longer changes what a computer records: those two
-> changes are in the source, not on the FM-1 yet, and so is the drum steps' beat glow (steps 1, 5, 9, 13). 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
-> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,501 checks, 39 more on the
+> **0.5 is on the FM-1** (first installed over USB on 20 Nov). The first recording from it clicked now and then, so
+> 0.5 now keeps a deeper USB buffer, MASTER no longer changes what a computer records, and the drum steps' beats glow
+> (1, 5, 9, 13): that build went on the FM-1 on 21 Nov, and a recording from it had no clicks. REC + GLO (erase the
+> track's part, to record it again) is in the source, not on the FM-1 yet. 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
+> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,560 checks, 39 more on the
 > synth itself and 48 on the master bus's sound). It reads a project saved by 0.2, 0.3 or 0.4.
 
 ## Installing it, and getting back
@@ -264,7 +265,12 @@ and off.
 - **OCT+ LEGATO** (T2–T4): each note is held until the next one starts, the last one round to the first: the whole
   loop tied. On a MONO sound, turn **MORE > LEGATO** on too and the notes glide into each other without restarting.
   The longest a note can be is almost 32 steps (two bars at 1/16).
-- Both can be undone with **EDIT + OCT−**.
+- **GLO ERASE:** empties the selected track's part in the pattern it's playing (a clip launched on HOME: that clip's
+  pattern): its notes or hits, accents, chance and locks. LENGTH, RATE, the pad mutes and the ACID settings stay.
+  Recording stays on or off as it was and the transport keeps running, so a misplayed take can be tried again at once;
+  step recording's cursor goes back to step 1. The REC page says **GLO: ERASE PART**; the screen then says, say,
+  **ERASED: T2 P03**.
+- All three can be undone with **EDIT + OCT−**.
 - The settings are kept with the project.
 
 ### Recording knob moves (motion)
@@ -475,9 +481,10 @@ the sound saved with the pattern it's on.
 - CPU load on the FM-1 hasn't been measured yet, with or without the master bus's stages. If it's short, voices drop
   first. A voice using FM, the shaper or the matrix takes about one and a half times a plain one's time (measured on
   the Mac, in the simulator).
-- The stems were recorded from the FM-1 once: each carried its own track, but the USB buffer ran dry about a dozen
-  times in 9 seconds, each a click in the recording (not in the FM-1's own sound). 0.5 now keeps a deeper buffer
-  (about 6 ms more delay), which hasn't been recorded from yet.
+- The first recording of the stems from the FM-1 had each track on its own pair, but the USB buffer ran dry about a
+  dozen times in 9 seconds, each a click in the recording (not in the FM-1's own sound). 0.5 now keeps a deeper buffer
+  (about 6 ms more delay); recorded from on 21 Nov with MASTER at 0, it had no clicks and the master pair kept its
+  level.
 - No stem for the reverb and delay returns (the ten inputs are all used), no 48 kHz or 24-bit stems.
 - No per-track EQ or compression, no multiband compression on the master; no locks on LFO 1 or arpeggiator settings
   (LFO 2's and the matrix's amounts lock); the arpeggio isn't recorded, only what you play.
