@@ -194,7 +194,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 <main class="wrap" id="gm-main" tabindex="-1">
 <header class="hero">
   <div class="screen">
-    <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.4</span></div>
+    <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.5</span></div>
     <h1><span class="in">Inside the</span> <span class="logo">GhettoMachine</span></h1>
     <div class="sub">How our four-track groovebox works, from the key you press to the sound in your headphones.</div>
     <div class="specs">
@@ -436,7 +436,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 <section id="recording" style="--c: var(--rec)">
   <div class="band"><h2>Recording</h2><span class="tag">HOLD REC</span></div>
   <p>With REC on and the pattern playing, a note goes to the nearest point of the grid you chose: a step, or every 2 or 4 steps. Its gate is how long you held the key. If the nearest point is just ahead, the sequencer is told to skip it once, so you don't hear it twice. With the pattern stopped, on the KEYS page, notes go in one step at a time.</p>
-  <p>The <strong>metronome</strong> counts quarters of the bar. It's synced to the sequencer at each bar's start and counts the other three beats itself. Each click is a short sine burst, 1.5 kHz on beat 1 and 1 kHz on the rest, made by a two-line recurrence (no sine table needed). It's added after the master bus, so it's never in a recording or the loudness meter.</p>
+  <p>The <strong>metronome</strong> counts quarters of the bar. It's synced to the sequencer at each bar's start and counts the other three beats itself. Each click is a short sine burst, 1.5 kHz on beat 1 and 1 kHz on the rest, made by a two-line recurrence (no sine table needed). It's added after the master bus, so it's never in a sample you record or the loudness meter (it is in the USB master pair).</p>
   <p>The <strong>count-in</strong> is a countdown in samples. The audio loop clicks the beats and starts the sequencer in the block where the countdown runs out. A note you play in the last half beat is put on step 1, and step 1 is skipped once at the start so you don't hear it twice.</p>
   <p><strong>QUANTIZE</strong> moves every note of the part to the nearest point of the grid, merging notes that meet into a chord and moving their locks with them. <strong>LEGATO</strong> sets each note's gate to reach the next note, plus one eighth of a step of overlap, so a MONO sound with LEGATO on ties them together. Both take an undo copy first.</p>
 </section>
@@ -516,6 +516,15 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   <p>The seven presets set the chain at once, and they're level-matched by measurement: on the demo groove, bypassed reads −15.1 LUFS and CLEAN −15.2, so switching compares the sound, not the volume. LOUD reaches −9.</p>
 </section>
 
+<!-- 9b -->
+<section id="usb" style="--c: var(--t3)">
+  <div class="band"><h2>Stems over USB</h2><span class="tag">0.5</span></div>
+  <p>Over its USB cable the FM-1 is also a sound card that needs no driver. fm1-base provides it: the audio input carries what the FM-1 plays, and the output lets the computer play through the FM-1. In 0.5 the input has <strong>ten channels</strong>: the master on 1–2, then each track alone, the drums on 3–4 and T2, T3, T4 on 5–6, 7–8 and 9–10. A DAW records all five pairs at once.</p>
+  <p>Ten is the most there's room for. The FM-1's USB runs at full speed, where an audio packet can be at most 1,023 bytes, sent once a millisecond. At 44.1 kHz a packet holds up to 46 frames; 46 frames of ten 16-bit channels is 920 bytes. Twelve channels, or 24 bits, wouldn't fit. A 48 kHz stream would mean resampling ten channels, which costs more than it's worth.</p>
+  <p>Each stem is taken where its track joins the mix: after its level and pan (and so after mutes and solo), before the reverb, the delay and the master bus. The drums are copied out of the mix buffer before the synth adds into it; the synth already sums each track's voices on their own before mixing them, so it keeps that sum for each track. The samples go straight into fm1-base's USB ring as each block renders, beside the master's, so the five pairs stay lined up to the sample. When no computer is recording, the ring gives nothing back and the app skips the work.</p>
+  <p>The stems sit at the level the screen's track meters show, which is the mix after the −14 dB trim, as the master bus receives it. The four add up to the master bus's input without the reverb and delay returns, and the demos peak 6 to 14 dB under full scale. They have no limiter, so a track turned up far enough clips in its stem. The metronome is on the master pair: fm1-base copies the master from what the app renders, and the click is already in that.</p>
+</section>
+
 <!-- 10 -->
 <section id="screen" style="--c: var(--t4)">
   <div class="band"><h2>The screen</h2><span class="tag">240 × 240</span></div>
@@ -592,9 +601,10 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
       <tr><td>synth2</td><td>the new pages, the matrix playing, locks and motion on it, the new sounds</td><td class="n">101</td></tr>
       <tr><td>acid</td><td>the 303 generator: lines, scales, half, whole, slides and accents, playing on a poly sound</td><td class="n">170</td></tr>
       <tr><td>convert3</td><td>a project saved by 0.3 loading into 0.4</td><td class="n">28</td></tr>
+      <tr><td>stems</td><td>each track on its own USB pair and nowhere else; pan, solo, MASTER, the sends and the metronome</td><td class="n">54</td></tr>
     </table>
   </div>
-  <p>That's 1,401 checks (with a few demos, a screen tour and the boot screen's picture). Separate C tests feed sine waves through the master bus (48 checks) and through the synth (39: FM's harmonics, each shaper, the matrix, slides and accents, everything at maximum at once, built with a checker that stops on any integer overflow), and compare the old and new synth byte for byte. Another sends a WAV to the simulator over its MIDI link and reads it back byte for byte. Demo scripts render WAV files we can listen to, like the master bus comparison.</p>
+  <p>That's 1,455 checks (with a few demos, a screen tour and the boot screen's picture). Separate C tests feed sine waves through the master bus (48 checks) and through the synth (39: FM's harmonics, each shaper, the matrix, slides and accents, everything at maximum at once, built with a checker that stops on any integer overflow), and compare the old and new synth byte for byte. Another sends a WAV to the simulator over its MIDI link and reads it back byte for byte. Demo scripts render WAV files we can listen to, like the master bus comparison.</p>
   <h3>Installing</h3>
   <p>The build ends in a <code>.fwsc</code> package with an identity, <code>FM-1_800</code>. Installing it over USB works because the firmware already on the FM-1 (X0X the first time, GhettoMachine since) includes an updater. The Mac sends the package over MIDI; the FM-1 checks it, restarts into a small loader, compares the flash 4 KB at a time and rewrites only what changed, then starts the new firmware.</p>
   <p>The <strong>ESP32-S3</strong> board is the rescue route. When an install is cut off and the FM-1 won't start, the S3 talks to the chip's built-in boot mode directly: it can read the whole flash for a backup and write the firmware area back. That's how the FM-1 came back on 18 November.</p>
@@ -615,6 +625,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
     <div><b>Phase 10</b><span>The scene grid, perform keys, sounds per pattern, follow actions, motion recording, tap tempo and MIDI clock. Built and tested in the simulator.</span></div>
     <div><b>Phase 11</b><span>20 Nov. The deeper synth: FM, ring, the wave shaper, drift, a third envelope, LFO 2, the matrix and macros, and a new save format. More engines were passed over to go deeper into the analog voice. Installed over USB.</span></div>
     <div><b>Phase 12</b><span>20 Nov. The 303 generator: acid lines from a few knobs, half and whole notes, slides and accents that play on any sound. And this page went online with the emulator.</span></div>
+    <div><b>0.5</b><span>20 Nov. Stems over USB: the master and each track on its own pair, recorded all at once.</span></div>
   </div>
 </section>
 
@@ -646,7 +657,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   </dl>
 </section>
 
-<footer>BongTech GhettoMachine 0.4, as of 20 November 2026. Built on fm1-base (Charles Vestal), with X0X's drum models and effects and Felucca-Engines' ANALOG voice. It's free software under the GPL-3.0: the source and the full manual are at <a href="https://github.com/siddholdenried-del/ghettomachine">github.com/siddholdenried-del/GhettoMachine</a>.</footer>
+<footer>BongTech GhettoMachine 0.5, as of 20 November 2026. Built on fm1-base (Charles Vestal), with X0X's drum models and effects and Felucca-Engines' ANALOG voice. It's free software under the GPL-3.0: the source and the full manual are at <a href="https://github.com/siddholdenried-del/ghettomachine">github.com/siddholdenried-del/GhettoMachine</a>.</footer>
 </main>
 </div>
 </body>
