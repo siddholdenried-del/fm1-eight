@@ -153,3 +153,94 @@ body.gm-bong-cult {
   .gm-bong-cult .hero .screen { padding-inline: .65rem; }
   .gm-bong-cult .hero h1 .logo { font-size: clamp(1.6rem, 7vw, 2.35rem); }
 }
+
+/* Keep the short task-based guide separate from the engineering write-up. */
+.bc-skip { z-index: 5; }
+.gm-nav-stack { position: sticky; top: 1rem; }
+.gm-bong-cult .bc-sidebar a[aria-current="page"] {
+  border-color: var(--bc-shadow) var(--bc-highlight) var(--bc-highlight) var(--bc-shadow);
+  background: #290744;
+  color: #fff5fa;
+}
+.gm-chapters {
+  padding-top: .7rem;
+  margin-top: .7rem;
+  border-top: 2px solid #724594;
+}
+.gm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin: 1rem 0;
+}
+.gm-bong-cult .gm-button {
+  display: inline-grid;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: .5rem .8rem;
+  border: 4px solid;
+  border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
+  background: #d0acf0;
+  color: #1c0a28;
+  font-weight: 700;
+  text-decoration: none;
+}
+.gm-bong-cult .gm-button:hover { background: #eccfff; }
+.gm-bong-cult .gm-primary { background: var(--bc-yellow); }
+.gm-bong-cult .gm-primary:hover { background: #ffface; }
+.gm-bong-cult .gm-button:focus-visible { outline-color: var(--bc-white); }
+.gm-home .screen .sub { margin: 0; max-width: 44ch; }
+.gm-home-links { margin-top: 1.1rem; }
+.gm-technical-topics {
+  margin-top: 1.2rem;
+  padding-top: .85rem;
+  border-top: 2px solid var(--bc-rule);
+  color: var(--muted);
+}
+.gm-technical-topics summary { cursor: pointer; }
+.gm-guide {
+  max-width: 68ch;
+  padding-top: clamp(1rem, 3.6vw, 2.35rem);
+}
+.gm-crumb {
+  margin: 0 0 .65rem;
+  color: var(--bc-yellow);
+  font: 700 .83rem/1.35 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gm-guide-lead { margin: .9rem 0 1.2rem; color: var(--muted); font-size: 1.06em; }
+.gm-guide h2 {
+  margin: 1.15rem 0 .55rem;
+  padding-top: .7rem;
+  border-top: 2px solid var(--bc-rule);
+  font-size: clamp(1.42rem, 3vw, 1.9rem);
+}
+.gm-guide ol, .gm-guide ul { padding-left: 1.45rem; }
+.gm-guide li { margin: .42rem 0; }
+.gm-guide-pager {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .65rem 1.1rem;
+  border-top: 2px solid var(--bc-rule);
+  margin-top: 1.35rem;
+  padding-top: .7rem;
+  font-weight: 700;
+}
+@media (max-width: 47rem) {
+  .gm-guide-page .bc-sidebar { position: sticky; top: 0; z-index: 3; padding: .35rem; }
+  .gm-guide-page .gm-nav-stack { position: static; }
+  .gm-guide-page .gm-chapters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .2rem;
+    border-top-width: 1px;
+    padding-top: .27rem;
+    margin-top: .27rem;
+  }
+  .gm-guide-page .bc-sidebar a { min-height: 2.05rem; padding: .12rem .08rem; font-size: .85rem; border-width: 2px; }
+  .gm-guide-page #gm-main { scroll-margin-top: 10.2rem; }
+}
+@media (max-width: 26rem) {
+  .gm-actions { display: grid; }
+}

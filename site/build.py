@@ -10,6 +10,8 @@ site/public/index.html   the page, a whole HTML document, its "Play it" section 
 site/public/emu/         the emulator: app/build/emu (the page, app.wasm, the audio worklet, its parts)
 site/public/_headers     the headers Cloudflare serves with it (wasm's type, caching)
 """
+import html
+import json
 import re
 import shutil
 import sys
@@ -47,24 +49,76 @@ FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect wi
 
 
 BRANDING = ROOT / "site" / "branding"
-SHELL_START = """<a class="bc-skip" href="#gm-main">Skip to the guide</a>
+GUIDE = (
+    ("", "Quick start", "Quick start"),
+    ("beats", "Drums & steps", "Drums and sequencing"),
+    ("sounds", "Sounds & samples", "Synths, samples and acid"),
+    ("recording", "Recording", "Recording"),
+    ("performance", "Live & song", "Playing live"),
+    ("mixer", "Mixer & FX", "Mixer and effects"),
+    ("setup", "Save & install", "Saving and installing"),
+)
+MASTHEAD = """<a class="bc-skip" href="#gm-main">Skip to content</a>
 <header class="bc-masthead">
   <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
   <p class="bc-badge">BongTech · Project site</p>
-  <a class="bc-name" href="https://bongcult.com/"><img src="bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
+  <a class="bc-name" href="https://bongcult.com/"><img src="/bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
   <div class="bc-rainbow" aria-hidden="true"></div>
 </header>
-<div class="bc-frame">
-  <aside class="bc-sidebar">
-    <nav aria-label="GhettoMachine">
-      <a href="#play">Play it</a>
-      <a href="#platform">Read the guide</a>
-      <a href="#story">Project history</a>
-      <a href="https://bongcult.com/">Bong Cult journal</a>
-    </nav>
-  </aside>
-  <main class="wrap" id="gm-main" tabindex="-1">
 """
+LANDING = """<div class="hero gm-home">
+  <div class="screen">
+    <div class="top"><span class="label">Firmware for the M-VAVE FM-1</span><span class="ver">V0.4</span></div>
+    <h1><span class="logo">GhettoMachine</span></h1>
+    <p class="sub">Four-track groovebox firmware. A 909 or 808, three synth or sampler tracks, and a 64-step sequencer.</p>
+  </div>
+  <p class="lede">Make a beat in the browser or look up the controls for the FM-1.</p>
+  <div class="gm-actions" id="play">
+    <a class="gm-button gm-primary" href="/guide/">Open the User Guide</a>
+    <a class="gm-button" href="/emu/">Play in browser</a>
+  </div>
+  <p class="gm-home-links"><a href="/technical/">How it works</a> · <a href="REPO">Source on GitHub</a></p>
+  <details class="gm-technical-topics">
+    <summary>Technical topics</summary>
+    TECHNICAL_TOPIC_LINKS
+  </details>
+</div>
+"""
+
+
+def guide_path(slug):
+    return f"/guide/{slug}/" if slug else "/guide/"
+
+
+def nav_link(href, label, current):
+    selected = ' aria-current="page"' if href == current else ''
+    return f'<a href="{href}"{selected}>{html.escape(label)}</a>'
+
+
+def render_document(head, title, path, content, guide_slug=None):
+    nav = [("/", "Home"), ("/guide/", "User Guide"), ("/emu/", "Play"), ("/technical/", "How it works")]
+    is_guide = guide_slug is not None
+    if is_guide:
+        nav = [("/", "Home"), ("/emu/", "Play in browser")]
+    site_nav = "".join(nav_link(href, label, path) for href, label in nav)
+    guide_nav = ''.join(nav_link(guide_path(slug), label, path) for slug, label, _ in GUIDE)
+    chapters = (f'<nav class="gm-chapters" aria-label="Guide chapters">{guide_nav}</nav>' if is_guide else '')
+    css_class = ' gm-guide-page' if is_guide else ''
+    js = '<script src="/chapter-redirect.js"></script>\n' if path == '/' else ''
+    return (
+        '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+        '<meta name="theme-color" content="#8500ff">\n'
+        '<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1, playable in the browser.">\n'
+        f'<link rel="canonical" href="https://ghettomachine.bongcult.com{path}">\n'
+        + re.sub(r'<title>[^<]*</title>', f'<title>{html.escape(title)}</title>', head, count=1) + '\n'
+        + ICON.replace("HREF", "/favicon.svg")
+        + '<link rel="stylesheet" href="/bong-cult-shell.css">\n' + js + '</head>\n'
+        + f'<body class="gm-bong-cult{css_class}">\n' + MASTHEAD
+        + '<div class="bc-frame">\n<aside class="bc-sidebar"><div class="gm-nav-stack">'
+        + f'<nav aria-label="GhettoMachine">{site_nav}</nav>{chapters}</div></aside>\n'
+        + f'<main class="wrap" id="gm-main" tabindex="-1">\n{content}\n</main>\n</div>\n</body>\n</html>\n'
+    )
 
 
 def build_landing(out):
@@ -77,9 +131,9 @@ def build_landing(out):
         "the FM-1, drawn as its panel. Press <strong>Switch on</strong>, then <strong>PLAY / STOP</strong> to hear its demo "
         "groove, and play it with the mouse or your computer's keyboard. Your work is kept in this browser. If an iPhone "
         "stays silent, turn up its volume, and turn off silent mode: older iOS versions mute web audio in it.</p>\n"
-        '    <div class="emu-frame"><iframe src="emu/" title="GhettoMachine, running in the browser" allow="midi; autoplay" '
+        '    <div class="emu-frame"><iframe src="/emu/" title="GhettoMachine, running in the browser" allow="midi; autoplay" '
         'loading="lazy"></iframe></div>\n'
-        f'    <p><a href="emu/">Open it full size</a> · <a href="{REPO}">The source</a> · '
+        f'    <p><a href="/emu/">Open it full size</a> · <a href="{REPO}">The source</a> · '
         f'<a href="{REPO}/blob/main/MANUAL.md">The manual</a></p>\n'
         "  </section>")
     page, n = re.subn(r"<!-- emu:start -->.*?<!-- emu:end -->", frame, page, flags=re.S)
@@ -89,23 +143,54 @@ def build_landing(out):
                         "It's about 430 KB of code, and the same code runs in your browser, right here.")
     page = re.sub(r'<meta name="claude:[^>]*>\n', "", page)
     head_end = page.index("</style>") + len("</style>")
+    head = page[:head_end]
     tag = '<div class="wrap">'
     contents = page[head_end:].strip()
     if not contents.startswith(tag) or not contents.endswith("</div>"):
         raise SystemExit("site: could not find the landing page wrapper")
     contents = contents[len(tag):-len("</div>")].strip()
-    doc = (
-        '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-        '<meta name="theme-color" content="#8500ff">\n'
-        '<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1: how it '
-        'works, and the firmware itself running in the browser.">\n'
-        + page[:head_end] + '\n'
-        + ICON.replace("HREF", "favicon.svg")
-        + '<link rel="stylesheet" href="bong-cult-shell.css">\n</head>\n<body class="gm-bong-cult">\n'
-        + SHELL_START + contents + '\n  </main>\n</div>\n</body>\n</html>\n'
+    # Keep previously shared /#chapter addresses working. The labeled links
+    # on the home page cover the same destinations even with JS disabled.
+    links = re.findall(r'<li><a href="#([a-z]+)"><i[^>]*></i>([^<]+)</a></li>', contents)
+    if not links or len(links) != len(set(slug for slug, _ in links)):
+        raise SystemExit("site: could not identify original technical anchors")
+    fallback = "<ul>" + "".join(f'<li><a href="/technical/#{slug}">{label}</a></li>' for slug, label in links) + "</ul>"
+    (out / "chapter-redirect.js").write_text(
+        "'use strict';\n"
+        "(() => {\n"
+        f"  const chapters = new Set({json.dumps([slug for slug, _ in links])});\n"
+        "  const forward = () => {\n"
+        "    const chapter = location.hash.slice(1);\n"
+        "    if (chapters.has(chapter)) location.replace('/technical/' + location.search + location.hash);\n"
+        "  };\n"
+        "  forward();\n"
+        "  addEventListener('hashchange', forward);\n"
+        "})();\n"
     )
-    (out / "index.html").write_text(doc)
+    landing = LANDING.replace("REPO", REPO).replace("TECHNICAL_TOPIC_LINKS", fallback)
+    (out / "index.html").write_text(render_document(head, "GhettoMachine · BongTech", "/", landing))
+    tech_dir = out / "technical"
+    tech_dir.mkdir(exist_ok=True)
+    (tech_dir / "index.html").write_text(render_document(head, "Inside GhettoMachine · Technical tour", "/technical/", contents))
+    for i, (slug, label, title) in enumerate(GUIDE):
+        path = guide_path(slug)
+        dest = out / path.strip("/")
+        dest.mkdir(parents=True, exist_ok=True)
+        chapter = (ROOT / "site" / "guide" / f"{slug or 'index'}.html").read_text().strip()
+        nav = []
+        if i:
+            prev_slug, prev_label, _ = GUIDE[i - 1]
+            nav.append(f'<a rel="prev" href="{guide_path(prev_slug)}">← {html.escape(prev_label)}</a>')
+        if i < len(GUIDE) - 1:
+            next_slug, next_label, _ = GUIDE[i + 1]
+            nav.append(f'<a rel="next" href="{guide_path(next_slug)}">{html.escape(next_label)} →</a>')
+        body = (
+            '<article class="gm-guide">'
+            f'<p class="gm-crumb">User Guide · {i + 1} of {len(GUIDE)}</p><h1>{html.escape(title)}</h1>\n'
+            + chapter + '<nav class="gm-guide-pager" aria-label="Adjacent chapters">'
+            + "".join(nav) + '</nav></article>'
+        )
+        (dest / "index.html").write_text(render_document(head, f"{title} · GhettoMachine User Guide", path, body, slug))
     for file in ("bong-cult-logo.svg", "bong-cult-shell.css"):
         shutil.copyfile(BRANDING / file, out / file)
 

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8500ff">
+<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1, playable in the browser.">
+<link rel="canonical" href="https://ghettomachine.bongcult.com/guide/mixer/">
+<title>Mixer and effects · GhettoMachine User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Sedgwick+Ave+Display&display=swap">
+<style>
+/* Layout: one reading column (phone first); each chapter opens with a band in the colour the firmware gives that part of
+   itself, ink on colour, the way the FM-1's own screen does it. */
+:root {
+  --bg: #F2F3F5;
+  --fg: #17181C;
+  --muted: #5B5F69;
+  --rule: #D8DAE0;
+  --panel: #E6E8EC;
+  --card: #FFFFFF;
+  --on: #16171B;                /* ink on the bright chapter colours, in both themes */
+  --c909: #FF7828; --c808: #46A0FF; --t2: #5AD282; --t3: #B97DFF; --t4: #F5CD3C;
+  --fx: #40C8DE; --mst: #FF6280; --rec: #EE4040; --cream: #E9E4D6; --ink: #2A2C33;
+  --display: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --logo: "Sedgwick Ave Display", "Marker Felt", "Chalkboard SE", cursive;   /* the wordmark, as on the boot screen */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111215; --fg: #E6E7EA; --muted: #9DA1AB; --rule: #2A2C33; --panel: #1B1D22; --card: #191B20; --ink: #3A3D46;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111215; --fg: #E6E7EA; --muted: #9DA1AB; --rule: #2A2C33; --panel: #1B1D22; --card: #191B20; --ink: #3A3D46;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 400 18px/1.62 var(--body);
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 680px; margin: 0 auto;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-block: 0 72px;
+}
+h1, h2, h3, .label { font-family: var(--display); text-wrap: balance; }
+h1 { font-size: 3.1rem; line-height: 0.95; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 2rem; line-height: 1; font-weight: 700; margin: 0; }
+h3 { font-size: 1.3rem; line-height: 1.15; font-weight: 700; margin: 1.8em 0 0.4em; }
+p { margin: 0.75em 0; }
+a { color: inherit; text-underline-offset: 3px; }
+code, .mono { font-family: var(--mono); font-size: 0.82em; }
+code { background: var(--panel); padding: 0.08em 0.35em; border-radius: 4px; }
+strong { font-weight: 600; }
+.label { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; font-weight: 600; }
+:focus-visible { outline: 3px solid var(--c808); outline-offset: 2px; }
+
+/* the opening: a screen-like band */
+.hero { padding-block: 28px 8px; }
+.hero .screen {
+  background: var(--c909); color: var(--on); border-radius: 14px; padding: 18px 18px 16px;
+  display: grid; gap: 10px;
+}
+.hero .screen .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.hero .ver { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+.hero h1 .in { display: block; font-size: 1.35rem; line-height: 1.1; letter-spacing: 0.02em; }
+/* the wordmark: as wide as the screen allows (GhettoMachine is about 5.8 em wide in it), at most 4.6rem */
+.hero h1 .logo { display: block; font-family: var(--logo); font-weight: 400; letter-spacing: 0; line-height: 1.05;
+  font-size: clamp(2.2rem, calc((100vw - 80px) / 6), 4.6rem); padding-top: 2px; }
+.hero .sub { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.25; max-width: 30ch; }
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 4px; }
+.specs div { background: var(--on); color: #F1EFE8; border-radius: 8px; padding: 6px 8px 7px; min-width: 0; }
+.specs b { display: block; font-family: var(--display); font-size: 1.35rem; line-height: 1.1; font-weight: 700; }
+.specs span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #B9B6AE; }
+.lede { font-size: 1.12rem; color: var(--fg); }
+
+/* contents */
+nav.toc { margin: 22px 0 8px; border-top: 1px solid var(--rule); padding-top: 14px; }
+nav.toc ol { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; }
+nav.toc a { display: flex; gap: 10px; align-items: center; text-decoration: none; padding: 6px 0; font-weight: 500; }
+nav.toc i { width: 12px; height: 12px; border-radius: 3px; flex: none; background: var(--c); }
+
+/* chapters */
+section { margin-top: 44px; scroll-margin-top: 16px; }
+.band {
+  background: var(--c); color: var(--on); border-radius: 12px; padding: 14px 16px 13px;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 12px;
+}
+.band .label { opacity: 0.75; }
+.band .tag { font-family: var(--display); font-weight: 700; font-size: 1rem; white-space: nowrap; }
+
+/* small diagram parts */
+.figure { margin: 18px 0; }
+.figure .cap { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.flow { display: grid; gap: 0; }
+.stage {
+  display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; align-items: stretch;
+  background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px;
+}
+.stage::before { content: ""; border-radius: 4px; background: var(--c, var(--ink)); }
+.stage b { font-family: var(--display); font-size: 1.12rem; font-weight: 700; display: block; line-height: 1.2; }
+.stage span { color: var(--muted); font-size: 0.92rem; line-height: 1.4; display: block; }
+.arrow { height: 16px; display: grid; place-items: center; color: var(--muted); font-size: 0.8rem; line-height: 1; }
+.arrow::before { content: ""; width: 2px; height: 100%; background: var(--rule); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.box { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 13px; min-width: 0; }
+.box h4 { margin: 0 0 6px; font-family: var(--display); font-size: 1.15rem; font-weight: 700; }
+.box ul { margin: 0; padding-left: 1.05em; font-size: 0.92rem; line-height: 1.45; }
+.box li { margin: 3px 0; }
+section > ul { padding-left: 1.2em; line-height: 1.5; }
+section > ul li { margin: 6px 0; }
+.box .when { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 6px; }
+
+.note { border-left: 3px solid var(--rule); padding: 2px 0 2px 14px; color: var(--muted); font-size: 0.95rem; }
+
+/* the flash map: a megabyte, to scale */
+.flash { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; }
+.flash .bar { display: grid; border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); }
+.flash .bar div { min-height: 3px; }
+.flash .legend { display: grid; align-content: start; gap: 7px; font-size: 0.9rem; line-height: 1.35; }
+.flash .legend div { display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: 9px; align-items: start; }
+.flash .legend i { width: 12px; height: 12px; border-radius: 3px; margin-top: 5px; }
+.flash .legend span { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; display: block; }
+
+/* the screen's three parts */
+.dev { width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 12px; overflow: hidden; display: grid;
+  grid-template-rows: 44fr 132fr 64fr; border: 1px solid var(--rule); margin: 6px auto 0; font-family: var(--display); }
+.dev > div { padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dev .b1 { background: #16171B; color: var(--t2); font-weight: 700; font-size: 1.2rem; }
+.dev .b1 small { color: #E8E6DE; font-size: 0.8rem; font-weight: 600; }
+.dev .b2 { background: var(--t2); color: var(--on); font-weight: 600; flex-direction: column; justify-content: center; }
+.dev .b3 { background: var(--t2); gap: 5px; padding: 6px; }
+.dev .b3 span { flex: 1; min-width: 0; background: #16171B; color: #E8E6DE; border-radius: 6px; height: 100%; font-size: 0.7rem;
+  display: grid; place-items: center; font-weight: 600; }
+.curve { width: 100%; height: 60px; }
+
+/* the timeline */
+.time { display: grid; gap: 10px; margin-top: 12px; }
+.time div { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; }
+.time b { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); font-weight: 500; padding-top: 4px; }
+
+dl.gloss { display: grid; gap: 12px; margin: 14px 0 0; }
+dl.gloss div { border-top: 1px solid var(--rule); padding-top: 10px; }
+dl.gloss dt { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+dl.gloss dd { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 420px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--display); font-weight: 700; font-size: 0.95rem; }
+td.n { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.8rem; white-space: nowrap; }
+
+footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); padding-top: 14px; }
+
+/* Play it: the emulator (the hosted page frames it here; elsewhere a link to it) */
+.cta { display: inline-block; font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em;
+  background: var(--t2); color: var(--on); text-decoration: none; border-radius: 999px; padding: 0.55em 1.3em; }
+.cta:hover { filter: brightness(1.06); }
+.emu-frame { width: min(1040px, calc(100vw - 24px)); margin: 14px 0 6px 50%; transform: translateX(-50%);
+  border-radius: 14px; overflow: hidden; border: 1px solid var(--rule); background: var(--card); }
+.emu-frame iframe { display: block; width: 100%; border: 0; height: calc(min(1040px, calc(100vw - 24px)) * 0.64 + 150px); }
+@media (max-width: 700px) { .emu-frame iframe { height: 660px; } }
+
+@media (max-width: 420px) {
+  body { font-size: 17px; }
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 1.7rem; }
+  .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/bong-cult-shell.css">
+</head>
+<body class="gm-bong-cult gm-guide-page">
+<a class="bc-skip" href="#gm-main">Skip to content</a>
+<header class="bc-masthead">
+  <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
+  <p class="bc-badge">BongTech · Project site</p>
+  <a class="bc-name" href="https://bongcult.com/"><img src="/bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
+  <div class="bc-rainbow" aria-hidden="true"></div>
+</header>
+<div class="bc-frame">
+<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><nav class="gm-chapters" aria-label="Guide chapters"><a href="/guide/">Quick start</a><a href="/guide/beats/">Drums &amp; steps</a><a href="/guide/sounds/">Sounds &amp; samples</a><a href="/guide/recording/">Recording</a><a href="/guide/performance/">Live &amp; song</a><a href="/guide/mixer/" aria-current="page">Mixer &amp; FX</a><a href="/guide/setup/">Save &amp; install</a></nav></div></aside>
+<main class="wrap" id="gm-main" tabindex="-1">
+<article class="gm-guide"><p class="gm-crumb">User Guide · 6 of 7</p><h1>Mixer and effects</h1>
+<p class="gm-guide-lead">Set the balance of your tracks first, then shape the whole mix at the master bus.</p>
+<h2>Mixer and sends</h2>
+<p>Use the mixer for track levels, pan and sends. The shared effects are a reverb and tempo delay. Press <strong>FX</strong> to open the effects pages.</p>
+<h2>Master bus</h2>
+<p>Hold <strong>SEL</strong> and press <strong>GLO</strong> to jump straight to the master bus. The chain has EQ, compression, tape saturation, stereo width and a limiter, plus presets and a loudness meter.</p>
+<p><a href="/technical/#fx">Mixer and effects tour</a> · <a href="/technical/#master">Master bus details</a></p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/performance/">← Live &amp; song</a><a rel="next" href="/guide/setup/">Save &amp; install →</a></nav></article>
+</main>
+</div>
+</body>
+</html>
