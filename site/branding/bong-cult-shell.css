@@ -1,25 +1,26 @@
-/* The Bong Cult frame wraps the GhettoMachine guide. Its chapter colours and
-   the separate /emu/ app still belong to the instrument. */
+/* Dungeon BBS shared frame for GhettoMachine’s editorial pages.
+   The separate /emu/ instrument is not styled by this file. */
 :root {
   color-scheme: dark;
-  background: #8500ff;
+  background: #10100f;
 }
 body.gm-bong-cult {
-  --bg: #8500ff;
-  --fg: #fff5fa;
-  --muted: #e5c9ee;
-  --rule: #aa7dc2;
-  --panel: #341052;
-  --card: #230337;
-  --bc-purple: #8500ff;
-  --bc-panel: #290744;
-  --bc-sidebar: #bb8ced;
-  --bc-white: #fff5fa;
-  --bc-yellow: #fff477;
-  --bc-rule: #daadf6;
-  --bc-paper: #d9b1f9;
-  --bc-highlight: #f5dfff;
-  --bc-shadow: #7a5996;
+  --bg: #10100f;
+  --fg: #ded9b9;
+  --muted: #bbb79f;
+  --rule: #706c59;
+  --panel: #1e1d18;
+  --card: #161613;
+  --accent: #8d53ed;
+  --display: "Barlow Semi Condensed", Impact, "Arial Narrow", sans-serif;
+  --bc-panel: #10100f;
+  --bc-sidebar: #141411;
+  --bc-white: #ded9b9;
+  --bc-yellow: #cbb2ff;
+  --bc-rule: #a49e82;
+  --bc-paper: #ded9b9;
+  --bc-highlight: #ded9b9;
+  --bc-shadow: #ded9b9;
   min-height: 100vh;
   margin: 0;
   padding: 0 0 clamp(1.8rem, 5vw, 4.5rem);
@@ -42,64 +43,48 @@ body.gm-bong-cult {
 .bc-masthead {
   position: relative;
   display: grid;
-  justify-items: center;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
   gap: clamp(.55rem, 1.55vw, 1.25rem);
   width: min(94%, 73rem);
   margin: 0 auto;
   padding: 1.4rem 0 0;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--mono);
 }
-.bc-masthead > :not(.bc-stars) { z-index: 1; }
 .bc-name {
-  width: min(65%, 20rem);
+  width: clamp(8rem, 20vw, 15rem);
   display: block;
 }
 .bc-name img { display: block; width: 100%; height: auto; }
 .bc-badge {
   margin: 0;
   padding: .28rem clamp(.9rem, 3vw, 1.55rem);
-  border: 3px ridge var(--bc-rule);
-  background: #09060a;
-  color: #7dff38;
+  border: 1px solid var(--bc-rule);
+  background: #10100f;
+  color: #ded9b9;
   font: 700 clamp(.72rem, 1.4vw, .95rem)/1.2 "Courier New", Courier, monospace;
   text-transform: uppercase;
   text-align: center;
 }
-.bc-rainbow {
-  width: 88%;
-  height: 6px;
-  margin: .15rem auto 0;
-  background: linear-gradient(90deg,#ff0626,#ff9559,#ffe45c,#a3ef5f,#4cf9e9,#5fa8ff,#ff57fc);
+.bc-rule {
+  height: 1px;
+  background: var(--bc-paper);
 }
-.bc-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  color: var(--bc-white);
-  font: bold 1rem/1 monospace;
-}
-.bc-stars span { position: absolute; }
-.bc-stars span:nth-child(1) { top: 36%; left: 11%; }
-.bc-stars span:nth-child(2) { top: 67%; left: 21%; color: var(--bc-yellow); }
-.bc-stars span:nth-child(3) { top: 68%; left: 6%; }
-.bc-stars span:nth-child(4) { top: 39%; right: 11%; color: var(--bc-yellow); }
-.bc-stars span:nth-child(5) { top: 66%; right: 20%; }
-.bc-stars span:nth-child(6) { top: 74%; right: 5%; }
 .bc-frame {
   display: grid;
   grid-template-columns: clamp(10rem, 16vw, 13rem) minmax(0,1fr);
   width: min(94%, 73rem);
   margin: 1.65rem auto 0;
-  border: 7px ridge var(--bc-paper);
+  border: 1px solid var(--bc-paper);
   background: var(--bc-panel);
 }
 .bc-sidebar {
   min-width: 0;
   padding: clamp(.7rem, 1.65vw, 1.25rem);
-  border-right: 6px ridge var(--bc-paper);
+  border-right: 1px solid var(--bc-paper);
   background: var(--bc-sidebar);
-  color: #160d1e;
-  font-family: "Times New Roman", Times, serif;
+  color: #ded9b9;
+  font-family: var(--mono);
   text-align: center;
 }
 .bc-sidebar nav {
@@ -111,16 +96,16 @@ body.gm-bong-cult {
   min-height: 2.75rem;
   align-items: center;
   padding: .25rem;
-  border: 4px solid;
+  border: 1px solid;
   border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
-  background: #d0acf0;
-  color: #160d1e;
+  background: #161613;
+  color: #ded9b9;
   text-decoration: none;
   font-size: clamp(.95rem, 1.45vw, 1.15rem);
   font-weight: 700;
   line-height: 1.2;
 }
-.bc-sidebar a:hover { background: #ebcaff; }
+.bc-sidebar a:hover { background: #302244; }
 .bc-sidebar a:active { border-color: var(--bc-shadow) var(--bc-highlight) var(--bc-highlight) var(--bc-shadow); }
 .gm-bong-cult .wrap {
   width: min(100%, 54rem);
@@ -129,29 +114,27 @@ body.gm-bong-cult {
   padding: 0 clamp(.85rem, 2.3vw, 1.75rem) clamp(1.25rem, 3vw, 2.25rem);
   overflow-wrap: anywhere;
 }
-.gm-bong-cult .hero .screen { border: 4px ridge #ffa86f; border-radius: 0; }
-.gm-bong-cult .band { border: 2px solid #ffffff35; border-radius: 0; }
+.gm-bong-cult .hero .screen { border: 1px solid #ded9b9; border-radius: 0; }
+.gm-bong-cult .band { border: 1px solid #ded9b9; border-radius: 0; }
 .gm-bong-cult .band .tag { white-space: normal; text-align: right; }
 .gm-bong-cult .wrap a { color: var(--bc-yellow); }
 .gm-bong-cult .emu-frame {
   width: 100%;
   margin: 14px 0 6px;
   transform: none;
-  border: 3px ridge var(--bc-rule);
+  border: 1px solid var(--bc-rule);
   border-radius: 0;
 }
 .gm-bong-cult .emu-frame iframe { height: clamp(610px, 72vw, 740px); }
 @media (max-width: 47rem) {
-  .bc-frame { display: block; margin-top: 1.1rem; border-width: 5px; }
-  .bc-sidebar { border-right: 0; border-bottom: 5px ridge var(--bc-paper); }
+  .bc-frame { display: block; margin-top: 1.1rem; border-width: 1px; }
+  .bc-sidebar { border-right: 0; border-bottom: 1px solid var(--bc-paper); }
   .bc-sidebar nav { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .4rem; }
-  .bc-sidebar a { border-width: 3px; }
-  .bc-rainbow { height: 4px; }
+  .bc-sidebar a { border-width: 1px; }
   .gm-bong-cult .hero { padding-top: 1rem; }
 }
 @media (max-width: 27rem) {
   .gm-bong-cult .hero .screen { padding-inline: .65rem; }
-  .gm-bong-cult .hero h1 .logo { font-size: clamp(1.6rem, 7vw, 2.35rem); }
 }
 
 /* Keep the task-based User Guide separate from the engineering write-up. */
@@ -159,8 +142,8 @@ body.gm-bong-cult {
 .gm-nav-stack { position: sticky; top: 1rem; }
 .gm-bong-cult .bc-sidebar a[aria-current="page"] {
   border-color: var(--bc-shadow) var(--bc-highlight) var(--bc-highlight) var(--bc-shadow);
-  background: #290744;
-  color: #fff5fa;
+  background: var(--accent);
+  color: #000;
 }
 .gm-actions {
   display: flex;
@@ -173,23 +156,23 @@ body.gm-bong-cult {
   min-height: 2.75rem;
   align-items: center;
   padding: .5rem .8rem;
-  border: 4px solid;
+  border: 1px solid;
   border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
-  background: #d0acf0;
-  color: #1c0a28;
+  background: #161613;
+  color: #ded9b9;
   font-weight: 700;
   text-decoration: none;
 }
-.gm-bong-cult .gm-button:hover { background: #eccfff; }
-.gm-bong-cult .gm-primary { background: var(--bc-yellow); }
-.gm-bong-cult .gm-primary:hover { background: #ffface; }
+.gm-bong-cult .gm-button:hover { background: #302244; }
+.gm-bong-cult .wrap .gm-primary { background: var(--accent); color: #000; }
+.gm-bong-cult .gm-primary:hover { background: #b58cfa; }
 .gm-bong-cult .gm-button:focus-visible { outline-color: var(--bc-white); }
 .gm-home .screen .sub { margin: 0; max-width: 44ch; }
 .gm-home-links { margin-top: 1.1rem; }
 .gm-technical-topics {
   margin-top: 1.2rem;
   padding-top: .85rem;
-  border-top: 2px solid var(--bc-rule);
+  border-top: 1px solid var(--bc-rule);
   color: var(--muted);
 }
 .gm-technical-topics summary { cursor: pointer; }
@@ -208,7 +191,7 @@ body.gm-bong-cult {
 .gm-guide h2 {
   margin: 1.15rem 0 .55rem;
   padding-top: .7rem;
-  border-top: 2px solid var(--bc-rule);
+  border-top: 1px solid var(--bc-rule);
   font-size: clamp(1.42rem, 3vw, 1.9rem);
 }
 .gm-guide ol, .gm-guide ul { padding-left: 1.45rem; }
@@ -218,7 +201,7 @@ body.gm-bong-cult {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: .65rem 1.1rem;
-  border-top: 2px solid var(--bc-rule);
+  border-top: 1px solid var(--bc-rule);
   margin-top: 1.35rem;
   padding-top: .7rem;
   font-weight: 700;
@@ -229,7 +212,7 @@ body.gm-bong-cult {
 
 /* The guide resembles a small manual, not a second copy of the landing menu. */
 .gm-guide-page .bc-masthead { gap: .65rem; padding-top: .8rem; }
-.gm-guide-page .bc-name { width: min(62%, 15rem); }
+.gm-guide-page .bc-name { width: clamp(8rem, 16vw, 12rem); }
 .gm-guide-page .bc-frame {
   grid-template-columns: clamp(15rem, 24vw, 19rem) minmax(0,1fr);
   margin-top: 1.2rem;
@@ -249,16 +232,16 @@ body.gm-bong-cult {
 }
 .gm-guide-page .gm-nav-stack > nav a {
   min-height: 2.55rem;
-  border-width: 3px;
+  border-width: 1px;
   text-align: center;
   font-size: .93rem;
 }
 .gm-toc-title {
   margin: 0;
   padding: .45rem .45rem .55rem;
-  border-top: 2px solid #734c8f;
-  color: #2c0d43;
-  font: bold 1.27rem/1.13 "Times New Roman", Times, serif;
+  border-top: 1px solid #706c59;
+  color: #ded9b9;
+  font: bold 1.04rem/1.2 var(--mono);
 }
 .gm-toc-mobile { display: none; }
 .bc-sidebar .gm-toc { display: block; }
@@ -266,9 +249,9 @@ body.gm-bong-cult {
 .gm-toc-parts > li + li { margin-top: .5rem; }
 .gm-toc-part {
   display: block;
-  border-top: 1px solid #8356a5;
+  border-top: 1px solid #706c59;
   padding: .5rem .38rem .22rem;
-  color: #301047;
+  color: #bbb79f;
   font: 700 .73rem/1.2 var(--mono);
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -278,13 +261,13 @@ body.gm-bong-cult {
   padding: .41rem .44rem;
   border: 1px solid transparent;
   min-height: 0;
-  color: #1d0928;
+  color: #ded9b9;
   background: transparent;
   font: 650 .97rem/1.25 var(--body);
   text-align: left;
   overflow-wrap: anywhere;
 }
-.gm-bong-cult .gm-toc a:hover { background: #e4c3fa; }
+.gm-bong-cult .gm-toc a:hover { background: #302244; }
 .gm-bong-cult .gm-toc a.gm-toc-chapter {
   display: grid;
   grid-template-columns: 1.55rem minmax(0,1fr);
@@ -292,18 +275,18 @@ body.gm-bong-cult {
 }
 .gm-chapter-number { opacity: .84; font: .75rem/1.55 var(--mono); }
 .gm-bong-cult .gm-toc a[aria-current="page"] {
-  background: #30084a;
-  border-color: #30084a;
-  color: #fff5fa;
+  background: #8d53ed;
+  border-color: #8d53ed;
+  color: #000;
 }
 .gm-bong-cult .gm-toc a:focus-visible, .gm-toc-mobile summary:focus-visible {
-  outline-color: #290744;
+  outline-color: var(--bc-white);
   outline-offset: 1px;
 }
 .gm-toc .gm-toc-topics {
   margin: .25rem 0 .45rem .9rem;
   padding-left: .6rem;
-  border-left: 2px solid #8753aa;
+  border-left: 2px solid #8d53ed;
 }
 .gm-bong-cult .gm-toc .gm-toc-topics a {
   padding: .31rem .35rem;
@@ -311,8 +294,8 @@ body.gm-bong-cult {
   font-weight: 500;
 }
 .gm-bong-cult .gm-toc a[aria-current="location"] {
-  border-color: #613477;
-  background: #efd6ff;
+  border-color: #8d53ed;
+  background: #302244;
   font-weight: 700;
   text-decoration: underline;
 }
@@ -359,7 +342,7 @@ body.gm-bong-cult {
     z-index: 3;
     padding: .35rem;
     border-right: 0;
-    border-bottom: 5px ridge var(--bc-paper);
+    border-bottom: 1px solid var(--bc-paper);
   }
   .gm-guide-page .gm-nav-stack {
     position: static;
@@ -382,17 +365,17 @@ body.gm-bong-cult {
   .gm-toc-mobile summary {
     padding: .21rem .4rem .26rem;
     min-height: 2.75rem;
-    border: 3px solid;
+    border: 1px solid;
     border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
-    background: #dec0f5;
-    color: #1c0a28;
+    background: #161613;
+    color: #ded9b9;
     font: 700 .95rem/1.12 var(--body);
     cursor: pointer;
   }
   .gm-toc-mobile summary span {
     display: block;
     margin-left: .95rem;
-    color: #49265d;
+    color: #cbb2ff;
     font-size: .78rem;
     overflow-wrap: anywhere;
   }
@@ -407,11 +390,32 @@ body.gm-bong-cult {
     overflow: auto;
     overscroll-behavior: contain;
     padding: .35rem;
-    border: 4px ridge var(--bc-paper);
+    border: 1px solid var(--bc-paper);
     background: var(--bc-sidebar);
-    box-shadow: 0 .35rem .6rem #19022970;
+    box-shadow: 0 .35rem .6rem #000c;
   }
   .gm-bong-cult .gm-toc-mobile a { min-height: 2.5rem; padding: .44rem; }
   .gm-bong-cult .gm-toc-mobile .gm-toc-topics a { min-height: 2.3rem; padding: .4rem; }
   .gm-guide-page #gm-main, .gm-guide h2[id] { scroll-margin-top: 4.4rem; }
+}
+
+/* Editorial shell only. Hardware diagrams keep their instrument colour keys. */
+.bc-name img { filter: sepia(30%) brightness(.90); }
+.bc-sidebar nav > a { text-transform: uppercase; font-size: .86rem; }
+.gm-bong-cult .hero .screen, .gm-bong-cult .band { background: var(--card); color: var(--fg); }
+.gm-bong-cult .hero .screen .label, .gm-bong-cult .hero .ver { color: var(--bc-yellow); font-family: var(--mono); }
+.gm-bong-cult .hero .ver { flex: none; font-size: .82rem; white-space: nowrap; }
+.gm-bong-cult .hero .sub { font: 500 1.05rem/1.4 var(--body); }
+.gm-bong-cult .hero h1 .logo {
+  font: 900 clamp(1.85rem, 5.8vw, 4.2rem)/.95 var(--display);
+  letter-spacing: -.015em;
+  text-transform: uppercase;
+}
+.gm-bong-cult :is(.stage,.box,code,.specs div,.flash .bar,.dev,nav.toc i,.flash .legend i) { border-radius: 0; }
+.gm-bong-cult .band { border-left: .27rem solid var(--c, var(--accent)); }
+.gm-bong-cult .gm-toc a[aria-current="page"]:hover,
+.gm-bong-cult .bc-sidebar .gm-nav-stack > nav a[aria-current="page"]:hover { background: var(--accent); color: #000; }
+@media (max-width: 27rem) {
+  .gm-bong-cult .hero h1 .logo { font-size: clamp(1.65rem, 8.3vw, 2.25rem); }
+  .bc-badge { padding-inline: .3rem; font-size: .63rem; }
 }

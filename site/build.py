@@ -207,10 +207,9 @@ TOC_SCRIPT = """'use strict';
 
 MASTHEAD = """<a class="bc-skip" href="#gm-main">Skip to content</a>
 <header class="bc-masthead">
-  <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
-  <p class="bc-badge">BongTech · Project site</p>
   <a class="bc-name" href="https://bongcult.com/"><img src="/bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
-  <div class="bc-rainbow" aria-hidden="true"></div>
+  <div class="bc-rule" aria-hidden="true"></div>
+  <p class="bc-badge">BongTech · Project site</p>
 </header>
 """
 LANDING = """<div class="hero gm-home">
@@ -266,7 +265,7 @@ def render_document(head, title, path, content, guide_slug=None, topics=()):
     return (
         '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-        '<meta name="theme-color" content="#8500ff">\n'
+        '<meta name="theme-color" content="#10100f">\n'
         '<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1, playable in the browser.">\n'
         f'<link rel="canonical" href="https://ghettomachine.bongcult.com{path}">\n'
         + re.sub(r'<title>[^<]*</title>', f'<title>{html.escape(title)}</title>', head, count=1) + '\n'
