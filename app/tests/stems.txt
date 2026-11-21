@@ -1,0 +1,143 @@
+# GhettoMachine 0.5's USB stems: the master on USB audio inputs 1-2, then each track alone (the drums 3-4, T2 5-6, T3 7-8,
+# T4 9-10), dry, before the master chain and MASTER.  tools/build.py ../../app --host, then
+#   app/build/host/ghettomachine_host app/tests/stems.txt OUTDIR   (the USB input's 10 channels in stems.wav)
+# stems: the stems written this block (the host takes them always); stemN / stemNl / stemNr: track N's stem's peak since
+# the last look (both sides, or one), dB x 10, -1200 silent; stemreset: every stem's peak started again; stemovers: stem
+# samples clipped since the last look; peak_db_min / _max: the FM-1's own output (after MASTER) since peakreset
+wait 600
+master 4096
+expect stems 1
+usbwav stems.wav
+# ---- stopped: every stem silent
+wait 300
+expect stem1 -1200
+expect stem2 -1200
+expect stem3 -1200
+expect stem4 -1200
+# ---- PLAY: the default beat, on the drums' stem alone (T2..T4 have no notes yet), centred
+tap PLAY
+wait 2000
+expect stem1l >-200
+expect stem1r >-200
+expect stem2 -1200
+expect stem3 -1200
+expect stem4 -1200
+# ---- T2's keys: its note on its own stem, not on T3's or T4's
+turn ALGO 1
+wait 30
+expect trk 2
+key 7 down
+wait 300
+expect stem2 >-400
+expect stem3 -1200
+expect stem4 -1200
+key 7 up
+wait 600
+expect voices2 0
+expect stem2 >-1200
+wait 100
+expect stem2 -1200
+# ---- MASTER down to nothing: the FM-1 silent, the stems as they were (they're before it)
+master 0
+wait 100
+peakreset
+expect stemreset 1
+wait 300
+expect peak_db_max -90
+expect stem1 >-200
+master 4096
+# ---- the mixer's PAN (GLO twice): T2 hard left, so its stem's right side is silent; the drums' stem keeps both
+tap GLO
+wait 30
+tap GLO
+wait 30
+expect mixpage 1
+spin K2 -63
+wait 30
+expect mix2_1 1
+expect stemreset 1
+key 7 down
+wait 300
+expect stem2l >-400
+expect stem2r -1200
+expect stem1r >-200
+key 7 up
+wait 600
+spin K2 63
+wait 30
+expect mix2_1 64
+# ---- the sends: T3's PLUCK, a short note with its reverb and delay sends (on by default): the stem stops with the
+# voice, the master rings on with the reverb and the echoes
+turn ALGO 1
+wait 30
+expect trk 3
+expect page 9
+expect stemreset 1
+key 7 down
+wait 40
+key 7 up
+wait 700
+expect voices3 0
+expect stem3 >-1200
+wait 100
+peakreset
+wait 200
+expect stem3 -1200
+expect peak_db_min -75
+# ---- solo T2 (HOME, its key + OCT+): the other tracks muted, the drums' stem quiet after its last hit has rung out
+tap HOME
+wait 30
+key 3 down
+wait 30
+tap OCT+
+wait 30
+key 3 up
+wait 30
+expect solo 2
+expect tmute 13
+expect stemreset 1
+wait 1500
+expect stem1 >-1200
+wait 500
+expect stem1 <-900
+key 3 down
+wait 30
+tap OCT+
+wait 30
+key 3 up
+wait 30
+expect solo 0
+expect tmute 0
+wait 1000
+expect stem1 >-200
+# ---- the metronome (REC held, K1: ON) is the master's alone: T4 soloed (no notes) and every stem silent, the click heard
+key 8 down
+wait 30
+tap OCT+
+wait 30
+key 8 up
+wait 30
+expect solo 4
+press REC
+wait 400
+expect recpage 1
+spin K1 1
+wait 30
+release REC
+wait 30
+expect click 1
+wait 1500
+expect clicks >0
+expect stemreset 1
+peakreset
+wait 1000
+expect clicks >0
+expect stem1 <-900
+expect stem2 -1200
+expect stem3 -1200
+expect stem4 -1200
+expect peak_db_min -40
+tap PLAY
+wait 300
+usbwavstop
+expect stemovers 0

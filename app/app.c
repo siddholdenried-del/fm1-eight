@@ -2290,17 +2290,86 @@ static void syn_block(void)
     syn_at = 0;
 }
 
-static void synth_add(float *l, float *r, float *rv, float *dl, uint32_t n)
+/* the USB stems (fm1.toml usb_audio_channels = 10): beside the master on USB audio inputs 1-2, each track alone on its
+ * own pair, the drums on 3-4 and T2..T4 on 5-6, 7-8, 9-10. A stem is the track as it comes into the mix: its level,
+ * pan, mutes and solo, before the reverb and the delay (their sends are heard on the master only) and before the master
+ * chain and MASTER; the metronome and the perform keys' STUTTER, TAPE STOP and CRUSH are the master's alone too.
+ * They're at the level the screen's track meters show: the mix as the master bus takes it (after FX_BUS_TRIM), so the
+ * four add up to the master bus's input less the reverb and the delay; the demos peak 6 to 14 dB under full scale
+ * (12 dB more clipped the drums). 16 bits each, clipped past full scale. plat_usb_ch gives nothing while no computer
+ * records: no work then */
+#define STEMS (PLAT_USB_CH >= 2 * NTRK)
+#define STEM_GAIN FX_BUS_TRIM
+static uint8_t stems_on;                  /* this block: a computer records the stems */
+#ifdef PLAT_HOST
+static float stem_pk[NTRK][2];            /* each stem's peak since the last look, 1 full scale (the tests) */
+static uint32_t stem_overs;               /* samples clipped since the last look */
+#endif
+
+static int16_t stem_q(float x)
 {
-    uint32_t i;
-    for (i = 0; i < n; i++) {
+    return (int16_t)(x >= 1.0f ? 32767 : x <= -1.0f ? -32767 : (int)(x * 32767.0f));
+}
+
+/* n frames of track s (l, r: the mix's scale) into its stem, from the frame off into the block being rendered */
+static void stem_put(int s, const float *l, const float *r, uint32_t off, uint32_t n)
+{
+    while (n) {
+        uint32_t run, k;
+        int16_t *p = plat_usb_ch(off, &run);
+        if (!p || !run)
+            return;
+        if (run > n)
+            run = n;
+        p += 2 * s;
+        for (k = 0; k < run; k++, p += PLAT_USB_CH_STRIDE) {
+            float a = l[k] * STEM_GAIN, b = r[k] * STEM_GAIN;
+            p[0] = stem_q(a);
+            p[1] = stem_q(b);
+#ifdef PLAT_HOST
+            a = a < 0.0f ? -a : a;
+            b = b < 0.0f ? -b : b;
+            if (a > stem_pk[s][0])
+                stem_pk[s][0] = a;
+            if (b > stem_pk[s][1])
+                stem_pk[s][1] = b;
+            stem_overs += (a > 1.0f) + (b > 1.0f);
+#endif
+        }
+        l += run;
+        r += run;
+        off += run;
+        n -= run;
+    }
+}
+
+/* the synth into the mix (and each of its tracks into its stem), from the frame off into the block being rendered */
+static void synth_add(float *l, float *r, float *rv, float *dl, uint32_t n, uint32_t off)
+{
+    uint32_t i = 0;
+    while (i < n) {
+        uint32_t k, m;
         if (syn_at >= SYN_CTL)
             syn_block();
-        l[i] += syn_l[syn_at];
-        r[i] += syn_r[syn_at];
-        rv[i] += syn_rv[syn_at];
-        dl[i] += syn_dl[syn_at];
-        syn_at++;
+        m = SYN_CTL - syn_at;
+        if (m > n - i)
+            m = n - i;
+        for (k = 0; k < m; k++) {
+            l[i + k] += syn_l[syn_at + k];
+            r[i + k] += syn_r[syn_at + k];
+            rv[i + k] += syn_rv[syn_at + k];
+            dl[i + k] += syn_dl[syn_at + k];
+        }
+        if (STEMS && stems_on) {
+            int t;
+            for (t = 1; t < NTRK; t++) {
+                const float *a = syn_track(t, 0), *b = syn_track(t, 1);
+                if (a && b)
+                    stem_put(t, a + syn_at, b + syn_at, off + i, m);
+            }
+        }
+        syn_at += m;
+        i += m;
     }
 }
 
@@ -2434,6 +2503,10 @@ void app_render(int32_t *lr, uint32_t n, uint32_t master_q12)
     float gain = (float)master_q12 / 4096.0f, pk = peak, pkl = peak_l, pkr = peak_r;
     if (n > APP_BLOCK)
         n = APP_BLOCK;
+    if (STEMS) {                          /* a computer records the USB stems this block */
+        uint32_t run;
+        stems_on = plat_usb_ch(0, &run) != 0;
+    }
     midi_in();
     render_t += n;
     tempo_stretch();
@@ -2568,6 +2641,8 @@ void app_render(int32_t *lr, uint32_t n, uint32_t master_q12)
         }
         drums_render(proj.kit, buf_l + done, buf_r + done, bus_rev + done, bus_dly + done, (int)chunk);
         drum_mix(buf_l + done, buf_r + done, bus_rev + done, bus_dly + done, chunk);
+        if (STEMS && stems_on)            /* (the mix holds the drums alone until the synth comes in) */
+            stem_put(TR_DRUM, buf_l + done, buf_r + done, done, chunk);
         {   /* the drums' level, for the screen */
             float pk = drum_pk;
             for (i = done; i < done + chunk; i++) {
@@ -2579,7 +2654,7 @@ void app_render(int32_t *lr, uint32_t n, uint32_t master_q12)
             }
             drum_pk = pk;
         }
-        synth_add(buf_l + done, buf_r + done, bus_rev + done, bus_dly + done, chunk);
+        synth_add(buf_l + done, buf_r + done, bus_rev + done, bus_dly + done, chunk, done);
         if (sq.playing) {
             sq.bar_left -= (float)chunk;
             perf.roll_to -= (float)chunk;
@@ -8616,6 +8691,25 @@ int app_expect(const char *what, int *got)
     else if (!strcmp(what, "clips")) {    /* samples past the ceiling since the last look */
         *got = (int)clips;
         clips = 0;
+    } else if (!strcmp(what, "stems"))    /* the USB stems written this block (the host: always taken) */
+        *got = STEMS && stems_on;
+    else if (!strcmp(what, "stemreset")) {   /* every stem's peak started again (1) */
+        int s;
+        for (s = 0; s < NTRK; s++)
+            stem_pk[s][0] = stem_pk[s][1] = 0.0f;
+        *got = 1;
+    } else if (!strcmp(what, "stemovers")) {   /* stem samples clipped since the last look */
+        *got = (int)stem_overs;
+        stem_overs = 0;
+    } else if (!strncmp(what, "stem", 4) && what[4] >= '1' && what[4] < '1' + NTRK) {
+        /* stemN, stemNl, stemNr: track N's stem's peak since the last look (both sides, or one), dB x 10; -1200 silent */
+        int s = what[4] - '1', side = what[5] == 'l' ? 0 : what[5] == 'r' ? 1 : -1;
+        float pk = side >= 0 ? stem_pk[s][side] : stem_pk[s][0] > stem_pk[s][1] ? stem_pk[s][0] : stem_pk[s][1];
+        if (side != 1)
+            stem_pk[s][0] = 0.0f;
+        if (side != 0)
+            stem_pk[s][1] = 0.0f;
+        *got = (int)(fx_db(pk) * 10.0f);
     } else if (!strcmp(what, "dlyon"))    /* the delay in the chain (not lent to sampling) */
         *got = fx_delay_on();
     else if (!strcmp(what, "pkl") || !strcmp(what, "pkr")) {   /* a side's peak since the last look, dB x 10 */

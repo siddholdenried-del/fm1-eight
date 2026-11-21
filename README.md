@@ -3,8 +3,9 @@
 A four-track groovebox firmware for the **M-VAVE FM-1**: one drum track (909 or 808, every pad editable) and three
 instrument tracks, each a mono synth, a poly synth or a sampler. A 64-step sequencer with 16 patterns, a scene grid
 for playing live, an LFO on every track, an arpeggiator and chord mode, a reverb, a tempo delay and a master bus with a
-mastering chain, a deeper synth (FM, ring, a wave shaper, a mod matrix, macros) and a **303 pattern generator** whose
-slides and accents play on any sound.
+mastering chain, a deeper synth (FM, ring, a wave shaper, a mod matrix, macros), a **303 pattern generator** whose
+slides and accents play on any sound, and **stems over USB**: a computer records the master and each track on its own
+pair of inputs.
 
 It was called fm1-eight until 0.4.
 

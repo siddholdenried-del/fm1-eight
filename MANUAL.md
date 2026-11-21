@@ -1,4 +1,4 @@
-# BongTech GhettoMachine 0.4: the manual
+# BongTech GhettoMachine 0.5: the manual
 
 The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 
@@ -13,11 +13,12 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 - **A deeper synth:** OSC 2 with its own wave, FM and ring modulation, a wave shaper (fold, clip, rectify, crush),
   analog drift, a third envelope, a second LFO for each note, a six-slot mod matrix and four macro knobs.
 - **A 303 pattern generator** on T2–T4: acid lines with slides and accents, made from a few knobs.
+- **Stems over USB:** a computer records the master and each track on its own pair of inputs, all at once.
 
-> **0.4 is on the FM-1** (installed over USB on 20 Nov, as BongTech GhettoMachine, after 0.3 the same day). 0.4 is
-> 0.3 plus the 303 generator, the new name and the boot screen's logo. 0.3 is 0.2 plus the performance update (the scene grid onwards) and the synth update. 0.4 passes its
-> simulator tests (1,401 checks, 39 more on the synth itself and 48 on the master bus's sound). It reads a project
-> saved by 0.2 or 0.3.
+> **0.5 is built, not installed yet.** 0.4 is on the FM-1 (installed over USB on 20 Nov). 0.5 is 0.4 plus the USB
+> stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
+> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,455 checks, 39 more on the
+> synth itself and 48 on the master bus's sound). It reads a project saved by 0.2, 0.3 or 0.4.
 
 ## Installing it, and getting back
 
@@ -29,8 +30,8 @@ cd third_party/fm1-base/tools && ../../../.venv/bin/python fm1_install.py ../../
 ```
 
 **Tap SAVE first:** an install restarts the FM-1, and the saved project is what comes back. The project and the
-samples are kept; only the firmware is written, never the boot code. A project and user presets saved by 0.2 or 0.3
-load into 0.4 (see "What is kept").
+samples are kept; only the firmware is written, never the boot code. A project and user presets saved by 0.2, 0.3 or
+0.4 load into 0.5 (see "What is kept").
 
 The first install over M-VAVE's own firmware went through the ESP32-S3 adapter (backup, dry run, write), and that
 route still works for getting M-VAVE's firmware back.
@@ -332,6 +333,35 @@ for more, use GAIN or the LOUD preset.
 Measured on a demo groove: bypassed and CLEAN about −15 LUFS; GLUE, WARM, WIDE and LO-FI about −13; PUNCH −12; LOUD −9.
 Peaks stay under −0.7 dB.
 
+## Recording on a computer: USB audio and stems
+
+Plugged into a computer over USB, the FM-1 is also a sound card, with no driver to install: **GhettoMachine FM-1**,
+10 inputs and 2 outputs, at 44.1 kHz. The inputs are the FM-1's sound; the outputs let the computer play through the
+FM-1's speaker and headphones.
+
+| Inputs | What's on them |
+| --- | --- |
+| **1–2** | The master: everything you hear, after the master bus, at MASTER |
+| **3–4** | The drums alone |
+| **5–6** | T2 alone |
+| **7–8** | T3 alone |
+| **9–10** | T4 alone |
+
+In a DAW, pick GhettoMachine FM-1 as the audio input device, make a stereo track for each pair, and record them all at
+once. Each stem is one track as it comes into the mix:
+
+- **In a stem:** the track's LEVEL and PAN, its mutes and solo, its LFO, locks and everything it plays (ROLL and FILL
+  too).
+- **Only on the master:** the reverb and the delay (the sends go to them, not into the stems), the DJ filter and the
+  whole master bus, MASTER, the metronome, and the perform keys that work on the output (STUTTER, TAPE STOP, CRUSH,
+  THROW, WASH). Add your own effects to the stems, or record the master pair beside them.
+- **Levels:** a stem sits at the level its meter shows on the screen; the four add up to what goes into the master
+  bus, less the reverb and the delay. The demos peak 6 to 14 dB under full scale. A stem has no limiter: one that goes
+  past full scale clips, so turn that track's LEVEL down. MASTER doesn't change the stems.
+- **The metronome is on the master pair** when it's on (hold REC, K1). Set it to OFF or REC while you record the
+  master pair, or use the DAW's own click.
+- **16 bits** a channel: USB at the FM-1's speed carries ten channels at 44.1 kHz with 16 bits each, and no more.
+
 ## HOME: the scene grid
 
 HOME is for playing live. The screen is a grid: **16 patterns across** (the white keys), **a track a row** (DR, T2,
@@ -414,8 +444,11 @@ Press HOME on the SONG page.
 | Samples | a bank of their own | as soon as they're recorded or sent |
 | User presets and kits | a store of their own | as soon as you save one |
 
+**From 0.4:** the same format; 0.4 and 0.5 read each other's projects.
+
 **From 0.3:** a project saved by 0.3 loads as it was; its parts' generators start unset. The first SAVE writes 0.4's
-format, which 0.3 can't read: going back to 0.3 starts a fresh project (the file stays, and 0.4 reads it again).
+format (0.5's too), which 0.3 can't read: going back to 0.3 starts a fresh project (the file stays, and 0.4 or 0.5
+reads it again).
 
 **From 0.2:** a project saved by 0.2 (or by its performance update) loads with every note, lock, sound and setting it
 had; the synth update's settings start at their defaults, so every sound plays as before. Your USER presets are
@@ -432,11 +465,15 @@ the sound saved with the pattern it's on.
 - **Out:** the keys send on their track's channel (pads on channel 10).
 - **Clock:** sent or followed, over USB (SETUP, above).
 
-## Not in 0.4
+## Not in 0.5
 
 - CPU load on the FM-1 hasn't been measured yet, with or without the master bus's stages. If it's short, voices drop
   first. A voice using FM, the shaper or the matrix takes about one and a half times a plain one's time (measured on
   the Mac, in the simulator).
+- The stems have been tested in the simulator, not yet on the FM-1 with a computer recording. If the FM-1 is busy
+  for most of each audio block, the recording (not the FM-1's own sound) can click now and then; fm1-base can keep
+  a deeper buffer for that, with about 6 ms more delay.
+- No stem for the reverb and delay returns (the ten inputs are all used), no 48 kHz or 24-bit stems.
 - No per-track EQ or compression, no multiband compression on the master; no locks on LFO 1 or arpeggiator settings
   (LFO 2's and the matrix's amounts lock); the arpeggio isn't recorded, only what you play.
 - The matrix can't move another slot's amount, and LFO 2 doesn't follow the tempo (LFO 1 does, and is a source).

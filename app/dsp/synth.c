@@ -1231,6 +1231,15 @@ void syn_half(uint32_t h)
 }
 
 static volatile float trk_pk[SYN_TRACKS];   /* each track's peak in the mix since the screen last looked */
+static float trk_l[SYN_TRACKS][SYN_CTL], trk_r[SYN_TRACKS][SYN_CTL];   /* the last block, each track alone */
+static uint32_t trk_used;                 /* bit t: track t sounded in it */
+
+const float *syn_track(int t, int side)
+{
+    if (t < 1 || t >= SYN_TRACKS || !(trk_used >> t & 1u))
+        return 0;
+    return side ? trk_r[t] : trk_l[t];
+}
 
 void syn_mix(float *l, float *r, float *rev, float *dly)
 {
@@ -1238,16 +1247,20 @@ void syn_mix(float *l, float *r, float *rev, float *dly)
     int k, t;
     for (k = 0; k < SYN_CTL; k++)
         l[k] = r[k] = rev[k] = dly[k] = 0.0f;
+    trk_used = 0;
     for (t = 1; t < SYN_TRACKS; t++) {
         int m0 = used_m[0][t], m1 = used_m[1][t], s0 = used_lr[0][t], s1 = used_lr[1][t];
         float pl = mix[t].pl * g, pr = mix[t].pr * g, rs = mix[t].rs * g, ds = mix[t].ds * g, pk = trk_pk[t];
         if (!(m0 | m1 | s0 | s1))
             continue;
+        trk_used |= 1u << t;
         for (k = 0; k < SYN_CTL; k++) {
             float m = (float)((m0 ? acc_m[0][t][k] : 0) + (m1 ? acc_m[1][t][k] : 0));
             float ul = (float)((s0 ? acc_l[0][t][k] : 0) + (s1 ? acc_l[1][t][k] : 0));
             float ur = (float)((s0 ? acc_r[0][t][k] : 0) + (s1 ? acc_r[1][t][k] : 0));
             float send = m + 0.5f * (ul + ur), a = (m + ul) * pl, b = (m + ur) * pr;
+            trk_l[t][k] = a;
+            trk_r[t][k] = b;
             l[k] += a;
             r[k] += b;
             rev[k] += send * rs;

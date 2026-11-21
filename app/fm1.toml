@@ -12,6 +12,7 @@ ble = false                    # no radio: the firmware is GPL-3.0, so JieLi's b
 cpu2 = true                    # the second core renders half the synth voices
 cpu2_fallback = true           # one core (8 voices) after a failure of it, instead of a restart
 companion = true              # the project file (plat_file_*); the samples over USB later (tools/fm1_sample.py)
+usb_audio_channels = 10        # USB audio in: the master on 1-2, then each track alone (the stems: drums 3-4, T2 5-6, T3 7-8, T4 9-10)
 # the site and firmware.json
 tagline = "a 4-track groovebox for the FM-1: a 909 / 808 drum track and three instrument tracks"
 repo = "https://github.com/siddholdenried-del/ghettomachine"
