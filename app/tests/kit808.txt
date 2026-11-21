@@ -1,0 +1,35 @@
+# The 808's level (0.5): each 808 sound is made up, after its drive, to the loudness of the 909 pad that plays its part
+# (dsp/drum808.c k_make), so the default beat sounds as loud on either kit. Before, the 808 played it 12 dB quieter
+# (short-term -31.7 LUFS against the 909's -19.5).  tools/build.py ../../app --host, then
+#   app/build/host/ghettomachine_host app/tests/kit808.txt OUTDIR
+# lufs: the master bus's short-term loudness (3 s), LUFS x 10, measured while a master bus page shows its meters
+wait 600
+master 4096
+press SEL
+wait 30
+tap GLO
+wait 30
+release SEL
+wait 30
+expect page 12
+# ---- the 909 plays the default beat (BD, SD, CH, accents on 1 and 9)
+expect kit 0
+expect stemreset 1
+tap PLAY
+wait 4500
+expect lufs >-210
+expect lufs <-180
+tap PLAY
+wait 3500
+# ---- the 808 plays it at the same loudness, give or take 1.5 dB
+turn PRESET 1
+wait 100
+expect kit 1
+tap PLAY
+wait 4500
+expect lufs >-210
+expect lufs <-180
+tap PLAY
+wait 1000
+# its accented hits don't clip the USB drum stem
+expect stemovers 0

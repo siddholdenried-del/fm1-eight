@@ -18,8 +18,9 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 > **0.5 is on the FM-1** (first installed over USB on 20 Nov). The first recording from it clicked now and then, so
 > 0.5 now keeps a deeper USB buffer, MASTER no longer changes what a computer records, and the drum steps' beats glow
 > (1, 5, 9, 13): that build went on the FM-1 on 21 Nov, and a recording from it had no clicks. REC + GLO (erase the
-> track's part, to record it again) is in the source, not on the FM-1 yet. 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
-> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,560 checks, 39 more on the
+> track's part, to record it again) went on it the same day. The 808 brought up to the 909's level is in the source,
+> not on the FM-1 yet. 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
+> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,569 checks, 39 more on the
 > synth itself and 48 on the master bus's sound). It reads a project saved by 0.2, 0.3 or 0.4.
 
 ## Installing it, and getting back
@@ -90,6 +91,9 @@ at the top and the knob cards are dark, lettered in it. Three parts, top to bott
   - Hold a step and turn **SELECT**: its chance (100 % to 5 %).
 - **EDIT:** the pad's knobs: tune, tone, decay, its reverb and delay sends, and so on. Tap EDIT for more. The last page
   is the kit's own knobs (accent, velocity).
+- **The two kits play at the same level:** each 808 sound is as loud as the 909 pad that plays its part (until 21 Nov
+  the 808 played a groove about 12 dB quieter). The 808's accent is stronger than the 909's, as on a real 808: about
+  6 dB against 3; the KIT page's Accent sets it.
   - Hold a step and turn a knob: that value for that step only (a lock). Held step + OCT− clears its locks.
 - **ENV:** the MUTE page. Pad keys mute pads in this pattern. OCT+ unmutes them all.
 - **Knobs on the steps page:** LENGTH and RATE of this track's part, SWING and TEMPO.

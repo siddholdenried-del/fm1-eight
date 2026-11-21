@@ -1355,6 +1355,18 @@ static const float k_trim[D8S_NUM] = {
     0.2964f, 0.1953f, 0.4110f, 0.4199f, 0.3917f, 0.3750f, 0.3899f, 0.3843f,
     0.2643f, 2.6005f, 0.6142f, 3.9640f, 0.1219f, 0.0021f, 0.0402f, 5.9505f};
 
+/* GhettoMachine's make-up, after a sound's drive and distortion (0.5): 8W8 balanced its lanes (k_trim) for its own master
+ * drive and glue, which this port leaves to the firmware's master bus, so without them the drums came out far under the
+ * 909 (the kick 17.7 dB, the snare and toms 14-16 dB) while the metal was nearly level. Each sound is brought to the
+ * momentary loudness (BS.1770, 400 ms) of the 909 pad that plays its part, at default pots and an unaccented hit: BD the
+ * 909's BD, SD its SD, the toms (and congas) its toms, RS (and clave) its RS, CP (and maracas) its CP, CH and OH its hats,
+ * CY its crash, CB its ride's place a little under (-20 LUFS). In dB: */
+static const float k_make[D8S_NUM] = {
+    7.4989f,  /* BD +17.5 */  5.0119f,  /* SD +14.0 */  5.9566f,  /* LT +15.5 */  5.9566f,  /* MT +15.5 */
+    5.9566f,  /* HT +15.5 */  5.9566f,  /* LC +15.5 */  5.9566f,  /* MC +15.5 */  5.9566f,  /* HC +15.5 */
+    4.2170f,  /* RS +12.5 */  4.2170f,  /* CL +12.5 */  2.2387f,  /* MA +7.0 */   2.2387f,  /* CP +7.0 */
+    3.7584f,  /* CB +11.5 */  1.8836f,  /* CH +5.5 */   1.1220f,  /* OH +1.0 */   2.3714f}; /* CY +7.5 */
+
 /* base notes (sc808_engine.cpp kBaseNote) for the note-tuned sounds */
 static const float k_base_note[D8S_NUM] = {
     34.0f, 65.0f, 42.02f, 48.58f, 54.83f, 55.88f, 62.49f, 67.55f, 91.62f, 99.2f, 113.0f, 71.0f};
@@ -1788,7 +1800,7 @@ static void lane_mix(drum808_t *d, d8_lane_t *l, const float *buf, int m, float 
     const float pl = d->pan_lc[tr], pr = d->pan_rc[tr], dpl = d->pan_dl[tr], dpr = d->pan_dr[tr];
     int s = l->snd, i, type = d->pot[s][D8P_DIST];
     const d8_shp_t *p = &d->shp[s];
-    float trim = k_trim[s], g = d->potv[s][D8P_LEVEL] * l->hit * d->vol;
+    float trim = k_trim[s], g = d->potv[s][D8P_LEVEL] * l->hit * d->vol * k_make[s];   /* (make-up after the shaper) */
     float ra = d->potv[s][D8P_REV], da = d->potv[s][D8P_DLY];
     int bypass = p->drive < 1.0e-3f;
     if (l->cstep == 0.0f && bypass) {             /* the common case */
