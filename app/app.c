@@ -5938,6 +5938,10 @@ static void input(void)
 void app_input_only(void) { input(); }
 
 /* ------------------------------------------------------------------- lights --- */
+#ifdef PLAT_HOST
+static uint16_t lit_white, dim_white;     /* the white keys as last lit and glowing, a bit a key (the tests' wlit, wdim) */
+#endif
+
 static void lights(void)
 {
     uint32_t bk = 0, wk = 0, dimk = 0, b = 0, k;
@@ -5982,6 +5986,8 @@ static void lights(void)
                 continue;
             if (bit_get(row, s))
                 wk |= 1u << WK[k];
+            else if (!(k & 3u))          /* the beats (steps 1, 5, 9, 13 of the bank) glow when empty */
+                dimk |= 1u << WK[k];
             if (sq.playing && s == st)
                 wk ^= 1u << WK[k];      /* the playhead: a step lit goes out, a dark one lights */
         }
@@ -6034,6 +6040,15 @@ static void lights(void)
         b |= 1u << B_SAVE;
     b |= ui.btn;
     plat_lights(b, wk | bk, 0, dimk & ~(wk | bk), 1);
+#ifdef PLAT_HOST
+    lit_white = dim_white = 0;
+    for (k = 0; k < 16u; k++) {
+        if (wk >> WK[k] & 1u)
+            lit_white |= (uint16_t)(1u << k);
+        else if (dimk >> WK[k] & 1u)
+            dim_white |= (uint16_t)(1u << k);
+    }
+#endif
 }
 
 /* ------------------------------------------------------------------- screen --- */
@@ -7152,6 +7167,8 @@ static void page_steps(void)              /* the drums' grid: 11 pads and the ac
             int s = ui.spage * 16 + k, x = 27 + k * 13;
             if (s >= p->len)
                 continue;
+            if (!(k & 3))                 /* the beats (steps 1, 5, 9, 13 of the page): a column of their own */
+                cv_rect(x - 1, y, 13, 11, mix565(sel ? C_PANEL : C_BODY, C_INK, 22));
             if (sq.playing && s == st)
                 cv_rect(x - 1, y, 13, 11, C_GRID);
             if (bit_get(bits, s)) {
@@ -8703,6 +8720,10 @@ int app_expect(const char *what, int *got)
         for (s = 0; s < NTRK; s++)
             stem_pk[s][0] = stem_pk[s][1] = 0.0f;
         *got = 1;
+    } else if (!strcmp(what, "wlit")) {   /* the white keys lit, a bit a key (white 1: 1) */
+        *got = lit_white;
+    } else if (!strcmp(what, "wdim")) {   /* the white keys glowing */
+        *got = dim_white;
     } else if (!strcmp(what, "stemovers")) {   /* stem samples clipped since the last look */
         *got = (int)stem_overs;
         stem_overs = 0;

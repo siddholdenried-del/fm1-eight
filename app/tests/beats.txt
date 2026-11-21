@@ -1,0 +1,89 @@
+# The drums' beat steps (0.5): on the drum pages the white keys of steps 1, 5, 9 and 13 of the bank shown glow when
+# the step is empty (a lit step stays lit), and the screen's grid gives those steps a column of their own. T2..T4's
+# step pages are as they were.  tools/build.py ../../app --host, then
+#   app/build/host/ghettomachine_host app/tests/beats.txt OUTDIR   (OUTDIR must exist: beats.png is the drums' grid)
+# wlit / wdim: the white keys lit / glowing, a bit a key (white 1: 1, white 5: 16, white 9: 256, white 13: 4096)
+wait 600
+expect trk 1
+expect page 0
+# ---- BD (the default beat: 1, 5, 9, 13): every beat lit, none left to glow
+expect pad 0
+expect wlit 4369
+expect wdim 0
+# ---- SD (5, 13): those lit, 1 and 9 glow
+key 3 down
+wait 30
+key 3 up
+wait 30
+expect pad 1
+expect wlit 4112
+expect wdim 257
+# ---- CH (3, 7, 11, 15): off the beat, so every beat glows
+key 17 down
+wait 30
+key 17 up
+wait 30
+expect pad 7
+expect wlit 17476
+expect wdim 4369
+shot beats.png
+# ---- SEQ held: the accents (1, 9) lit, the other beats glow
+press SEQ
+wait 30
+expect wlit 257
+expect wdim 4112
+release SEQ
+wait 30
+# ---- a step lit on a beat is lit, not glowing; off again, it glows
+key 7 down
+wait 30
+key 7 up
+wait 30
+expect hit7_5 1
+expect wlit 17492
+expect wdim 4353
+key 7 down
+wait 30
+key 7 up
+wait 30
+expect hit7_5 0
+expect wdim 4369
+# ---- LENGTH 6: only steps 1 and 5 are beats there
+spin K1 -10
+wait 30
+expect len 6
+expect wlit 4
+expect wdim 17
+# ---- LENGTH 32, the second bank (17-32, empty): its 17, 21, 25, 29 glow
+spin K1 26
+wait 30
+expect len 32
+tap OCT+
+wait 30
+expect wlit 0
+expect wdim 4369
+tap OCT-
+wait 30
+spin K1 -16
+wait 30
+expect len 16
+# ---- the beats glow on the drums' other pages too (EDIT, MUTE): the keys are steps there
+tap EDIT
+wait 30
+expect page 1
+expect wdim 4369
+tap ENV
+wait 30
+expect page 2
+expect wdim 4369
+tap ENV
+wait 30
+expect page 0
+# ---- T2's STEPS: as before, no glow
+turn ALGO 1
+wait 30
+expect trk 2
+tap SEQ
+wait 30
+expect page 0
+expect wdim 0

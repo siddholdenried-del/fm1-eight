@@ -17,8 +17,8 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 
 > **0.5 is on the FM-1** (installed over USB on 20 Nov, after 0.4 the same day). A real recording from it clicked now
 > and then, so 0.5 now keeps a deeper USB buffer, and MASTER no longer changes what a computer records: those two
-> changes are in the source, not on the FM-1 yet. 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
-> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,468 checks, 39 more on the
+> changes are in the source, not on the FM-1 yet, and so is the drum steps' beat glow (steps 1, 5, 9, 13). 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
+> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,501 checks, 39 more on the
 > synth itself and 48 on the master bus's sound). It reads a project saved by 0.2, 0.3 or 0.4.
 
 ## Installing it, and getting back
@@ -83,7 +83,8 @@ at the top and the knob cards are dark, lettered in it. Three parts, top to bott
 - **Pads:** the 11 black keys are BD, SD, LT, MT, HT, RS, CP, CH, OH and CR/RD (909) or CY/CB (808). Pressing one picks it
   and plays it.
 - **Steps (SEQ):** the 16 white keys are the picked pad's steps. Press an empty step to light it; press and let go of a
-  lit one to clear it. OCT− / OCT+ or SELECT move through step pages up to 64.
+  lit one to clear it. OCT− / OCT+ or SELECT move through step pages up to 64. The beats, steps 1, 5, 9 and 13 of the
+  page, glow dimly while they're empty, and the screen's grid gives them a darker column, so a bar is easy to count.
   - Hold **SEQ** and press steps: accents.
   - Hold a step and turn **SELECT**: its chance (100 % to 5 %).
 - **EDIT:** the pad's knobs: tune, tone, decay, its reverb and delay sends, and so on. Tap EDIT for more. The last page
