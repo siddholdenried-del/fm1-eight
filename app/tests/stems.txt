@@ -1,12 +1,15 @@
 # GhettoMachine 0.5's USB stems: the master on USB audio inputs 1-2, then each track alone (the drums 3-4, T2 5-6, T3 7-8,
-# T4 9-10), dry, before the master chain and MASTER.  tools/build.py ../../app --host, then
+# T4 9-10), dry, before the master chain; the tracks' own levels set the USB mix, MASTER only the speaker and the
+# headphones (plat_usb_audio_full).  tools/build.py ../../app --host, then
 #   app/build/host/ghettomachine_host app/tests/stems.txt OUTDIR   (the USB input's 10 channels in stems.wav)
 # stems: the stems written this block (the host takes them always); stemN / stemNl / stemNr: track N's stem's peak since
 # the last look (both sides, or one), dB x 10, -1200 silent; stemreset: every stem's peak started again; stemovers: stem
-# samples clipped since the last look; peak_db_min / _max: the FM-1's own output (after MASTER) since peakreset
+# samples clipped since the last look; peak_db_min / _max: the FM-1's own output (after MASTER) since peakreset;
+# pkl / pkr: each side of the app's render (what the USB master pair takes) since the last look, dB x 10, -1000 silent
 wait 600
 master 4096
 expect stems 1
+expect usb_audio_full 1
 usbwav stems.wav
 # ---- stopped: every stem silent
 wait 300
@@ -37,14 +40,18 @@ expect voices2 0
 expect stem2 >-1200
 wait 100
 expect stem2 -1200
-# ---- MASTER down to nothing: the FM-1 silent, the stems as they were (they're before it)
+# ---- MASTER down to nothing: the FM-1 silent, the USB master pair and the stems as they were (a look restarts pkl, pkr)
 master 0
 wait 100
 peakreset
 expect stemreset 1
+expect pkl >-1001
+expect pkr >-1001
 wait 300
 expect peak_db_max -90
 expect stem1 >-200
+expect pkl >-200
+expect pkr >-200
 master 4096
 # ---- the mixer's PAN (GLO twice): T2 hard left, so its stem's right side is silent; the drums' stem keeps both
 tap GLO
@@ -66,6 +73,23 @@ wait 600
 spin K2 63
 wait 30
 expect mix2_1 64
+# ---- the mixer's LEVEL (SELECT back): the drums at 50 of 100, their stem 6 dB lower; back to 100
+turn SELECT -1
+wait 30
+expect mixpage 0
+expect stemreset 1
+wait 1000
+expect stem1 >-100
+spin K1 -50
+wait 30
+expect mix1_0 50
+expect stemreset 1
+wait 1000
+expect stem1l <-110
+expect stem1r >-160
+spin K1 50
+wait 30
+expect mix1_0 100
 # ---- the sends: T3's PLUCK, a short note with its reverb and delay sends (on by default): the stem stops with the
 # voice, the master rings on with the reverb and the echoes
 turn ALGO 1

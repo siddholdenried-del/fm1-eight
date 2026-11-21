@@ -164,11 +164,17 @@ channels at 44.1 kHz, 16 bits: the master on 1–2 (fm1-base's tap, as before), 
   not limited, past it.
 - **Not possible without changing fm1-base:** keeping the metronome off the master pair (the tap copies what the app
   renders, click included).
-- **Cost:** image 445,188 B (+1.2 KB); RAM .data+.bss 79,812 of 98,304 B (+10 KB: the ten-channel ring and the synth's
-  per-track block); the pool unchanged. On the device the ring needs a render under about 40 % of its block's time;
-  past that the recording gets a held sample now and then, and `FM1B_UAC_DEEP` (fm1-base) is the fix. Unmeasured.
-- **Tests:** `app/tests/stems.txt` (54): every stem silent while stopped, the drums alone on 3–4, a T2 note on 5–6 only,
-  MASTER 0 leaving the stems as they were, PAN hard left emptying the right side, a stem stopping with its voice while
+- **MASTER out of the USB mix** (the user: "internal track levels set usb mix"): `plat_usb_audio_full(1)` in app_init,
+  so app_render gets 4096, the master pair is the master bus's output at full level, and fm1-base puts MASTER on for
+  the speaker after its tap (uac_mix.h). The app's pkl / pkr are now before MASTER.
+- **On the FM-1** (installed 20 Nov, recorded with ffmpeg from the Mac while fm1_remote.py pressed PLAY): every stem
+  carried its own track, but the shallow ring (128 frames primed) ran dry ~12 times in 9 s: all ten channels held for
+  up to ~260 frames, then a jump. `FM1B_UAC_DEEP 1` in app.h keeps a whole block more (5.8 ms more latency), the ring
+  in the pool: RAM .data+.bss 69,572 B, pool 298,140 of 344,064.
+- **Cost:** image 445,268 B (+1.3 KB over 0.4); with the deep ring in the pool, RAM .data+.bss 69,572 of 98,304 B
+  (0.4: 69,860) and the pool 298,140 of 344,064 (+15 KB).
+- **Tests:** `app/tests/stems.txt` (67): every stem silent while stopped, the drums alone on 3–4, a T2 note on 5–6 only,
+  MASTER 0 leaving the stems and the master pair as they were, LEVEL 50 taking the drums' stem 6 dB down, PAN hard left emptying the right side, a stem stopping with its voice while
   the master's reverb rings on, solo, the metronome on the master only, no clipped samples. `usbwav` writes the ten
   channels as a computer would get them.
 
@@ -502,7 +508,7 @@ channels at 44.1 kHz, 16 bits: the master on 1–2 (fm1-base's tap, as before), 
 | ✓ | **7. The master bus (v0.2)**: EQ, compressor, TAPE, STEREO, limiter GAIN/CEILING/RELEASE, chain presets, BYPASS, loudness meters, MASTER last | Built, tested in the simulator (`master.txt`, `mbus_unit.c`, `master_demo.wav`), installed over USB and played. **Still to do: measure the CPU** |
 | ✓ | **10. Performance (v0.2 update)**: HOME as a scene grid (a clip per track, scenes, clip stop, LAUNCH at the bar, the beat or now), seven perform keys and TAPE STOP, sounds per pattern (T2–T4's sounds and the kit), follow actions, motion recording, RELOAD (SAVE + OCT−), tap tempo, nudge, solo, MIDI clock sent and followed (timed by the audio block, tempo over 4 beats, the groove pulled to it every 16th), the SETUP page. A tempo change now stretches the bar and the steps together (before, the bar kept the old tempo until its end) | `scenes.txt` (44), `perform.txt` (48), `live.txt` (120); all suites pass (942 checks). The new parts appended to project_t (32,680 of 32,736 B): a 0.2 project still loads. **Still to try on the device** |
 | ✓ | **12. The 303 generator (v0.4)**: the ACID pages on SEQ (DENSITY, WHOLE, SLIDE, ACCENT; ROOT, SCALE, NOTES, OCTAVE; SEED, LENGTH, RATE, SWING), NEW and MUTATE, HALF / WHOLE / SLIDE and accents as step marks played on any sound, per-part settings (format 3), LEGATO SLIDE | `acid.txt` (170), `convert3.txt` (28: 0.3's file), `synth_unit.c` (39: LEGATO SLIDE, SN_SLIDE, SN_ACCENT); all suites pass (1,401 checks); device build passes (image 444 KB). Installed 20 Nov |
-| ✓ | **13. USB stems (v0.5)**: the USB audio input at ten channels, the master on 1–2 and each track alone on 3–10, dry, before the master bus and MASTER | `stems.txt` (54); all suites pass (1,455 checks); device build passes (image 445 KB, RAM +10 KB). **Still to try on the device** with a computer recording |
+| ✓ | **13. USB stems (v0.5)**: the USB audio input at ten channels, the master on 1–2 and each track alone on 3–10, dry, before the master bus and MASTER | `stems.txt` (67); all suites pass (1,468 checks). Installed 20 Nov and recorded from: each stem right, but clicks (the USB ring ran dry); the deep ring and MASTER out of the USB mix since, **not yet installed** |
 | ✓ | **11. The synth update (v0.3)**: OSC 2's own wave, FM, RING, DRIFT; the SHAPER (FOLD, CLIP, RECT, CRUSH, BIAS, PRE/POST); MOD ENV; LFO 2 for each voice; a six-slot matrix; MACRO 1–4; nine factory sounds. Project format 2 (64 parameters a sound, 7-byte steps), 0.2's projects and user presets converted as they load | `convert.txt` (65), `synth2.txt` (101), `synth_unit.c` (28, sanitized), `synth_same.sh` (0.2's sounds byte for byte); all suites pass (1,114 checks). **Still to try on the device**, and its CPU with FM and the SHAPER on many voices |
 
 ## Risks

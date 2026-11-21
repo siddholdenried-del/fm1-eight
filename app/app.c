@@ -2703,7 +2703,8 @@ void app_render(int32_t *lr, uint32_t n, uint32_t master_q12)
                     click_hit(ck.beat == 0);
                 ck.beat = (ck.beat + 1) & 3;
             }
-            if (ck.env > 0.0001f) {       /* after the master bus, under MASTER: not in a recording or the master */
+            if (ck.env > 0.0001f) {       /* after the master bus, under MASTER: not in a sample or the meters (in the
+                                           * USB master pair, and under MASTER on the speaker: plat_usb_audio_full) */
                 float y = ck.c * ck.y1 - ck.y2, v = ck.y1 * ck.env * gain;
                 ck.y2 = ck.y1;
                 ck.y1 = y;
@@ -2741,6 +2742,10 @@ void app_init(void)
     syn_init();
     lfo_init();
     fx_init(shared_buf, DLY_LEN);
+    /* the USB mix is set by the tracks' own levels, not the MASTER knob (the user's call, 0.5): the render comes at
+     * full level (app_render's master_q12 4096), the USB master pair takes it so, and the platform puts MASTER on for
+     * the speaker and headphones after (device/uac_mix.h); the stems never had MASTER */
+    plat_usb_audio_full(1);
     cpu2 = (uint8_t)(plat_cpu2_set(1) == 0);
     pool_max = pool_now = (uint8_t)(cpu2 ? SYN_VOICES : SYN_VOICES / 2);
     syn_pool(pool_max);

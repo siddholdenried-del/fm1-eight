@@ -15,9 +15,10 @@ The BongTech GhettoMachine turns the M-VAVE FM-1 into a four-track groovebox:
 - **A 303 pattern generator** on T2–T4: acid lines with slides and accents, made from a few knobs.
 - **Stems over USB:** a computer records the master and each track on its own pair of inputs, all at once.
 
-> **0.5 is built, not installed yet.** 0.4 is on the FM-1 (installed over USB on 20 Nov). 0.5 is 0.4 plus the USB
-> stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
-> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,455 checks, 39 more on the
+> **0.5 is on the FM-1** (installed over USB on 20 Nov, after 0.4 the same day). A real recording from it clicked now
+> and then, so 0.5 now keeps a deeper USB buffer, and MASTER no longer changes what a computer records: those two
+> changes are in the source, not on the FM-1 yet. 0.5 is 0.4 plus the USB stems. 0.4 is 0.3 plus the 303 generator, the new name and the boot screen's logo; 0.3 is 0.2 plus the performance
+> update (the scene grid onwards) and the synth update. 0.5 passes its simulator tests (1,468 checks, 39 more on the
 > synth itself and 48 on the master bus's sound). It reads a project saved by 0.2, 0.3 or 0.4.
 
 ## Installing it, and getting back
@@ -327,7 +328,7 @@ Everything you hear goes through it, in this order:
 - **LIMIT:** GAIN and CEILING again, RELEASE, and LIMIT on or off (off, a loud mix clips).
 
 **About MASTER:** the MASTER knob now comes after the whole chain, so it only sets how loud you hear it and never
-changes what the chain does. It also means **you'll turn MASTER up further than with X0X** for the same loudness;
+changes what the chain does, or (since 0.5) what a computer records over USB. It also means **you'll turn MASTER up further than with X0X** for the same loudness;
 for more, use GAIN or the LOUD preset.
 
 Measured on a demo groove: bypassed and CLEAN about −15 LUFS; GLUE, WARM, WIDE and LO-FI about −13; PUNCH −12; LOUD −9.
@@ -341,7 +342,7 @@ FM-1's speaker and headphones.
 
 | Inputs | What's on them |
 | --- | --- |
-| **1–2** | The master: everything you hear, after the master bus, at MASTER |
+| **1–2** | The master: everything you hear, after the master bus (MASTER doesn't change it) |
 | **3–4** | The drums alone |
 | **5–6** | T2 alone |
 | **7–8** | T3 alone |
@@ -357,7 +358,10 @@ once. Each stem is one track as it comes into the mix:
   THROW, WASH). Add your own effects to the stems, or record the master pair beside them.
 - **Levels:** a stem sits at the level its meter shows on the screen; the four add up to what goes into the master
   bus, less the reverb and the delay. The demos peak 6 to 14 dB under full scale. A stem has no limiter: one that goes
-  past full scale clips, so turn that track's LEVEL down. MASTER doesn't change the stems.
+  past full scale clips, so turn that track's LEVEL down.
+- **The tracks' levels set the USB mix, MASTER doesn't:** the knob sets only the speaker and the headphones, so you can
+  listen quietly (or not at all) while the computer records. The master pair comes off the master bus at its full
+  level, its peaks kept under the limiter's CEILING.
 - **The metronome is on the master pair** when it's on (hold REC, K1). Set it to OFF or REC while you record the
   master pair, or use the DAW's own click.
 - **16 bits** a channel: USB at the FM-1's speed carries ten channels at 44.1 kHz with 16 bits each, and no more.
@@ -470,9 +474,9 @@ the sound saved with the pattern it's on.
 - CPU load on the FM-1 hasn't been measured yet, with or without the master bus's stages. If it's short, voices drop
   first. A voice using FM, the shaper or the matrix takes about one and a half times a plain one's time (measured on
   the Mac, in the simulator).
-- The stems have been tested in the simulator, not yet on the FM-1 with a computer recording. If the FM-1 is busy
-  for most of each audio block, the recording (not the FM-1's own sound) can click now and then; fm1-base can keep
-  a deeper buffer for that, with about 6 ms more delay.
+- The stems were recorded from the FM-1 once: each carried its own track, but the USB buffer ran dry about a dozen
+  times in 9 seconds, each a click in the recording (not in the FM-1's own sound). 0.5 now keeps a deeper buffer
+  (about 6 ms more delay), which hasn't been recorded from yet.
 - No stem for the reverb and delay returns (the ten inputs are all used), no 48 kHz or 24-bit stems.
 - No per-track EQ or compression, no multiband compression on the master; no locks on LFO 1 or arpeggiator settings
   (LFO 2's and the matrix's amounts lock); the arpeggio isn't recorded, only what you play.

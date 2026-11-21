@@ -13,6 +13,11 @@
 void app_splash(void);
 #define APP_BLOCK 256u                   /* frames per audio block: 5.8 ms at 44.1 kHz */
 #define APP_TOUCH                        /* velocity from the keys (lib/touch.h): played pads */
+/* the USB audio input (the master and the stems) keeps a whole block more in hand, so a render may take all of its
+ * block's time: recorded from 0.5 on the FM-1, the shallow ring ran dry a dozen times in 9 s of a groove (each a run
+ * of up to ~260 frames held, a click in the recording, not on the FM-1). Its ring goes to the pool; 5.8 ms more
+ * latency. (device/unity.c FM1B_UAC_DEEP) */
+#define FM1B_UAC_DEEP 1
 
 /* the store: the user presets (sounds and kits; the project itself is a file, app.c PROJ_FILE),
  * the panel calibration (the platform's) and Bluetooth's slot (unused: no radio in this build), and their offsets */
