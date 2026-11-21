@@ -239,12 +239,12 @@ python3 -I app/tools/fm1_sample.py get copied-sample.wav --track 3</code></pre>
 
 
 <h2 id="usb-stems" tabindex="-1">Record the master and separate tracks over USB (0.5)</h2>
-<p>This is an FM-1 hardware feature, not an export button in the browser groovebox. On firmware 0.5, select <strong>GhettoMachine FM-1</strong> as the DAW’s audio input device. It exposes ten inputs and two monitoring outputs at 44.1 kHz, 16-bit. The 0.5 build has been tested in the simulator; end-to-end recording from the physical FM-1 has not been verified.</p>
+<p>This is an FM-1 hardware feature, not an export button in the browser groovebox. On firmware 0.5, select <strong>GhettoMachine FM-1</strong> as the DAW’s audio input device. It exposes ten inputs and two monitoring outputs at 44.1 kHz, 16-bit. It was recorded from the physical FM-1 on 20 November: each pair carried its own track. That first recording clicked now and then, so 0.5 now keeps a deeper USB buffer (about 6 ms more latency), which hasn't been recorded from yet.</p>
 <div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="USB input pairs in the DAW"><table>
 <caption>USB input pairs in the DAW</caption>
 <thead><tr><th scope="col">Inputs</th><th scope="col">Signal</th></tr></thead>
 <tbody>
-<tr><th scope="row">1–2</th><td>Stereo master after the master bus and MASTER level.</td></tr>
+<tr><th scope="row">1–2</th><td>Stereo master after the master bus. MASTER doesn’t change it: the knob sets only the speaker and headphones.</td></tr>
 <tr><th scope="row">3–4</th><td>DRUMS dry stem.</td></tr>
 <tr><th scope="row">5–6</th><td>T2 dry stem.</td></tr>
 <tr><th scope="row">7–8</th><td>T3 dry stem.</td></tr>
