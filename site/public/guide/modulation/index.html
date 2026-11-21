@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8500ff">
+<meta name="description" content="BongTech GhettoMachine, a four-track groovebox firmware for the M-VAVE FM-1, playable in the browser.">
+<link rel="canonical" href="https://ghettomachine.bongcult.com/guide/modulation/">
+<title>Modulation in depth · GhettoMachine User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Sedgwick+Ave+Display&display=swap">
+<style>
+/* Layout: one reading column (phone first); each chapter opens with a band in the colour the firmware gives that part of
+   itself, ink on colour, the way the FM-1's own screen does it. */
+:root {
+  --bg: #F2F3F5;
+  --fg: #17181C;
+  --muted: #5B5F69;
+  --rule: #D8DAE0;
+  --panel: #E6E8EC;
+  --card: #FFFFFF;
+  --on: #16171B;                /* ink on the bright chapter colours, in both themes */
+  --c909: #FF7828; --c808: #46A0FF; --t2: #5AD282; --t3: #B97DFF; --t4: #F5CD3C;
+  --fx: #40C8DE; --mst: #FF6280; --rec: #EE4040; --cream: #E9E4D6; --ink: #2A2C33;
+  --display: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --logo: "Sedgwick Ave Display", "Marker Felt", "Chalkboard SE", cursive;   /* the wordmark, as on the boot screen */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111215; --fg: #E6E7EA; --muted: #9DA1AB; --rule: #2A2C33; --panel: #1B1D22; --card: #191B20; --ink: #3A3D46;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111215; --fg: #E6E7EA; --muted: #9DA1AB; --rule: #2A2C33; --panel: #1B1D22; --card: #191B20; --ink: #3A3D46;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 400 18px/1.62 var(--body);
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 680px; margin: 0 auto;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-block: 0 72px;
+}
+h1, h2, h3, .label { font-family: var(--display); text-wrap: balance; }
+h1 { font-size: 3.1rem; line-height: 0.95; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 2rem; line-height: 1; font-weight: 700; margin: 0; }
+h3 { font-size: 1.3rem; line-height: 1.15; font-weight: 700; margin: 1.8em 0 0.4em; }
+p { margin: 0.75em 0; }
+a { color: inherit; text-underline-offset: 3px; }
+code, .mono { font-family: var(--mono); font-size: 0.82em; }
+code { background: var(--panel); padding: 0.08em 0.35em; border-radius: 4px; }
+strong { font-weight: 600; }
+.label { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; font-weight: 600; }
+:focus-visible { outline: 3px solid var(--c808); outline-offset: 2px; }
+
+/* the opening: a screen-like band */
+.hero { padding-block: 28px 8px; }
+.hero .screen {
+  background: var(--c909); color: var(--on); border-radius: 14px; padding: 18px 18px 16px;
+  display: grid; gap: 10px;
+}
+.hero .screen .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.hero .ver { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+.hero h1 .in { display: block; font-size: 1.35rem; line-height: 1.1; letter-spacing: 0.02em; }
+/* the wordmark: as wide as the screen allows (GhettoMachine is about 5.8 em wide in it), at most 4.6rem */
+.hero h1 .logo { display: block; font-family: var(--logo); font-weight: 400; letter-spacing: 0; line-height: 1.05;
+  font-size: clamp(2.2rem, calc((100vw - 80px) / 6), 4.6rem); padding-top: 2px; }
+.hero .sub { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.25; max-width: 30ch; }
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 4px; }
+.specs div { background: var(--on); color: #F1EFE8; border-radius: 8px; padding: 6px 8px 7px; min-width: 0; }
+.specs b { display: block; font-family: var(--display); font-size: 1.35rem; line-height: 1.1; font-weight: 700; }
+.specs span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #B9B6AE; }
+.lede { font-size: 1.12rem; color: var(--fg); }
+
+/* contents */
+nav.toc { margin: 22px 0 8px; border-top: 1px solid var(--rule); padding-top: 14px; }
+nav.toc ol { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; }
+nav.toc a { display: flex; gap: 10px; align-items: center; text-decoration: none; padding: 6px 0; font-weight: 500; }
+nav.toc i { width: 12px; height: 12px; border-radius: 3px; flex: none; background: var(--c); }
+
+/* chapters */
+section { margin-top: 44px; scroll-margin-top: 16px; }
+.band {
+  background: var(--c); color: var(--on); border-radius: 12px; padding: 14px 16px 13px;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 12px;
+}
+.band .label { opacity: 0.75; }
+.band .tag { font-family: var(--display); font-weight: 700; font-size: 1rem; white-space: nowrap; }
+
+/* small diagram parts */
+.figure { margin: 18px 0; }
+.figure .cap { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.flow { display: grid; gap: 0; }
+.stage {
+  display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; align-items: stretch;
+  background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px;
+}
+.stage::before { content: ""; border-radius: 4px; background: var(--c, var(--ink)); }
+.stage b { font-family: var(--display); font-size: 1.12rem; font-weight: 700; display: block; line-height: 1.2; }
+.stage span { color: var(--muted); font-size: 0.92rem; line-height: 1.4; display: block; }
+.arrow { height: 16px; display: grid; place-items: center; color: var(--muted); font-size: 0.8rem; line-height: 1; }
+.arrow::before { content: ""; width: 2px; height: 100%; background: var(--rule); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.box { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 13px; min-width: 0; }
+.box h4 { margin: 0 0 6px; font-family: var(--display); font-size: 1.15rem; font-weight: 700; }
+.box ul { margin: 0; padding-left: 1.05em; font-size: 0.92rem; line-height: 1.45; }
+.box li { margin: 3px 0; }
+section > ul { padding-left: 1.2em; line-height: 1.5; }
+section > ul li { margin: 6px 0; }
+.box .when { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 6px; }
+
+.note { border-left: 3px solid var(--rule); padding: 2px 0 2px 14px; color: var(--muted); font-size: 0.95rem; }
+
+/* the flash map: a megabyte, to scale */
+.flash { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; }
+.flash .bar { display: grid; border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); }
+.flash .bar div { min-height: 3px; }
+.flash .legend { display: grid; align-content: start; gap: 7px; font-size: 0.9rem; line-height: 1.35; }
+.flash .legend div { display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: 9px; align-items: start; }
+.flash .legend i { width: 12px; height: 12px; border-radius: 3px; margin-top: 5px; }
+.flash .legend span { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; display: block; }
+
+/* the screen's three parts */
+.dev { width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 12px; overflow: hidden; display: grid;
+  grid-template-rows: 44fr 132fr 64fr; border: 1px solid var(--rule); margin: 6px auto 0; font-family: var(--display); }
+.dev > div { padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dev .b1 { background: #16171B; color: var(--t2); font-weight: 700; font-size: 1.2rem; }
+.dev .b1 small { color: #E8E6DE; font-size: 0.8rem; font-weight: 600; }
+.dev .b2 { background: var(--t2); color: var(--on); font-weight: 600; flex-direction: column; justify-content: center; }
+.dev .b3 { background: var(--t2); gap: 5px; padding: 6px; }
+.dev .b3 span { flex: 1; min-width: 0; background: #16171B; color: #E8E6DE; border-radius: 6px; height: 100%; font-size: 0.7rem;
+  display: grid; place-items: center; font-weight: 600; }
+.curve { width: 100%; height: 60px; }
+
+/* the timeline */
+.time { display: grid; gap: 10px; margin-top: 12px; }
+.time div { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; }
+.time b { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); font-weight: 500; padding-top: 4px; }
+
+dl.gloss { display: grid; gap: 12px; margin: 14px 0 0; }
+dl.gloss div { border-top: 1px solid var(--rule); padding-top: 10px; }
+dl.gloss dt { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+dl.gloss dd { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 420px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--display); font-weight: 700; font-size: 0.95rem; }
+td.n { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.8rem; white-space: nowrap; }
+
+footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); padding-top: 14px; }
+
+/* Play it: the emulator (the hosted page frames it here; elsewhere a link to it) */
+.cta { display: inline-block; font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em;
+  background: var(--t2); color: var(--on); text-decoration: none; border-radius: 999px; padding: 0.55em 1.3em; }
+.cta:hover { filter: brightness(1.06); }
+.emu-frame { width: min(1040px, calc(100vw - 24px)); margin: 14px 0 6px 50%; transform: translateX(-50%);
+  border-radius: 14px; overflow: hidden; border: 1px solid var(--rule); background: var(--card); }
+.emu-frame iframe { display: block; width: 100%; border: 0; height: calc(min(1040px, calc(100vw - 24px)) * 0.64 + 150px); }
+@media (max-width: 700px) { .emu-frame iframe { height: 660px; } }
+
+@media (max-width: 420px) {
+  body { font-size: 17px; }
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 1.7rem; }
+  .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/bong-cult-shell.css">
+<script src="/guide-toc.js" defer></script>
+</head>
+<body class="gm-bong-cult gm-guide-page">
+<a class="bc-skip" href="#gm-main">Skip to content</a>
+<header class="bc-masthead">
+  <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
+  <p class="bc-badge">BongTech · Project site</p>
+  <a class="bc-name" href="https://bongcult.com/"><img src="/bong-cult-logo.svg" alt="Bong Cult home" width="866" height="320"></a>
+  <div class="bc-rainbow" aria-hidden="true"></div>
+</header>
+<div class="bc-frame">
+<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><div class="gm-toc-desktop"><p class="gm-toc-title">Table of contents</p><nav class="gm-toc" aria-label="Guide table of contents"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/modulation/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Modulation</span></a><ul class="gm-toc-topics"><li><a href="#where" data-guide-topic>Where the modulation pages are</a></li><li><a href="#lfo1" data-guide-topic>LFO 1: one per track</a></li><li><a href="#lfo2" data-guide-topic>LFO 2: one per note (T2–T4)</a></li><li><a href="#envelopes" data-guide-topic>The MOD ENV and the other envelopes</a></li><li><a href="#matrix" data-guide-topic>The MATRIX: six routes per sound</a></li><li><a href="#macros" data-guide-topic>Macros: one knob, many moves</a></li><li><a href="#step-modulation" data-guide-topic>Modulation per step: locks</a></li><li><a href="#motion" data-guide-topic>Record knob moves as motion</a></li><li><a href="#recipes" data-guide-topic>Recipes</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">08</span><span>Save &amp; install</span></a></li><li><a class="gm-toc-chapter" href="/guide/reference/"><span class="gm-chapter-number" aria-hidden="true">09</span><span>Every control</span></a></li></ol></li></ul></nav></div><details class="gm-toc-mobile"><summary aria-label="Table of contents">Contents<span>Modulation</span></summary><div class="gm-toc-mobile-panel"><nav class="gm-toc" aria-label="Guide table of contents (mobile)"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/modulation/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Modulation</span></a><ul class="gm-toc-topics"><li><a href="#where" data-guide-topic>Where the modulation pages are</a></li><li><a href="#lfo1" data-guide-topic>LFO 1: one per track</a></li><li><a href="#lfo2" data-guide-topic>LFO 2: one per note (T2–T4)</a></li><li><a href="#envelopes" data-guide-topic>The MOD ENV and the other envelopes</a></li><li><a href="#matrix" data-guide-topic>The MATRIX: six routes per sound</a></li><li><a href="#macros" data-guide-topic>Macros: one knob, many moves</a></li><li><a href="#step-modulation" data-guide-topic>Modulation per step: locks</a></li><li><a href="#motion" data-guide-topic>Record knob moves as motion</a></li><li><a href="#recipes" data-guide-topic>Recipes</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">08</span><span>Save &amp; install</span></a></li><li><a class="gm-toc-chapter" href="/guide/reference/"><span class="gm-chapter-number" aria-hidden="true">09</span><span>Every control</span></a></li></ol></li></ul></nav></div></details></div></aside>
+<main class="wrap" id="gm-main" tabindex="-1">
+<article class="gm-guide"><p class="gm-crumb">User Guide · 4 of 9</p><h1>Modulation in depth</h1>
+<p class="gm-guide-lead">Modulation moves a sound while it plays, without you touching a knob. GhettoMachine has five sources of movement: <strong>LFO 1</strong> (one per track, can follow the tempo), <strong>LFO 2</strong> (one per note), the <strong>MOD ENV</strong> (a third envelope per note), the four <strong>MACRO</strong> knobs, and <strong>step locks</strong> written by the sequencer. On T2–T4 the <strong>MATRIX</strong> connects LFO 1, LFO 2, the three envelopes, velocity, the note, a random value and the macros to 17 destinations, six routes per sound. This chapter covers where each one lives, what it can reach, how far it moves things, and recipes to start from.</p>
+
+<h2 id="where" tabindex="-1">Where the modulation pages are</h2>
+<p>Each section button opens the page you last used in that section. Press it again for the next page. The quickest way to a page is to press its button, then turn <strong>SELECT</strong> to move between that section's pages. SELECT stops at the first and last page, so turning it fully right always lands on the last page.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Modulation pages on T2–T4"><table>
+<caption>Modulation pages on T2–T4</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">How to get there</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">LFO 1</th><td>LFO, then SELECT fully left</td><td>SHAPE</td><td>RATE</td><td>DEPTH</td><td>DEST</td></tr>
+<tr><th scope="row">LFO 1 MORE</th><td>LFO, SELECT one page right</td><td>SYNC</td><td>RETRIG</td><td>FADE IN</td><td>PHASE</td></tr>
+<tr><th scope="row">LFO 2</th><td>LFO, SELECT two pages right</td><td>SHAPE</td><td>RATE</td><td>FADE IN</td><td>RESTART</td></tr>
+<tr><th scope="row">MATRIX</th><td>LFO, SELECT fully right</td><td>SLOT</td><td>SOURCE</td><td>DEST</td><td>AMOUNT</td></tr>
+<tr><th scope="row">MOD ENV</th><td>ENV, SELECT fully right</td><td>ATTACK</td><td>DECAY</td><td>SUSTAIN</td><td>RELEASE</td></tr>
+<tr><th scope="row">MACRO</th><td>EDIT, SELECT fully right</td><td>MACRO 1</td><td>MACRO 2</td><td>MACRO 3</td><td>MACRO 4</td></tr>
+</tbody></table></div>
+<p>Pressing LFO on the last LFO page (MATRIX) returns to KEYS. On DRUMS, LFO has two pages, LFO 1 and LFO 1 MORE, and then returns to STEPS. The drums have no LFO 2, MOD ENV, macros or matrix.</p>
+
+<h2 id="lfo1" tabindex="-1">LFO 1: one per track</h2>
+<p>LFO 1 moves the whole track at once: every note of a chord sweeps together. It is the only modulation source that can lock to the tempo. Its settings belong to the project, not to the sound, so changing PRESETS keeps the LFO as it is.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="LFO 1 and LFO 1 MORE settings"><table>
+<caption>LFO 1 and LFO 1 MORE settings</caption>
+<thead><tr><th scope="col">Knob</th><th scope="col">Values</th><th scope="col">What it does</th></tr></thead>
+<tbody>
+<tr><th scope="row">SHAPE</th><td>SINE, TRIANGLE, SAW UP, SAW DOWN, SQUARE, S&amp;H, SMOOTH</td><td>S&amp;H jumps to a new random level each cycle. SMOOTH slides between random levels.</td></tr>
+<tr><th scope="row">RATE</th><td>FREE: 0.05–29 Hz (starts at 1.2 Hz). TEMPO: 4 BARS, 2 BARS, 1 BAR, 1/2, 1/4., 1/4, 1/8., 1/4T, 1/8, 1/8T, 1/16, 1/16T, 1/32</td><td>One cycle takes this long. SYNC decides which list the knob shows.</td></tr>
+<tr><th scope="row">DEPTH</th><td>−64 to +63 (0 at first)</td><td>How far it moves DEST. A negative depth turns the wave upside down.</td></tr>
+<tr><th scope="row">DEST</th><td>T2–T4: CUTOFF, PITCH, LEVEL, PWM, RESO, DETUNE, MIX, DRIVE, NOISE, SUB, START. DRUMS: OFF, then one knob of the selected pad</td><td>Where LFO 1 goes. To reach more destinations, route it through the <a href="#matrix">matrix</a>.</td></tr>
+<tr><th scope="row">SYNC</th><td>FREE or TEMPO</td><td>TEMPO follows the tempo and MIDI clock.</td></tr>
+<tr><th scope="row">RETRIG</th><td>T2–T4: FREE, NOTE, BAR. DRUMS: FREE, BAR</td><td>FREE runs on its own. NOTE restarts it at each note on the track, whether from the keys, the steps or MIDI. BAR restarts it at each bar. PLAY also restarts tempo-synced and BAR LFOs, so they start with the bar.</td></tr>
+<tr><th scope="row">FADE IN</th><td>OFF, then 1–5001 ms, shown in milliseconds (T2–T4 only)</td><td>The LFO grows from nothing after each restart. <strong>It only works with RETRIG on NOTE.</strong> With FREE or BAR it has no effect.</td></tr>
+<tr><th scope="row">PHASE</th><td>0–357°</td><td>Where in its wave the LFO starts when it restarts. 0° starts SINE and TRIANGLE at the middle, rising.</td></tr>
+</tbody></table></div>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="How far LFO 1 moves each destination at full DEPTH"><table>
+<caption>How far LFO 1 moves each destination at full DEPTH</caption>
+<thead><tr><th scope="col">DEST</th><th scope="col">At DEPTH ±64</th></tr></thead>
+<tbody>
+<tr><th scope="row">CUTOFF</th><td>±64 of the filter's 128 steps, about four octaves.</td></tr>
+<tr><th scope="row">PITCH</th><td>±12 semitones. DEPTH 5 is a vibrato of about one semitone each way.</td></tr>
+<tr><th scope="row">LEVEL</th><td>Tremolo: dips the level by up to all of it. A positive DEPTH dips at the wave's low point.</td></tr>
+<tr><th scope="row">PWM, RESO, DETUNE, MIX, DRIVE, NOISE, SUB</th><td>±64 on the knob's 0–127 scale, added to where the knob is.</td></tr>
+<tr><th scope="row">START (SAMPLER)</th><td>Moves where each note starts in the sample by up to half the trimmed sample, read once as each note starts.</td></tr>
+</tbody></table></div>
+
+<h3>LFO 1 on the drums</h3>
+<ol>
+<li>On DRUMS, tap the black key of the pad you want to move (CH, for example).</li>
+<li>Press <strong>LFO</strong>. Turn <strong>K4 DEST</strong> right from OFF through that pad's knobs: for the 909 CH, Decay, Level, Tune, Drive and Pan. Switches (Dist, Sound) and sends (Rev, Dly) aren't on the list.</li>
+<li>Set <strong>K3 DEPTH</strong>. At ±64 the knob moves up to 64 of its 0–127 range.</li>
+</ol>
+<p>The drum LFO is read once at each hit of that pad, starting from the knob's value or that step's lock. A hit keeps that value while it rings, so an S&amp;H or a fast LFO gives each hit a different setting. The drums have one LFO, for one pad at a time. Turning DEST while a different pad is selected moves the LFO to that pad. Hits played into the FM-1 over MIDI skip the LFO and step locks.</p>
+
+<h2 id="lfo2" tabindex="-1">LFO 2: one per note (T2–T4)</h2>
+<p>Every note gets its own LFO 2. In a chord each voice can wobble on its own, and a note that starts later starts its own cycle. <strong>LFO 2 does nothing by itself:</strong> it only reaches the sound through a <a href="#matrix">MATRIX</a> slot whose SOURCE is LFO 2.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="LFO 2 settings"><table>
+<caption>LFO 2 settings</caption>
+<thead><tr><th scope="col">Knob</th><th scope="col">Values</th><th scope="col">What it does</th></tr></thead>
+<tbody>
+<tr><th scope="row">SHAPE</th><td>The same seven shapes as LFO 1</td><td>S&amp;H and SMOOTH pick new random levels for each note.</td></tr>
+<tr><th scope="row">RATE</th><td>0.05–29 Hz (4.8 Hz unless the preset sets another)</td><td>Not tempo-synced. The matrix can move it (destination LFO 2 RATE).</td></tr>
+<tr><th scope="row">FADE IN</th><td>OFF, then 1 ms–5.0 s</td><td>Each note's LFO 2 grows from nothing: a delayed vibrato.</td></tr>
+<tr><th scope="row">RESTART</th><td>EACH NOTE or FREE</td><td>EACH NOTE starts every note at the beginning of the wave. FREE starts every note at a random point, so the notes of a chord drift out of step.</td></tr>
+</tbody></table></div>
+<p>LFO 2 is part of the sound: it's saved in user presets and changes with PRESETS. Its four knobs can be locked per step and recorded as motion.</p>
+
+<h2 id="envelopes" tabindex="-1">The MOD ENV and the other envelopes</h2>
+<p>ENV has three pages: AMP ENV, FILTER ENV and MOD ENV. Each has ATTACK, DECAY and RELEASE from 1 ms to 5.0 s, and SUSTAIN 0–127. Every note runs its own copy of all three.</p>
+<ul>
+<li><strong>AMP ENV</strong> shapes the volume. It is also a matrix source.</li>
+<li><strong>FILTER ENV</strong> moves the cutoff by EDIT → FILTER → ENV AMT (−64 to +63). It is also a matrix source, so one envelope can move the filter and, for example, the FM amount.</li>
+<li><strong>MOD ENV</strong> has no job until a matrix slot uses it. Unless a preset sets it, it starts at ATTACK 1 ms, DECAY 528 ms, SUSTAIN 0 and RELEASE 157 ms, so it rises at once and falls away within about half a second. Point it at FM, SHAPER, PITCH, OSC 2 or anything else in the list below.</li>
+</ul>
+<p>Envelope times are 1 ms at 0, 81 ms at 32, 641 ms at 64, 2.2 s at 96 and 5.0 s at 127.</p>
+
+<h2 id="matrix" tabindex="-1">The MATRIX: six routes per sound</h2>
+<p>Press <strong>LFO</strong> and turn <strong>SELECT</strong> fully right. The page lists all six slots, and the one on the knobs is highlighted.</p>
+<ol>
+<li><strong>K1 SLOT</strong> picks MOD 1 to MOD 6. The screen reader reads the slot as, for example, “LFO 2 &gt; PITCH +4”, or OFF.</li>
+<li><strong>K2 SOURCE</strong> picks what moves.</li>
+<li><strong>K3 DEST</strong> picks what is moved.</li>
+<li><strong>K4 AMOUNT</strong> sets how far, from −64 to +63. A slot does nothing while its SOURCE is OFF or its AMOUNT is 0.</li>
+</ol>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Matrix sources"><table>
+<caption>Matrix sources</caption>
+<thead><tr><th scope="col">Source</th><th scope="col">Range</th><th scope="col">What it is</th></tr></thead>
+<tbody>
+<tr><th scope="row">LFO 1</th><td>−1 to +1</td><td>The track's LFO 1, after its FADE IN but <strong>before its DEPTH</strong>. It works with LFO 1's DEPTH at 0, so you can use a tempo-synced LFO 1 only through the matrix.</td></tr>
+<tr><th scope="row">LFO 2</th><td>−1 to +1</td><td>Each note's own LFO 2.</td></tr>
+<tr><th scope="row">MOD ENV</th><td>0 to 1</td><td>The third envelope.</td></tr>
+<tr><th scope="row">FILT ENV</th><td>0 to 1</td><td>The filter envelope.</td></tr>
+<tr><th scope="row">AMP ENV</th><td>0 to 1</td><td>The amp envelope.</td></tr>
+<tr><th scope="row">VELOCITY</th><td>0 to 1</td><td>How hard the note was played or its step's velocity.</td></tr>
+<tr><th scope="row">NOTE</th><td>−1 to +1</td><td>The note's distance from C4: −1 five octaves below, +1 five octaves above.</td></tr>
+<tr><th scope="row">RANDOM</th><td>−1 to +1</td><td>A new random value for each note, held for that note.</td></tr>
+<tr><th scope="row">MACRO 1–4</th><td>0 to 1</td><td>EDIT → MACRO's four knobs.</td></tr>
+</tbody></table></div>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Matrix destinations and how far a full source moves them at AMOUNT ±64"><table>
+<caption>Matrix destinations and how far a full source moves them at AMOUNT ±64</caption>
+<thead><tr><th scope="col">DEST</th><th scope="col">Full range</th></tr></thead>
+<tbody>
+<tr><th scope="row">PITCH</th><td>±48 semitones. The amount is squared so that small amounts stay fine: AMOUNT 8 moves 0.75 semitone, 16 moves 3, 32 moves 12 and 63 moves about 46.</td></tr>
+<tr><th scope="row">OSC 2</th><td>OSC 2's pitch alone, ±48 semitones, squared like PITCH. Good for FM and ring sweeps.</td></tr>
+<tr><th scope="row">DETUNE</th><td>±127 cents.</td></tr>
+<tr><th scope="row">CUTOFF</th><td>The filter's whole range.</td></tr>
+<tr><th scope="row">RESO, PWM, MIX, SUB, NOISE, DRIVE, FM, RING, SHAPER</th><td>127 steps of the knob. SHAPER moves the shaper's AMOUNT.</td></tr>
+<tr><th scope="row">BIAS</th><td>64 steps of the shaper's BIAS.</td></tr>
+<tr><th scope="row">LEVEL</th><td>Up to twice as loud, or down to silence.</td></tr>
+<tr><th scope="row">PAN</th><td>All the way left or right. It adds to the spread of a unison stack.</td></tr>
+<tr><th scope="row">LFO 2 RATE</th><td>127 steps of LFO 2's RATE, per note.</td></tr>
+</tbody></table></div>
+<ul>
+<li>Routes add up. Two slots to the same DEST add together, and they add on top of the knob's value, LFO 1 and the filter envelope.</li>
+<li>One source can feed several slots, and one destination can take several sources.</li>
+<li>The routing is part of the sound. It's saved with user presets and kept per pattern when SETUP → SOUNDS is OWN.</li>
+<li>The matrix can't move another slot's amount, LFO 1's settings, envelope times, GLIDE, the arpeggiator, the mixer or the effects.</li>
+</ul>
+
+<h2 id="macros" tabindex="-1">Macros: one knob, many moves</h2>
+<p>Press <strong>EDIT</strong> and turn <strong>SELECT</strong> fully right to <strong>MACRO</strong>; on a SAMPLER track it is also the last EDIT page. The four knobs, 0–127 and 0 at first, do nothing until a matrix slot uses MACRO 1–4 as its SOURCE. The MACRO page shows each macro's position and what the matrix connects it to.</p>
+<p>Several factory sounds already have MACRO 1 connected, so turn K1 on their MACRO page:</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Factory sounds with matrix routings"><table>
+<caption>Factory sounds with matrix routings</caption>
+<thead><tr><th scope="col">Sound</th><th scope="col">Routings</th></tr></thead>
+<tbody>
+<tr><th scope="row">FM BELL</th><td>MOD ENV → FM +40, VELOCITY → FM +20, MACRO 1 → FM +50</td></tr>
+<tr><th scope="row">FM BASS</th><td>MOD ENV → FM +45, MACRO 1 → FM +40</td></tr>
+<tr><th scope="row">FM KEYS</th><td>MOD ENV → FM +30, VELOCITY → FM +30, MACRO 1 → RING +40</td></tr>
+<tr><th scope="row">FOLD LEAD</th><td>LFO 2 → PITCH +4, MOD ENV → SHAPER +30, MACRO 1 → SHAPER +60</td></tr>
+<tr><th scope="row">WEST PLUCK</th><td>MOD ENV → SHAPER +50, VELOCITY → SHAPER +30, MACRO 1 → BIAS +40</td></tr>
+<tr><th scope="row">RING METAL</th><td>MOD ENV → OSC 2 −20, MACRO 1 → OSC 2 +24</td></tr>
+<tr><th scope="row">DRIFT PAD</th><td>LFO 2 → PAN +40, LFO 2 → CUTOFF +8, MACRO 1 → CUTOFF +40</td></tr>
+<tr><th scope="row">CRUSH BASS</th><td>MACRO 1 → SHAPER +60</td></tr>
+<tr><th scope="row">WOBBLE</th><td>LFO 2 → CUTOFF +35, MACRO 1 → LFO 2 RATE +40</td></tr>
+</tbody></table></div>
+<p>The other 15 factory sounds have an empty matrix.</p>
+
+<h2 id="step-modulation" tabindex="-1">Modulation per step: locks</h2>
+<p>A lock gives one step its own value for one knob. The sound jumps to that value when the step plays and goes back to the knob's own value at the track's next step that has notes and no lock for that knob.</p>
+<ol>
+<li>On T2–T4, open <strong>STEPS</strong> (SEQ) and hold a lit step's white key.</li>
+<li>Keep holding it and press <strong>EDIT</strong>, <strong>ENV</strong> or <strong>LFO</strong>. While a step is held, SELECT turns the pages on those three sections, so you can reach any page.</li>
+<li>Turn a knob. Its card turns cream with an <strong>L</strong>: that value is locked to the held step. Let go of the step.</li>
+</ol>
+<ul>
+<li>On T2–T4 you can lock the synth knobs on EDIT and ENV, the macros, LFO 2's knobs and the matrix AMOUNTs. These answer NOT LOCKABLE: TYPE, LEVEL, VOICES (UNISON), LEGATO, the matrix's SOURCE and DEST, and the sampler's START, END, LOOP, LOOP START, ROOT, TUNE and RECORD AT. LFO 1, the arpeggiator, the mixer and the effects can't be locked either.</li>
+<li>On DRUMS, open <strong>EDIT</strong> for the pad (the white keys are its steps there too), hold a lit step and turn one of the pad's knobs. You can also hold the step on STEPS and then tap EDIT. On STEPS itself the knobs are LENGTH, RATE, SWING and TEMPO, not locks. The KIT page and the Sound switches can't be locked.</li>
+<li>Each part holds 16 locks. When they run out the screen says <strong>NO LOCK LEFT</strong>. On DRUMS a step's CHANCE also uses one of the 16. On T2–T4 chance is stored in the step itself.</li>
+<li>Hold a step and press <strong>OCT−</strong> to clear its locks (and put its chance back to 100%).</li>
+</ul>
+<p>Locking a macro or a matrix AMOUNT gives you one-step timbre changes: route MACRO 2 to FM and RING, then lock MACRO 2 high on the off-beats only.</p>
+
+<h2 id="motion" tabindex="-1">Record knob moves as motion</h2>
+<p>Tap <strong>REC</strong> so it lights, press <strong>PLAY</strong>, open a sound page and turn a knob. Each step the playhead reaches while you turn gets a lock with the knob's value then. Undo with <strong>EDIT + OCT−</strong>. Turns close together undo as one.</p>
+<ul>
+<li>Recorded on T2–T4: the synth knobs on EDIT and ENV, the macros, LFO 2's knobs and the matrix AMOUNTs. TYPE, LEVEL and the sampler's START, END, LOOP, LOOP START, ROOT, TUNE and RECORD AT aren't recorded. On DRUMS: the selected pad's EDIT knobs, but not the KIT page or the 808's Sound switches.</li>
+<li>Careful: recording also captures turns of VOICES (UNISON), LEGATO and the matrix's SOURCE and DEST, which you can't lock by hand. Leave those alone while REC is lit and the transport runs, or clear the locks afterwards with a held step + OCT−.</li>
+<li>Not recorded: LFO 1, ARP, PRESETS, the mixer, the effects and the master bus.</li>
+<li>A sweep across 16 steps uses all 16 locks of the part. Record short gestures, or clear the old locks first.</li>
+<li>Recording only happens while REC is lit <em>and</em> the transport runs. Stopped, the knob changes the sound itself.</li>
+</ul>
+
+<h2 id="recipes" tabindex="-1">Recipes</h2>
+<p>Each recipe starts from a factory sound on T2 unless it says otherwise. Numbers without a unit are knob positions (0–127, or the signed AMOUNT); values with a unit are what the screen shows.</p>
+<ol>
+<li><strong>Tempo wobble bass.</strong> SQR BASS. EDIT → FILTER: CUTOFF about 40, RESO about 70. LFO 1: SHAPE SINE, DEPTH +40, DEST CUTOFF. LFO 1 MORE: SYNC TEMPO, RETRIG BAR. Back on LFO 1, set RATE to 1/8. Try 1/8T or 1/4. for a broken rhythm.</li>
+<li><strong>Any destination, in time.</strong> On LFO 1 MORE, SYNC TEMPO. LFO 1: RATE 1/4, DEPTH 0. MATRIX: MOD 1 LFO 1 → PAN +40, MOD 2 LFO 1 → FM +20. Because the matrix takes LFO 1 before its DEPTH, the LFO reaches PAN and FM, which aren't on LFO 1's own DEST list.</li>
+<li><strong>Delayed vibrato for pads.</strong> SOFT PAD. LFO 2: SHAPE SINE, RATE about 5 Hz, FADE IN about 600 ms, RESTART EACH NOTE. MATRIX: LFO 2 → PITCH +8, about three-quarters of a semitone.</li>
+<li><strong>Plucked FM.</strong> SINE KEYS. EDIT → OSC 2: FM 10. MOD ENV: ATTACK 0, DECAY about 32 (81 ms), SUSTAIN 0. MATRIX: MOD ENV → FM +40, VELOCITY → FM +20. Harder notes get brighter. Compare FM BELL.</li>
+<li><strong>Velocity to brightness.</strong> MATRIX: VELOCITY → CUTOFF +30, and lower CUTOFF to match. Soft notes are darker. Set a step's velocity with K2 while holding it on STEPS.</li>
+<li><strong>Keyboard-dependent tone.</strong> MATRIX: NOTE → DRIVE +20 so high notes get grittier, and NOTE → PAN +30 so low notes sit left and high notes right.</li>
+<li><strong>No two notes the same.</strong> MATRIX: RANDOM → PAN +25, RANDOM → CUTOFF +10, RANDOM → PITCH +3 for a slight detune per note.</li>
+<li><strong>Vibrato that speeds up.</strong> MOD ENV: ATTACK about 96 (2.2 s), SUSTAIN 127. MATRIX: MOD ENV → LFO 2 RATE +40, LFO 2 → PITCH +6.</li>
+<li><strong>One performance knob.</strong> SAW LEAD. EDIT → SHAPER: type FOLD, AMOUNT about 10. MATRIX: MACRO 1 → CUTOFF +45, MACRO 1 → SHAPER +30, MACRO 1 → RESO +20. Now EDIT → MACRO K1 opens the filter and the folder together. Record it with REC armed, or lock it per step.</li>
+<li><strong>Random hi-hat decays (DRUMS).</strong> Tap the CH pad. LFO 1: SHAPE S&amp;H, DEPTH +30, DEST CH Decay. LFO 1 MORE: SYNC TEMPO, RETRIG BAR. LFO 1: RATE 1/16. Every closed hat gets its own length.</li>
+<li><strong>Moving sample start (SAMPLER).</strong> On a SAMPLER track with a sample: LFO 1: SHAPE SAW UP, DEPTH +50, DEST START. LFO 1 MORE: SYNC TEMPO, RETRIG BAR. LFO 1: RATE 1 BAR. Each note in the bar starts further into the sample.</li>
+</ol>
+<p>Turn a source's AMOUNT down to 0 when you're done with it rather than leaving it at a value you can't hear: a route you forgot about can make a later sound behave strangely. <a href="/guide/reference/#instrument-sound">Every sound parameter with its range</a></p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/sounds/">← Sounds &amp; samples</a><a rel="next" href="/guide/recording/">Recording →</a></nav></article>
+</main>
+</div>
+</body>
+</html>
