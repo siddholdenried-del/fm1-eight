@@ -19,6 +19,7 @@
 #include "dsp/fx.h"
 #include "dsp/uimath.h"
 #include "logo.h"                       /* tools/gen_logo.py: the boot screen's logo */
+#include "mono_font.h"                  /* tools/gen_mono.py: FONT_MS, FONT_MB (IBM Plex Mono) */
 #include <stddef.h>
 
 #define NPADS DRUMS_NPADS
@@ -6114,14 +6115,29 @@ static void lights(void)
  *     lock's card is cream; a card that only reads (a meter) is grey.
  * (attic/screen_dark.c keeps the first look: dark pages, cream cards.)
  * draw() draws all three; draw_live() ~30 times a second the band (its meters) and, on a page that moves, the page. */
-#define C_INK RGB(18, 18, 22)
-#define C_CREAM RGB(236, 232, 220)
-#define C_BANDBG RGB(20, 20, 24)             /* the band */
-#define C_TILE RGB(26, 27, 32)               /* dark cards and tiles on the bright page */
-#define C_TILET RGB(240, 238, 230)           /* their text */
-#define C_TILET2 RGB(146, 146, 152)          /* their labels */
-#define C_WELL RGB(58, 60, 66)               /* a gauge's empty track on them */
-#define C_WHITE2 RGB(255, 255, 255)
+/* Bong Cult's Dungeon BBS look (since 0.5; github.com/siddholdenried-del/bongcult-dungeon-bbs): an ink-dark canvas,
+ * bone text and 1-pixel rules, square corners. Violet marks what is selected (the knob being turned, the page you are
+ * on, the selected row) with dark ink on it; pale violet a lock; acid green is only for live readings (the meters).
+ * Each section keeps its own colour for its name and for what it draws (hits, notes, curves): the guide keeps
+ * instrument colours that mean something. Condensed capitals (Barlow) label; a monospace face (IBM Plex Mono) reads
+ * the counters and the line under the title. (attic/screen_dark.c and git keep the earlier looks.) */
+#define C_CANVAS RGB(16, 16, 15)
+#define C_FIELD RGB(30, 29, 24)               /* a raised field: cards, boxes */
+#define C_BONE RGB(222, 217, 185)             /* text, strong rules */
+#define C_MUTED RGB(187, 183, 159)            /* secondary text, labels */
+#define C_RULE RGB(98, 95, 80)                /* a 1-pixel rule */
+#define C_DUSK RGB(50, 48, 41)                 /* the grid, empty steps, a gauge's track */
+#define C_VIOLET RGB(141, 83, 237)            /* selected (dark ink on it) */
+#define C_FOCUS RGB(194, 154, 252)            /* pale violet: a lock, emphasis */
+#define C_METER RGB(163, 237, 88)             /* live readings */
+#define C_INK C_CANVAS                        /* dark ink: on violet, bone or a section's colour */
+#define C_CREAM C_BONE                        /* HOME, SONG, SETUP and the mixer */
+#define C_BANDBG C_CANVAS
+#define C_TILE C_FIELD
+#define C_TILET C_BONE
+#define C_TILET2 C_MUTED
+#define C_WELL C_DUSK
+#define C_WHITE2 C_BONE
 #define C_RECCOL RGB(238, 64, 64)             /* hold REC: recording's page */
 #define C_FXCOL RGB(64, 200, 222)
 #define C_MSTCOL RGB(255, 98, 128)
@@ -6143,8 +6159,10 @@ static struct {
     uint16_t grid;                        /* lines, empty steps */
     uint16_t txt2;                        /* labels */
     uint16_t fg;                          /* what's drawn: ink */
-    uint16_t hi;                          /* what stands out: white (ink on the lightest colours) */
+    uint16_t hi;                          /* what stands out: bone */
     uint16_t red;                         /* an alarm that reads on it */
+    uint16_t txt;                         /* text on the page: bone */
+    uint16_t ink;                         /* what a shade of the ground leans to (mix565(C_BODY, TH_INK, n)): bone */
 } th;
 #define C_BODY th.col
 #define C_PANEL th.panel
@@ -6153,6 +6171,8 @@ static struct {
 #define TH_FG th.fg
 #define TH_HI th.hi
 #define TH_RED th.red
+#define TH_TXT th.txt
+#define TH_INK th.ink
 
 static int lum565(uint16_t c)             /* 0..255 */
 {
@@ -6160,15 +6180,17 @@ static int lum565(uint16_t c)             /* 0..255 */
     return (r * 54 + g * 183 + b * 19) >> 8;
 }
 
-static void theme(uint16_t col)
+static void theme(uint16_t col)          /* the page: the canvas, drawn on in the section's colour, written in bone */
 {
-    th.col = col;
-    th.panel = mix565(col, C_INK, 30);
-    th.grid = mix565(col, C_INK, 84);
-    th.txt2 = mix565(col, C_INK, 168);
-    th.fg = C_INK;
-    th.hi = lum565(col) < 190 ? C_WHITE2 : C_INK;
-    th.red = RGB(178, 16, 36);
+    th.col = C_CANVAS;
+    th.panel = C_FIELD;
+    th.grid = C_DUSK;
+    th.txt2 = C_MUTED;
+    th.fg = col;
+    th.hi = C_BONE;
+    th.red = RGB(240, 84, 72);
+    th.txt = C_BONE;
+    th.ink = C_BONE;
 }
 
 static int rec_page(void)                 /* REC held a moment (or used as a modifier): recording's page */
@@ -6188,24 +6210,21 @@ static uint16_t sec_col(void)             /* the section's colour */
     }
 }
 
-static const uint8_t RIN[7][6] = {{0}, {0}, {1, 0}, {1, 0, 0}, {2, 1, 0, 0}, {3, 1, 1, 0, 0}, {4, 2, 1, 1, 0, 0}};
-static void rrect(int x, int y, int w, int h, int r, uint16_t c)   /* a box with rounded corners */
+static void rrect(int x, int y, int w, int h, int r, uint16_t c)   /* a box (square corners: r is the old look's) */
 {
-    int j;
+    (void)r;
+    if (w > 0 && h > 0)
+        cv_rect(x, y, w, h, c);
+}
+
+static void frame(int x, int y, int w, int h, uint16_t c)   /* a 1-pixel rule round a box */
+{
     if (w <= 0 || h <= 0)
         return;
-    if (r > 6)
-        r = 6;
-    if (2 * r > h)
-        r = h / 2;
-    if (2 * r > w)
-        r = w / 2;
-    for (j = 0; j < r; j++) {
-        int in = RIN[r][j];
-        cv_rect(x + in, y + j, w - 2 * in, 1, c);
-        cv_rect(x + in, y + h - 1 - j, w - 2 * in, 1, c);
-    }
-    cv_rect(x, y + r, w, h - 2 * r, c);
+    cv_rect(x, y, w, 1, c);
+    cv_rect(x, y + h - 1, w, 1, c);
+    cv_rect(x, y, 1, h, c);
+    cv_rect(x + w - 1, y, 1, h, c);
 }
 
 static void fit_(const felucca_font_t *f, const char *s, int maxw, char *out, int cap)   /* s, cut to fit maxw */
@@ -6289,12 +6308,13 @@ static void band_set(uint16_t col, const char *id, const char *title, const char
 
 static void band(void)
 {
-    uint16_t col = bd.col, ink = C_TILET, ink2 = mix565(col, C_BANDBG, 100), well = RGB(52, 54, 60);
+    uint16_t col = bd.col, ink = C_BONE, ink2 = C_MUTED, well = C_DUSK;
     uint32_t now = plat_ms();
     char t[32], u[32];
     int32_t x;
     float pl, pr;
     cv_begin(240, 44, C_BANDBG);
+    cv_rect(0, 43, 240, 1, C_RULE);       /* the rule under the masthead */
     if (now < ui.msg_until) {             /* a change: what, and its value, large */
         const char *val = ui.msg[1][0] ? ui.msg[1] : ui.msg[0];
         const felucca_font_t *f;
@@ -6302,7 +6322,7 @@ static void band(void)
             t[0] = 0;
             text_cat(t, ui.msg[0]);
             upper(t);
-            cv_text(8, 0, &FONT_S, t, ink2);
+            cv_text(8, 1, &FONT_MS, t, ink2);
         }
         u[0] = 0;
         text_cat(u, val);
@@ -6315,12 +6335,15 @@ static void band(void)
         x = (longid ? cv_text(7, 10, &FONT_M, bd.id, col) : cv_text(7, 5, &FONT_L, bd.id, col)) + 8;
         fit(&FONT_B, bd.title, 170 - x, t);
         cv_text(x, 4, &FONT_B, t, ink);
-        fit(&FONT_S, bd.ctx, 170 - x, t);
-        cv_text(x, 21, &FONT_S, t, ink2);
-        if (bd.npg > 1) {
+        {   /* the line under it in the monospace face; the condensed one where that would cut it */
+            const felucca_font_t *cf = text_w(&FONT_MS, bd.ctx) <= 170 - x ? &FONT_MS : &FONT_S;
+            fit(cf, bd.ctx, 170 - x, t);
+            cv_text(x, cf == &FONT_MS ? 23 : 21, cf, t, ink2);
+        }
+        if (bd.npg > 1) {                 /* the section's pages: the one shown violet */
             int i;
             for (i = 0; i < bd.npg; i++)
-                cv_rect(8 + i * 9, 39, 6, 3, i == bd.pg ? col : RGB(60, 62, 68));
+                cv_rect(8 + i * 9, 37, 6, 4, i == bd.pg ? C_VIOLET : C_DUSK);
         }
     }
     /* the pattern (and the next, the song's entry), the tempo, the transport */
@@ -6339,16 +6362,16 @@ static void band(void)
             two_digits(q + 1, t + 1);
         }
     }
-    text_r(220, 4, &FONT_B, t, ink);
+    text_r(220, 3, &FONT_MB, t, ink);
     int_text(proj.bpm10 / 10, t);
     if (srt.pos >= 0 && sq.playing) {
         u[0] = 'S';
         two_digits(srt.pos + 1, u + 1);
         text_cat(u, " ");
         text_cat(u, t);
-        text_r(220, 21, &FONT_S, u, ink2);
+        text_r(220, 23, &FONT_MS, u, ink2);
     } else {
-        text_r(220, 21, &FONT_S, t, ink2);
+        text_r(220, 23, &FONT_MS, t, ink2);
     }
     if (sq.playing) {                     /* a triangle */
         int j;
@@ -6356,7 +6379,7 @@ static void band(void)
             cv_rect(176, 25 + j, j < 5 ? j + 1 : 9 - j, 1, col);
     }
     if (ui.rec)
-        rrect(176, 8, 8, 8, 4, C_RED);
+        cv_rect(176, 8, 8, 8, C_RED);
     /* the output, each side, -48..0 dBFS */
     fx_out_sides(&pl, &pr);
     band_l = pl > band_l ? pl : band_l * 0.93f;
@@ -6367,8 +6390,8 @@ static void band(void)
         int hl = db_h(band_l, 36, 48.0f), hr = db_h(band_r, 36, 48.0f), clip = now - clip_t < 1500u && clip_t;
         cv_rect(225, 4, 5, 36, well);
         cv_rect(232, 4, 5, 36, well);
-        cv_rect(225, 40 - hl, 5, hl, col);
-        cv_rect(232, 40 - hr, 5, hr, col);
+        cv_rect(225, 40 - hl, 5, hl, C_METER);   /* (live: acid green) */
+        cv_rect(232, 40 - hr, 5, hr, C_METER);
         cv_rect(224, 4 + 36 * 6 / 48, 14, 1, C_BANDBG);   /* -6 dB */
         if (clip) {
             cv_rect(225, 4, 5, 3, C_RED);
@@ -6405,60 +6428,61 @@ static void card_put(card_t *c, const char *label, const char *text, int v, int 
     c->acc = bd.col;
 }
 
-static void strip(void)
+static void strip(void)                   /* four cells in one hard-edged grid, K1..K4 */
 {
     int k;
     uint32_t now = plat_ms();
-    cv_begin(240, 64, C_BODY);
+    cv_begin(240, 64, C_CANVAS);
+    cv_rect(0, 0, 240, 1, C_RULE);
+    for (k = 1; k < 4; k++)
+        cv_rect(k * 60 - 1, 0, 1, 64, C_RULE);
     for (k = 0; k < 4; k++) {
         const card_t *c = &cards[k];
-        int x = 3 + k * 59, y = 2, w = 56, h = 60, hot = ui.knob_k == k && now - ui.knob_t < 1300u && !c->ro;
-        int gx = x + 5, gy = y + 45, gw = w - 10, gh = 8, range = c->hi - c->lo;
-        uint16_t bg = c->ro ? RGB(64, 66, 72) : c->lock ? C_TILET : C_TILE, fill = c->lock ? C_INK : c->acc;
-        uint16_t well = c->lock ? mix565(C_TILET, C_INK, 50) : c->ro ? RGB(40, 42, 48) : C_WELL;
+        int x = k * 60, y = 1, w = 59, h = 63, hot = ui.knob_k == k && now - ui.knob_t < 1300u && !c->ro;
+        int gx = x + 5, gy = y + 46, gw = w - 10, gh = 7, range = c->hi - c->lo;
+        /* the knob just turned: violet, dark ink on it; a lock's value: pale violet; a reading: on the canvas */
+        uint16_t bg = hot ? C_VIOLET : c->ro ? C_CANVAS : C_FIELD;
+        uint16_t lab = hot ? C_INK : c->lock ? C_FOCUS : C_MUTED, val = hot ? C_INK : c->lock ? C_FOCUS : C_BONE;
+        uint16_t fill = hot ? C_INK : c->lock ? C_FOCUS : c->ro ? C_METER : c->acc;
+        uint16_t well = hot ? mix565(C_VIOLET, C_INK, 90) : C_DUSK;
         char t[32];
         const felucca_font_t *f;
-        if (!c->on) {
-            rrect(x, y, w, h, 6, C_PANEL);
+        if (!c->on)
             continue;
-        }
-        if (hot) {                        /* the knob being turned: its card ringed in white */
-            rrect(x, y, w, h, 6, C_WHITE2);
-            rrect(x + 3, y + 3, w - 6, h - 6, 4, bg);
-        } else {
-            rrect(x, y, w, h, 6, bg);
-        }
+        cv_rect(x, y, w, h, bg);
         f = text_w(&FONT_XS, c->label) <= w - (c->lock ? 16 : 9) ? &FONT_XS : &FONT_T;   /* a long name: the small face */
         fit(f, c->label, w - (c->lock ? 16 : 9), t);
-        cv_text(x + 5, y + (f == &FONT_T ? 4 : 2), f, t, c->lock ? C_INK : hot ? c->acc : C_TILET2);
-        if (c->lock)
-            cv_text(x + w - 12, y + 2, &FONT_XS, "L", C_INK);
+        cv_text(x + 5, y + (f == &FONT_T ? 4 : 2), f, t, lab);
+        if (c->lock) {                    /* L: this step's own value */
+            cv_rect(x + w - 12, y + 3, 9, 11, hot ? C_INK : C_FOCUS);
+            cv_text(x + w - 11, y + 1, &FONT_XS, "L", hot ? C_VIOLET : C_INK);
+        }
         f = text_w(&FONT_B, c->text) <= w - 8   ? &FONT_B   /* a long value: smaller faces before it is cut */
             : text_w(&FONT_S, c->text) <= w - 8  ? &FONT_S
             : text_w(&FONT_XS, c->text) <= w - 8 ? &FONT_XS
                                                  : &FONT_T;
         fit(f, c->text, w - 8, t);
-        cv_text(x + 5, y + (f == &FONT_T ? 21 : 18), f, t, c->lock ? C_INK : C_TILET);
+        cv_text(x + 5, y + (f == &FONT_T ? 21 : 18), f, t, val);
         if (range <= 0)
             continue;
         if (range <= 7 && c->mid <= c->lo) {   /* a switch: a step each */
             int i, sw = (gw - (range) * 2) / (range + 1);
             for (i = 0; i <= range; i++)
-                rrect(gx + i * (sw + 2), gy, sw, gh, 2, c->lo + i == c->v ? fill : well);
+                cv_rect(gx + i * (sw + 2), gy, sw, gh, c->lo + i == c->v ? fill : well);
             continue;
         }
-        rrect(gx, gy, gw, gh, 3, well);
+        cv_rect(gx, gy, gw, gh, well);
         {
             int v = c->v < c->lo ? c->lo : c->v > c->hi ? c->hi : c->v, px = gx + (v - c->lo) * gw / range;
             if (c->mid > c->lo) {             /* two-way: from the middle */
                 int mx = gx + (c->mid - c->lo) * gw / range;
                 if (px >= mx)
-                    rrect(mx, gy, px - mx + 1, gh, 2, fill);
+                    cv_rect(mx, gy, px - mx + 1, gh, fill);
                 else
-                    rrect(px, gy, mx - px + 1, gh, 2, fill);
-                cv_rect(mx, gy - 2, 1, gh + 4, c->lock ? C_INK : C_TILET2);
+                    cv_rect(px, gy, mx - px + 1, gh, fill);
+                cv_rect(mx, gy - 2, 1, gh + 4, hot ? C_INK : C_BONE);
             } else if (px > gx) {
-                rrect(gx, gy, px - gx < 6 ? 6 : px - gx, gh, 3, fill);
+                cv_rect(gx, gy, px - gx < 2 ? 2 : px - gx, gh, fill);
             }
         }
     }
@@ -6753,15 +6777,17 @@ static void page_map(int kind, int npg, int cur, const char *const *names, int y
     for (p = 0; p < npg; p++) {
         int y = y0 + p * rh, me = p == cur;
         char t[8];
-        if (me)
+        if (me) {                         /* the page the knobs are on: a field, marked violet */
             rrect(2, y, 236, rh - 2, 4, C_PANEL);
+            cv_rect(2, y, 3, rh - 2, C_VIOLET);
+        }
         if (names)
             fit(&FONT_XS, names[p], 40, t);
         else {
             t[0] = 'P';
             int_text(p + 1, t + 1);
         }
-        cv_text(6, y + (rh - 2) / 2 - 8, &FONT_XS, t, me ? TH_FG : C_TXT2);
+        cv_text(6, y + (rh - 2) / 2 - 8, &FONT_XS, t, me ? TH_TXT : C_TXT2);
         for (k = 0; k < 4; k++) {
             int x = 48 + k * 47, w = 42, gy = y + (rh - 2) / 2 - 2, range;
             if (!kinfo(kind, p, k, &c))
@@ -6769,11 +6795,11 @@ static void page_map(int kind, int npg, int cur, const char *const *names, int y
             if (rh >= 26) {                   /* room: each knob's name over its gauge */
                 char nm[12];
                 fit(&FONT_T, c.label, w, nm);
-                cv_text(x, y + 2, &FONT_T, nm, me ? TH_FG : C_TXT2);
+                cv_text(x, y + 2, &FONT_T, nm, me ? TH_TXT : C_TXT2);
                 gy = y + rh - 10;
             }
             range = c.hi - c.lo;
-            rrect(x, gy, w, 5, 2, me ? C_GRID : mix565(C_BODY, C_INK, 50));
+            rrect(x, gy, w, 5, 2, me ? C_GRID : mix565(C_BODY, TH_INK, 50));
             if (range > 0) {
                 int v = c.v < c.lo ? c.lo : c.v > c.hi ? c.hi : c.v, px = x + (v - c.lo) * w / range;
                 uint16_t col = me ? TH_FG : C_TXT2;
@@ -6925,7 +6951,7 @@ static void pic_filter(int tr)
         cv_rect(xe + (xe > xc ? -3 : 0), 15, 4, 8, TH_HI);
     }
     syn_param_text(SP_CUT, snd_value(tr, SP_CUT), t);
-    cv_text(xc + 4 > 180 ? xc - 50 : xc + 4, 24, &FONT_S, t, TH_FG);
+    cv_text(xc + 4 > 180 ? xc - 50 : xc + 4, 24, &FONT_S, t, TH_TXT);
 }
 
 static void pic_env(int tr, int pg)       /* the envelope's shape: attack, decay, sustain, release (ENV page pg) */
@@ -7109,7 +7135,7 @@ static void pic_macro(int tr)             /* the four macros: where each is, and
                 char u[16], w[16];
                 syn_param_text(SP_XM + 3 * k + 1, q[1], u);
                 fit(&FONT_XS, u, 54, w);
-                text_c(x + 27, 86 + n * 12, &FONT_XS, w, TH_FG);
+                text_c(x + 27, 86 + n * 12, &FONT_XS, w, TH_TXT);
                 n++;
             }
         }
@@ -7125,12 +7151,12 @@ static void pic_matrix(int tr)            /* MATRIX: its six slots, the one on t
     for (k = 0; k < SYN_SLOTS; k++) {
         int y = 8 + k * 19, me = k == ui.mslot, on = tset(tr)->snd[SP_XM + 3 * k] && tset(tr)->snd[SP_XM + 3 * k + 2];
         char t[32], u[32], n[4] = {(char)('1' + k), 0, 0, 0};
-        if (me)
-            rrect(8, y, 224, 18, 4, mix565(C_PANEL, TH_FG, 60));
-        cv_text(14, y + 3, &FONT_XS, n, me ? TH_FG : C_TXT2);
+        if (me)                           /* the slot on the knobs: selected */
+            rrect(8, y, 224, 18, 4, C_VIOLET);
+        cv_text(14, y + 3, &FONT_XS, n, me ? C_INK : C_TXT2);
         slot_text(tr, k, t);
         fit(&FONT_XS, t, 196, u);
-        cv_text(30, y + 3, &FONT_XS, u, on ? TH_FG : C_TXT2);
+        cv_text(30, y + 3, &FONT_XS, u, me ? C_INK : on ? TH_TXT : C_TXT2);
     }
 }
 
@@ -7150,7 +7176,7 @@ static void voices_meter(int tr, int x, int y, int cell)   /* the 16 voices: thi
 {
     int mine = tr > 0 ? syn_voices(tr) : 0, all = syn_voices(-1), i;
     for (i = 0; i < 16; i++) {
-        uint16_t c = i < mine ? TH_FG : i < all ? C_TXT2 : C_GRID;
+        uint16_t c = i < mine ? TH_FG : i < all ? C_RULE : C_GRID;
         rrect(x + (i % 8) * (cell + 3), y + (i / 8) * (cell + 3), cell, cell, 2, c);
     }
 }
@@ -7207,19 +7233,21 @@ static void page_steps(void)              /* the drums' grid: 11 pads and the ac
     for (row = 0; row < NPADS + 1; row++) {
         int y = row * 11, muted = row < NPADS && (p->mute >> row & 1u), sel = row == ui.pad;
         const uint32_t *bits = row < NPADS ? p->hit[row] : p->acc;
-        uint16_t on = row == NPADS ? TH_HI : muted ? C_GRID : sel ? TH_FG : mix565(C_BODY, C_INK, 118);
-        if (sel)
+        uint16_t on = row == NPADS ? TH_HI : muted ? C_GRID : sel ? TH_FG : mix565(C_BODY, TH_INK, 118);
+        if (sel) {                        /* the pad picked: its row a field, its name on violet */
             rrect(0, y, 240, 11, 3, C_PANEL);
+            cv_rect(1, y + 1, 22, 9, C_VIOLET);
+        }
         if (row < NPADS && hit[row] > 0.05f)   /* the pad sounding: its name lights */
-            rrect(1, y + 1, 22, 9, 2, mix565(sel ? C_PANEL : C_BODY, C_WHITE2, (int)(hit[row] * 230.0f)));
+            rrect(1, y + 1, 22, 9, 2, mix565(sel ? C_VIOLET : C_BODY, C_WHITE2, (int)(hit[row] * 230.0f)));
         cv_text(3, y - 2, &FONT_XS, row < NPADS ? drums_pad_name(proj.kit, row) : "AC",
-                muted ? TH_RED : sel || (row < NPADS && hit[row] > 0.4f) ? TH_FG : C_TXT2);
+                muted ? TH_RED : sel || (row < NPADS && hit[row] > 0.4f) ? C_INK : C_TXT2);
         for (k = 0; k < 16; k++) {
             int s = ui.spage * 16 + k, x = 27 + k * 13;
             if (s >= p->len)
                 continue;
             if (!(k & 3))                 /* the beats (steps 1, 5, 9, 13 of the page): a column of their own */
-                cv_rect(x - 1, y, 13, 11, mix565(sel ? C_PANEL : C_BODY, C_INK, 22));
+                cv_rect(x - 1, y, 13, 11, mix565(sel ? C_PANEL : C_BODY, TH_INK, 22));
             if (sq.playing && s == st)
                 cv_rect(x - 1, y, 13, 11, C_GRID);
             if (bit_get(bits, s)) {
@@ -7268,7 +7296,7 @@ static void page_roll(void)               /* an instrument part: its notes, pitc
         int y = top + (hi - n) * rh;
         int b = n % 12 == 1 || n % 12 == 3 || n % 12 == 6 || n % 12 == 8 || n % 12 == 10;
         if (b)
-            cv_rect(26, y, 214, rh, mix565(C_BODY, C_INK, 16));
+            cv_rect(26, y, 214, rh, mix565(C_BODY, TH_INK, 16));
         if (n % 12 == 0) {
             cv_rect(26, y + rh - 1, 214, 1, C_GRID);
             note_text(n, t);
@@ -7297,7 +7325,7 @@ static void page_roll(void)               /* an instrument part: its notes, pitc
             if (x + w > 240)
                 w = 240 - x;
             rrect(x, top + (hi - nn) * rh, w, rh > 2 ? rh - 1 : rh, 2,
-                  s == ui.held_step ? TH_HI : mix565(C_BODY, C_INK, 110 + ns_vel(ns)));
+                  s == ui.held_step ? TH_HI : mix565(C_BODY, TH_FG, 110 + ns_vel(ns)));
         }
         if (istep_locked(p, s))
             cv_rect(x + 3, 0, 5, 3, TH_FG);
@@ -7351,7 +7379,7 @@ static void page_gen(void)                /* the 303 generator: the line (16 ste
     for (n = lo; n <= hi; n++)            /* the root's octaves: a line and the name */
         if ((n - g.root) % 12 == 0) {
             int y = GEN_Y(n) + 3;
-            cv_rect(26, y, 214, 1, mix565(C_BODY, C_INK, 60));
+            cv_rect(26, y, 214, 1, mix565(C_BODY, TH_INK, 60));
             note_text(n, t);
             cv_text(1, y - 8 < 0 ? 0 : y - 8 > H - 14 ? H - 14 : y - 8, &FONT_XS, t, C_TXT2);
         }
@@ -7380,20 +7408,20 @@ static void page_gen(void)                /* the 303 generator: the line (16 ste
         w = slid ? 11 : ns->gate * 13 / 8 - 1;   /* HALF short, WHOLE as long as it's held */
         w = w < 5 ? 5 : x + w > 239 ? 239 - x : w;
         if (slid && k < 15)               /* the slide: on to the next note's pitch */
-            thick(x + 10, y + 2, x + 13, GEN_Y(p->st[nx].note[0]) + 2, C_INK);
-        rrect(x, y, w, 6, 2, (ns->vel & NS_ACC) ? C_WHITE2 : C_INK);
+            thick(x + 10, y + 2, x + 13, GEN_Y(p->st[nx].note[0]) + 2, TH_FG);
+        rrect(x, y, w, 6, 2, (ns->vel & NS_ACC) ? C_WHITE2 : TH_FG);
         if (ns->vel & NS_ACC)
             rrect(x + 1, 85, 9, 10, 2, C_WHITE2);
         else
             cv_rect(x + 4, 89, 3, 3, C_GRID);
         if (slid)
-            rrect(x + 1, 99, 12, 10, 2, C_INK);
+            rrect(x + 1, 99, 12, 10, 2, TH_FG);
         else
             cv_rect(x + 4, 103, 3, 3, C_GRID);
     }
 #undef GEN_Y
-    cv_text(6, 116, &FONT_XS, "OCT+ NEW LINE", TH_FG);
-    cv_text(100, 116, &FONT_XS, "OCT- MUTATE", TH_FG);
+    cv_text(6, 116, &FONT_XS, "OCT+ NEW LINE", TH_TXT);
+    cv_text(100, 116, &FONT_XS, "OCT- MUTATE", TH_TXT);
     if (p->len > 16) {
         steps_text(t);
         text_r(236, 116, &FONT_XS, t, C_TXT2);
@@ -7456,19 +7484,19 @@ static void page_keys(void)               /* an instrument track's KEYS page: wh
     {
         char f[40];
         fit(&FONT_L, t[0] ? t : "-", 140, f);
-        cv_text(8, 4, &FONT_L, f, t[0] ? TH_FG : C_GRID);
+        cv_text(8, 4, &FONT_L, f, t[0] ? TH_TXT : C_GRID);
     }
     voices_meter(tr, 152, 8, 7);
     cv_text(152, 30, &FONT_XS, "VOICES", C_TXT2);
     for (i = 0; i < 16; i++) {            /* the keyboard: 16 white keys, 11 black */
         int key = WK[i], on = (int)(ui.keys >> key & 1u);
-        rrect(i * 15, 56, 14, 74, 2, on ? mix565(col, C_INK, 100) : C_TILET);
+        rrect(i * 15, 56, 14, 74, 2, on ? col : C_TILET);
     }
     for (i = 0; i < 11; i++) {
         int key = BK[i], on = (int)(ui.keys >> key & 1u), w;
         for (w = 0; w < 16 && WK[w] != key - 1; w++) {
         }
-        rrect(w * 15 + 9, 56, 11, 44, 2, on ? mix565(col, C_INK, 100) : C_INK);
+        rrect(w * 15 + 9, 56, 11, 44, 2, on ? col : C_INK);
     }
     cards_of(KD_SEQ, 0);
 }
@@ -7505,7 +7533,7 @@ static void page_dedit(void)              /* the drums' EDIT page: the pad, its 
         text_cat(v, "%");
         kit_band(t, v, drum_epages(), ui.epage);
     } else {
-        kit_band(t, "HOLD A STEP + KNOB: LOCK", drum_epages(), ui.epage);
+        kit_band(t, "STEP + KNOB: LOCK", drum_epages(), ui.epage);
     }
     hits_take();
     {   /* the pad: its name, lit as it sounds */
@@ -7557,7 +7585,7 @@ static void page_iedit(int env)           /* an instrument track's EDIT (or ENV)
         rrect(4, 4, 232, 124, 6, C_PANEL);
         u[0] = 0;
         text_cat(u, TYPE_NAME[tset(tr)->type]);
-        cv_text(12, 8, &FONT_L, u, TH_FG);
+        cv_text(12, 8, &FONT_L, u, TH_TXT);
         voices_meter(tr, 12, 52, 20);
         cv_text(12, 102, &FONT_XS, "VOICES", C_TXT2);
         cv_text(200, 8, &FONT_XS, "LEVEL", C_TXT2);
@@ -7605,7 +7633,7 @@ static void page_lfo(void)                /* the track's LFO: its shape, where i
         } else {
             for (k = 0; k < SYN_SLOTS; k++)
                 n += v[SP_XM + 3 * k] == MS_LFO2 && v[SP_XM + 3 * k + 2];
-            text_cat(t, n ? "EACH NOTE ITS OWN" : "ROUTE IT ON MATRIX");
+            text_cat(t, n ? "EACH NOTE ITS OWN" : "ROUTE ON MATRIX");
         }
         band_set(col, TRK_NAME[tr], LFO_PAGE_NAME[pg], t, lfo_pages(tr), pg);
         if (pg == LP_MATRIX) {
@@ -7686,12 +7714,12 @@ static void page_arp(void)                /* an instrument track's arpeggiator: 
         rrect(4, 4, 232, 124, 6, C_PANEL);
         t[0] = 0;
         text_cat(t, ts->chord ? CHORD_NAME[ts->chord % NCHORDS] : "OFF");
-        cv_text(12, 6, &FONT_L, t, ts->chord ? TH_FG : C_GRID);
+        cv_text(12, 6, &FONT_L, t, ts->chord ? TH_TXT : C_GRID);
         if (ts->chord) {
             t[0] = 0;
             text_cat(t, INV_NAME[ts->chord_inv & 3u]);
             text_cat(t, ts->chord_inv ? " INVERSION" : " POSITION");
-            cv_text(120, 10, &FONT_S, t, TH_FG);
+            cv_text(120, 10, &FONT_S, t, TH_TXT);
             if (ts->type == TY_MONO)
                 cv_text(120, 26, &FONT_XS, "MONO: ONE NOTE. POLY PLAYS IT", C_TXT2);
         }
@@ -7699,7 +7727,7 @@ static void page_arp(void)                /* an instrument track's arpeggiator: 
             int n = 48 + w / 7 * 12 + WN[w % 7], on = 0;
             for (k = 0; k < nc && ts->chord; k++)
                 on |= cn[k] == n;
-            rrect(10 + w * 16, 46, 15, 76, 2, on ? mix565(col, C_INK, 110) : C_TILET);
+            rrect(10 + w * 16, 46, 15, 76, 2, on ? col : C_TILET);
         }
         for (w = 0; w < 10; w++) {        /* 10 black */
             int n = 48 + w / 5 * 12 + BN[w % 5], on = 0, x = 10 + (w / 5 * 7 + BX[w % 5]) * 16 + 10;
@@ -7714,13 +7742,13 @@ static void page_arp(void)                /* an instrument track's arpeggiator: 
     rrect(4, 4, 232, 124, 6, C_PANEL);
     t[0] = 0;
     text_cat(t, ARP_MODE_NAME[mode]);
-    cv_text(12, 8, &FONT_L, t, mode ? TH_FG : C_GRID);
+    cv_text(12, 8, &FONT_L, t, mode ? TH_TXT : C_GRID);
     for (i = 0; i < 12; i++) {            /* its order, drawn: rising, falling, both, scattered, as played */
         static const uint8_t RN[12] = {3, 7, 1, 5, 2, 6, 4, 0, 6, 2, 5, 1}, PL[12] = {0, 4, 2, 6, 0, 4, 2, 6, 0, 4, 2, 6};
         int v = mode == AM_UP ? i % 4 * 2 : mode == AM_DOWN ? 6 - i % 4 * 2 : mode == AM_UPDOWN ? (i % 6 < 4 ? i % 6 : 6 - i % 6) * 2
               : mode == AM_RANDOM ? RN[i] : PL[i];
         int x = 14 + i * 18, h = 12 + v * 7;
-        rrect(x, 120 - h, 14, h, 3, mode ? (i == (int)(arp[tr].idx % 12u) ? TH_HI : mix565(C_PANEL, C_INK, 150)) : C_GRID);
+        rrect(x, 120 - h, 14, h, 3, mode ? (i == (int)(arp[tr].idx % 12u) ? TH_HI : mix565(C_PANEL, TH_INK, 150)) : C_GRID);
     }
     for (i = 0; i < n && i < 6; i++) {    /* the notes it has */
         note_text(arp[tr].note[i], u);
@@ -7770,7 +7798,7 @@ static void page_home(void)               /* the scene grid: 16 patterns across 
     rrect(32 + proj.pat * 13, 0, 14, 132, 4, C_PANEL);   /* the focused scene's column */
     for (k = 0; k < NPAT; k++) {          /* the scene numbers */
         two_digits(k + 1, u);
-        text_c(39 + k * 13, 0, &FONT_T, u[0] == '0' ? u + 1 : u, k == proj.pat ? TH_FG : C_TXT2);
+        text_c(39 + k * 13, 0, &FONT_T, u[0] == '0' ? u + 1 : u, k == proj.pat ? TH_TXT : C_TXT2);
     }
     for (t = 0; t < NTRK; t++) {
         int y = 14 + t * 29, muted = (int)(proj.tmute >> t & 1u), h;
@@ -7783,17 +7811,17 @@ static void page_home(void)               /* the scene grid: 16 patterns across 
         cv_rect(4, y + 21, 23, 3, muted || clip[t] < 0 ? C_GRID : mix565(tc, C_INK, 90));
         if (h > 0)
             cv_rect(4, y + 21, h, 3, C_INK);
-        if (tk == t)
-            rrect(1, y, 3, 27, 1, C_INK);
+        if (tk == t)                      /* its key held: selected */
+            rrect(1, y, 3, 27, 1, C_VIOLET);
         for (k = 0; k < NPAT; k++) {      /* its clips: the part of each pattern */
             int x = 33 + k * 13, has = t == TR_DRUM ? !dpart_empty(&proj.p[k].d) : !ipart_empty(&proj.p[k].t[t - 1]);
             int on = clip[t] == k, q = qclip[t] == k || (sq.queued == k && qclip[t] == -1);
             int stopping = on && qclip[t] == -2;
-            uint16_t fill = has ? mix565(C_BODY, C_INK, 64) : C_BODY;
+            uint16_t fill = has ? mix565(C_BODY, TH_INK, 64) : C_BODY;
             if (on)
-                fill = (stopping && blink) ? mix565(C_BODY, C_INK, 64) : TH_FG;
+                fill = (stopping && blink) ? mix565(C_BODY, TH_INK, 64) : tc;
             else if (q)
-                fill = blink ? TH_FG : mix565(C_BODY, C_INK, 120);
+                fill = blink ? tc : mix565(C_BODY, TH_INK, 120);
             if (!has && !on && !q) {      /* empty: an outline */
                 rrect(x, y, 12, 27, 3, C_GRID);
                 rrect(x + 1, y + 1, 10, 25, 2, k == proj.pat ? C_PANEL : C_BODY);
@@ -7804,7 +7832,7 @@ static void page_home(void)               /* the scene grid: 16 patterns across 
                 int len = t == TR_DRUM ? proj.p[k].d.len : proj.p[k].t[t - 1].len, st = sq.t[t].step;
                 int ph = len > 0 && st >= 0 ? (st + 1) * 23 / len : 0;
                 if (ph > 0)
-                    cv_rect(x + 4, y + 25 - ph, 4, ph, C_WHITE2);
+                    cv_rect(x + 4, y + 25 - ph, 4, ph, C_INK);
             }
         }
     }
@@ -7829,15 +7857,15 @@ static void page_setup(void)              /* SETUP: MIDI CLOCK; SOUNDS shared or
     band_set(C_CREAM, "SETUP", "CLOCK, SOUNDS", "HOME: NEXT", 0, 0);
     rrect(3, 2, 234, 40, 6, C_PANEL);
     cv_text(10, 4, &FONT_XS, "MIDI CLOCK (USB)", C_TXT2);
-    cv_text(10, 20, &FONT_S, CL[proj.recq >> 2 & 3u], TH_FG);
+    cv_text(10, 20, &FONT_S, CL[proj.recq >> 2 & 3u], TH_TXT);
     rrect(3, 46, 234, 84, 6, C_PANEL);
     cv_text(10, 48, &FONT_XS, pp ? "SOUNDS PER PATTERN: WHICH HAVE THEIR OWN" : "SOUNDS: ONE FOR ALL PATTERNS", C_TXT2);
     for (t = 0; t < NTRK; t++) {          /* a row a track, a box a pattern: dark where it keeps a sound */
         int y = 66 + t * 15;
-        cv_text(8, y - 3, &FONT_XS, t == TR_DRUM ? "DR" : TRK_NAME[t], TH_FG);
+        cv_text(8, y - 3, &FONT_XS, t == TR_DRUM ? "DR" : TRK_NAME[t], TH_TXT);
         for (k = 0; k < NPAT; k++) {
             int has = t == TR_DRUM ? proj.pkit[k] != 0 : proj.psnd[k][t - 1].used;
-            rrect(30 + k * 13, y, 11, 11, 2, !pp ? C_GRID : has ? TH_FG : mix565(C_BODY, C_INK, 40));
+            rrect(30 + k * 13, y, 11, 11, 2, !pp ? C_GRID : has ? TH_FG : mix565(C_BODY, TH_INK, 40));
         }
     }
     cards_of(KD_SETUP, 0);
@@ -7855,23 +7883,23 @@ static void page_song(void)               /* the song: its entries, the cursor's
         int e = first + r, y = 2 + r * 18, me = e == ui.scur;
         if (e > proj.song_n)
             break;
-        rrect(3, y, 234, 16, 4, me ? C_TILE : C_PANEL);
+        rrect(3, y, 234, 16, 4, me ? C_VIOLET : C_PANEL);   /* the cursor's entry: selected */
         if (e == proj.song_n) {
-            cv_text(12, y, &FONT_S, e < NSONG ? "+ A PATTERN KEY ADDS ONE" : "(FULL)", me ? C_TILET2 : C_TXT2);
+            cv_text(12, y, &FONT_S, e < NSONG ? "+ A PATTERN KEY ADDS ONE" : "(FULL)", me ? C_INK : C_TXT2);
             continue;
         }
         if (sq.playing && srt.pos == e)
-            rrect(3, y, 8, 16, 3, me ? C_CREAM : TH_FG);
+            rrect(3, y, 8, 16, 3, me ? C_INK : TH_FG);
         two_digits(e + 1, u);
-        cv_text(16, y, &FONT_S, u, me ? C_TILET2 : C_TXT2);
+        cv_text(16, y, &FONT_S, u, me ? C_INK : C_TXT2);
         t[0] = 'P';
         two_digits(proj.song[e].pat + 1, t + 1);
-        cv_text(46, y - 1, &FONT_B, t, me ? C_TILET : TH_FG);
+        cv_text(46, y - 1, &FONT_B, t, me ? C_INK : TH_TXT);
         int_text(proj.song[e].bars, t);
         text_cat(t, proj.song[e].bars == 1 ? " BAR" : " BARS");
-        cv_text(96, y, &FONT_S, t, me ? C_TILET : C_TXT2);
+        cv_text(96, y, &FONT_S, t, me ? C_INK : C_TXT2);
         for (i = 0; i < proj.song[e].bars && i < 16; i++)   /* its bars as ticks */
-            cv_rect(160 + i * 4, y + 5, 3, 6, me ? C_TILET2 : C_GRID);
+            cv_rect(160 + i * 4, y + 5, 3, 6, me ? C_INK : C_GRID);
     }
     cards_of(KD_SONG, 0);
 }
@@ -7884,14 +7912,16 @@ static void page_mix(void)                /* the mixer: a strip a track, its met
     for (t = 0; t < NTRK; t++) {
         int x = 3 + t * 59, v = mix_value(t, ui.mixpage), muted = (int)(proj.tmute >> t & 1u), h;
         uint16_t col = trk_rgb(t);
-        rrect(x, 2, 56, 128, 6, t == ui.trk ? C_PANEL : mix565(C_BODY, C_INK, 12));
+        rrect(x, 2, 56, 128, 6, t == ui.trk ? C_PANEL : mix565(C_BODY, TH_INK, 12));
+        if (t == ui.trk)                  /* the track picked: selected */
+            frame(x, 2, 56, 128, C_VIOLET);
         rrect(x + 4, 6, 48, 18, 4, muted ? C_GRID : col);
         text_c(x + 28, 7, &FONT_S, t == TR_DRUM ? (proj.kit == KIT_808 ? "808" : "909") : TRK_NAME[t],
                muted ? TH_RED : C_INK);
         h = db_h(lvl[t], 92, 48.0f);      /* the meter, -48..0 dBFS */
         rrect(x + 6, 30, 8, 92, 3, C_GRID);
         if (h > 0)
-            rrect(x + 6, 122 - h, 8, h, 3, h > 90 ? TH_RED : h > 80 ? RGB(214, 120, 0) : TH_FG);
+            rrect(x + 6, 122 - h, 8, h, 3, h > 90 ? TH_RED : h > 80 ? RGB(240, 190, 80) : C_METER);
         if (ui.mixpage == 1) {            /* PAN: a slider across */
             cv_rect(x + 20, 76, 30, 2, C_GRID);
             cv_rect(x + 35, 70, 1, 14, C_TXT2);
@@ -7927,7 +7957,7 @@ static void page_fx(void)                 /* the sends' FX: what they do, drawn 
     rrect(4, 4, 232, 124, 6, C_PANEL);
     if (pg == 0) {                        /* the reverb: its tail, long by DECAY, bright by TONE, loud by LEVEL */
         float decay = 0.2f + (float)proj.fx[FXP_RV_DECAY] / 127.0f * 0.78f, lvlv = (float)proj.fx[FXP_RV_LEVEL] / 127.0f, a = 1.0f;
-        uint16_t c = mix565(C_BODY, C_INK, 120 + proj.fx[FXP_RV_TONE] / 2);
+        uint16_t c = mix565(C_BODY, TH_INK, 120 + proj.fx[FXP_RV_TONE] / 2);
         cv_rect(10, 118, 220, 1, C_GRID);
         for (i = 0; i < 54; i++) {
             int h = (int)(a * (0.3f + 0.7f * lvlv) * 100.0f);
@@ -7982,14 +8012,14 @@ static void hmeter(int x, int y, int w, int h, const char *name, float lin, floa
     cv_text(x, y - 3, &FONT_XS, name, C_TXT2);
     rrect(x + 30, y, w, h, 3, C_GRID);
     if (v > 0)
-        rrect(x + 30, y, v, h, 3, db > -1.0f ? TH_RED : db > -6.0f ? TH_HI : TH_FG);
+        rrect(x + 30, y, v, h, 3, db > -1.0f ? TH_RED : db > -6.0f ? RGB(240, 190, 80) : C_METER);
     cv_rect(x + 30 + w - w * 6 / (int)range, y - 2, 1, h + 4, C_TXT2);   /* -6 dB */
     s[0] = 0;
     if (db <= -60.0f)
         text_cat(s, "-INF");
     else
         db1(db, s);
-    text_r(236, y - 3, &FONT_XS, s, TH_FG);
+    text_r(236, y - 3, &FONT_XS, s, TH_TXT);
 }
 
 static void gr_bar(int x, int y, int w, int h, const char *name, float gr)   /* a reduction, 0..12 dB down */
@@ -8034,7 +8064,7 @@ static void mst_chain(void)
         cv_text(44, 99, &FONT_M, "--", C_GRID);
     } else {
         db1(lu, s);
-        cv_text(44, 99, &FONT_M, s, TH_FG);
+        cv_text(44, 99, &FONT_M, s, TH_TXT);
         {   /* the momentary loudness, a bar over -36..0 */
             int w = lm <= -36.0f ? 0 : (int)((lm + 36.0f) * 100.0f / 36.0f);
             if (w > 100)
@@ -8147,7 +8177,7 @@ static void mst_stereo(void)              /* STEREO: the image's width as a fan,
         int x = 120 + (int)(um_sin(a) * 100.0f), y = 120 - (int)(um_sin(a + 1.5708f) * 100.0f);
         if (a > 1.5f || a < -1.5f)
             continue;
-        cv_line(120, 120, x, y, mix565(C_PANEL, C_INK, 80 + (20 - (i < 0 ? -i : i)) * 8));
+        cv_line(120, 120, x, y, mix565(C_PANEL, TH_INK, 80 + (20 - (i < 0 ? -i : i)) * 8));
     }
     if (proj.fx[FXP_ST_BASS])             /* BASS MONO: the lows centred */
         rrect(114, 70, 13, 50, 4, TH_HI);
@@ -8164,7 +8194,7 @@ static void mst_limit(void)               /* LIMIT: the reduction and the output
     hmeter(10, 52, 150, 12, "OUT", mtr_out, 24.0f);
     xc = 40 + 150 + (int)(ce * 150.0f / 24.0f);
     cv_rect(xc, 46, 2, 24, TH_FG);
-    cv_text(xc - 30, 74, &FONT_XS, "CEILING", TH_FG);
+    cv_text(xc - 30, 74, &FONT_XS, "CEILING", TH_TXT);
     cv_text(10, 96, &FONT_XS, proj.fx[FXP_LIMIT] ? "GAIN IN, NOTHING PAST THE CEILING" : "OFF: IT CLIPS",
             proj.fx[FXP_LIMIT] ? C_TXT2 : TH_RED);
 }
@@ -8189,12 +8219,12 @@ static void page_mst(void)
         rrect(4, 4, 232, 124, 6, C_PANEL);
         grid_hz(x0, y0, w, h);
         for (i = -12; i <= 12; i += 6)
-            cv_rect(x0, mid - i * h / 30, w, 1, i ? mix565(C_PANEL, C_INK, 30) : C_GRID);
+            cv_rect(x0, mid - i * h / 30, w, 1, i ? mix565(C_PANEL, TH_INK, 30) : C_GRID);
         fx_eq_curve(db, 112);
         for (i = 0; i < 112; i++) {
             float d = db[i] < -15.0f ? -15.0f : db[i] > 15.0f ? 15.0f : db[i];
             int x = x0 + i * 2, y = mid - (int)(d * (float)h / 30.0f + (d < 0.0f ? -0.5f : 0.5f));
-            cv_rect(x, y < mid ? y : mid, 2, (y < mid ? mid - y : y - mid) + 1, mix565(C_PANEL, C_INK, 50));
+            cv_rect(x, y < mid ? y : mid, 2, (y < mid ? mid - y : y - mid) + 1, mix565(C_PANEL, TH_INK, 50));
             if (i)
                 thick(x - 2, py, x, y, proj.fx[FXP_M_BYPASS] ? C_TXT2 : TH_FG);
             py = y;
@@ -8276,7 +8306,7 @@ static void page_rec(void)                /* REC held: the metronome, the count-
         text_cat(t, grid);
         text_cat(t, " AS YOU RECORD");
     }
-    cv_text(6, 116, &FONT_XS, t, TH_FG);
+    cv_text(6, 116, &FONT_XS, t, TH_TXT);
     cards_of(KD_REC, 0);
 }
 
@@ -8404,7 +8434,7 @@ static void logo_part(const uint8_t *a, int32_t x0, int32_t y0, int32_t w, int32
 
 void app_splash(void)
 {
-    const uint16_t paper = RGB(250, 244, 232);
+    const uint16_t paper = C_CANVAS;      /* (Dungeon BBS: the graffiti in bone on the dark, BONGTECH pale violet) */
     const int32_t top = LOGO_NAME_Y, bot = LOGO_TAG_Y + LOGO_TAG_H;
     int32_t y, n;
     lcd_fill(0, 0, 240, 240, paper);
@@ -8412,7 +8442,7 @@ void app_splash(void)
         n = bot - y < 48 ? bot - y : 48;
         cv_begin(240, (uint32_t)n, paper);
         logo_part(LOGO_NAME, LOGO_NAME_X, LOGO_NAME_Y, LOGO_NAME_W, LOGO_NAME_H, y, n, APP_SPLASH_RGB);
-        logo_part(LOGO_TAG, LOGO_TAG_X, LOGO_TAG_Y, LOGO_TAG_W, LOGO_TAG_H, y, n, RGB(150, 136, 118));
+        logo_part(LOGO_TAG, LOGO_TAG_X, LOGO_TAG_Y, LOGO_TAG_W, LOGO_TAG_H, y, n, C_FOCUS);
         cv_blit(0, (uint32_t)y);
     }
     lcd_sync();

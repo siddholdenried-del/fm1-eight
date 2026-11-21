@@ -58,26 +58,30 @@ route still works for getting M-VAVE's firmware back.
 
 ### The screen
 
-The screen is in the colour of where you are: the drums orange (909) or blue (808); T2 green, T3 purple, T4 yellow;
-HOME, SONG and the mixer cream; FX cyan; the master bus rose. The page is that colour, drawn on in black; the band
-at the top and the knob cards are dark, lettered in it. Three parts, top to bottom:
+The screen follows Bong Cult's Dungeon BBS look: a near-black canvas, bone text and thin rules, square corners.
+**Violet marks what is selected** (the knob you're turning, the page you're on, the pad, slot or song entry picked),
+**acid green is only for live readings** (the meters), and each section keeps its own colour for its name and for
+what it draws: the drums orange (909) or blue (808); T2 green, T3 purple, T4 yellow; HOME, SONG and the mixer bone;
+FX cyan; the master bus rose. Labels are in condensed capitals; the counters and the line under the title are in a
+monospace face. Three parts, top to bottom:
 
-- **The band** (dark):
+- **The band**, ruled off from the page:
   - Left: what this is in big type, the page, and what it's on (the sound, the pad, the preset). Small dashes under it
-    show which page of how many.
+    show which page of how many, the one you're on violet.
   - Right: the pattern (>02 blinks when one is waiting), the tempo (S03 while a song plays), a triangle while playing,
     a red dot while recording.
-  - Far right: **two output meters** (left and right, before MASTER), with a red cap when the output reaches the top.
+  - Far right: **two output meters** (left and right, before MASTER) in green, with a red cap when the output reaches
+    the top.
   - **Turn a knob or press a button and the band shows the change large** for a moment: "RESO 76".
 - **The page:** a picture of what you're editing. The steps, the filter's curve, the envelope's shape, the
   oscillator's wave, the sample, the LFO with a dot where it is now, the arpeggio's order, the EQ's curve, the
   compressor's and the tape's curves, the stereo width. On the other pages, every knob of the sound in rows, the row
   the knobs are on now lit. Meters move live: each track's level on HOME and in the mixer, the pads lighting as they
   sound, the voices in use, the compressor's and the limiter's reduction, the loudness.
-- **The knob strip:** four cards, **K1 to K4 in the order the knobs sit.** Each shows what the knob does, its value
-  and a gauge. Two-way knobs (pan, EQ, depth) fill from the middle; switches show a step each. The card you're turning
-  gets a white ring. A **locked** value's card turns cream and shows an L. A grey card is a reading, not a knob (the
-  compressor's reduction, the stereo phase).
+- **The knob strip:** four cells in one ruled grid, **K1 to K4 in the order the knobs sit.** Each shows what the knob
+  does, its value and a gauge in the section's colour. Two-way knobs (pan, EQ, depth) fill from the middle; switches
+  show a step each. The cell you're turning turns **violet**. A **locked** value is pale violet with an **L**. A cell
+  on the bare canvas with a green gauge is a reading, not a knob (the compressor's reduction, the stereo phase).
 - **HOME** also shows the processor's load (CPU) and the voices sounding.
 
 ## The drum track

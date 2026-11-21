@@ -6,7 +6,8 @@ usb_product = "GhettoMachine FM-1"   # (at most 31 characters; "FM-1" in it: fm1
 o2 = ["dsp/drums.c", "dsp/drum909.c", "dsp/drum808.c", "dsp/synth.c", "dsp/fx.c", "dsp/fxbus.c", "dsp/master.c", "dsp/mbus.c", "dsp/uimath.c"]   # the engines at -O2, each its own unit
 gen = ["tools/gen_drum_samples.py {gen}/x0x_drum_samples.h",   # the 909 cymbals (mu-law) and the pot tables
        "tools/gen_engine_tables.py {gen}/fe_tables.h",          # Felucca-Engines' tables (the synth voice)
-       "tools/gen_logo.py {gen}/logo.h"]                        # the boot screen's logo (Sedgwick Ave Display, OFL)
+       "tools/gen_logo.py {gen}/logo.h",                        # the boot screen's logo (Sedgwick Ave Display, OFL)
+       "tools/gen_mono.py {gen}/mono_font.h"]                   # the monospace faces (IBM Plex Mono, OFL)
 words = "words.tsv"
 ble = false                    # no radio: the firmware is GPL-3.0, so JieLi's binary Bluetooth libraries stay out
 cpu2 = true                    # the second core renders half the synth voices

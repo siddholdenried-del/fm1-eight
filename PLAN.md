@@ -254,6 +254,17 @@ channels at 44.1 kHz, 16 bits: the master on 1–2 (fm1-base's tap, as before), 
 
 ## The look (phase 8, version 0.2), as built
 
+**Since 0.5 (21 Nov) the screen follows Bong Cult's Dungeon BBS style guide** (github.com/siddholdenried-del/
+bongcult-dungeon-bbs) at the user's request: theme() keeps its roles but on a near-black canvas (#10100F), raised
+fields #1E1D18, bone text #DED9B9 and muted #BBB79F, 1-pixel rules, square corners (rrect draws a plain box);
+violet #8D53ED with dark ink for what is selected (the knob being turned, the page dot, the picked pad, matrix slot,
+song entry, the mixer's track, the page map's row), pale violet #C29AFC for a lock, acid green #A3ED58 only for live
+meters; the section's colour for its big name, the gauges and what the page draws (hits, notes, curves, the playing
+clips). The knob strip is one ruled grid. IBM Plex Mono (app/tools/gen_mono.py: FONT_MS 12 px, FONT_MB 15 px) for the
+pattern, the tempo and the line under the title (the condensed face where the mono one would cut it). The boot
+screen keeps the graffiti logo (the user: "it can still have the graffiti text"), bone on the canvas with BONGTECH
+pale violet. The original description of 0.2's look follows.
+
 - **Three parts:** the band (240×44: the section's colour, what and where, pattern, tempo, transport, page dots, the
   output's L/R meters before MASTER with a clip cap; a change shown large for 1.3 s), the page (240×132: its picture),
   the knob strip (240×64: four cards as K1–K4 sit; name, value, gauge; from the middle for two-way knobs, in steps
