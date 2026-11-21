@@ -6,7 +6,9 @@
 
   python3 -I site/build.py --landing-only site/public   (refresh the page and branding only)
 
-site/public/index.html   the page, a whole HTML document, its "Play it" section framing emu/
+site/public/index.html   the homepage linking the User Guide and browser instrument
+site/public/guide/       task-based guide, generated from site/guide HTML fragments
+site/public/technical/   the original technical tour, with its embedded emulator
 site/public/emu/         the emulator: app/build/emu (the page, app.wasm, the audio worklet, its parts)
 site/public/_headers     the headers Cloudflare serves with it (wasm's type, caching)
 """
@@ -15,6 +17,7 @@ import json
 import re
 import shutil
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +61,146 @@ GUIDE = (
     ("mixer", "Mixer & FX", "Mixer and effects"),
     ("setup", "Save & install", "Saving and installing"),
 )
+GUIDE_PARTS = (
+    ("Getting started", ("",)),
+    ("Making a track", ("beats", "sounds", "recording")),
+    ("Finishing & performing", ("performance", "mixer")),
+    ("Reference", ("setup",)),
+)
+CHAPTER_SUMMARIES = {
+    "": "First beat, panel controls, screen and the browser instrument.",
+    "beats": "Drum pads, step pages, track lengths, accents and parameter locks.",
+    "sounds": "Voice types, oscillators, modulation, presets, sampling and the 303.",
+    "recording": "Real-time and step entry, recording options, chords and knob motion.",
+    "performance": "Clips, scenes, follow actions, performance moves, songs and sync.",
+    "mixer": "Levels, sends, effects, the mastering chain and reading the meters.",
+    "setup": "Project storage, saving patterns and sounds, MIDI, updates and recovery.",
+}
+
+
+class ChapterHeadings(HTMLParser):
+    """Use real chapter H2s and their explicit IDs as the one source for the TOC."""
+
+    def __init__(self):
+        super().__init__()
+        self.headings = []
+        self.identifiers = set()
+        self.text = None
+        self.heading_id = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        marker = attrs.get("id")
+        if marker:
+            if marker in self.identifiers or marker == "gm-main":
+                raise ValueError(f"duplicate or reserved ID {marker!r}")
+            self.identifiers.add(marker)
+        if tag == "h1":
+            raise ValueError("chapter fragments may not contain an H1")
+        if tag == "h2":
+            if not marker or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", marker):
+                raise ValueError("each chapter H2 needs an explicit lowercase hyphenated id")
+            self.heading_id = marker
+            self.text = []
+
+    def handle_data(self, data):
+        if self.text is not None:
+            self.text.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "h2" and self.text is not None:
+            label = " ".join("".join(self.text).split())
+            if not label:
+                raise ValueError(f"chapter H2 is empty: {self.heading_id}")
+            self.headings.append((self.heading_id, label))
+            self.text = None
+            self.heading_id = None
+
+
+def guide_table(match):
+    table = match.group()
+    caption = re.search(r"<caption>(.*?)</caption>", table, re.S)
+    name = html.unescape(re.sub(r"<[^>]*>", "", caption.group(1))).strip() if caption else "Reference table"
+    return f'<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="{html.escape(name)}">{table}</div>'
+
+
+def guide_navigation(current_slug, topics, mobile=False):
+    chapter_labels = {slug: (i + 1, label) for i, (slug, label, _) in enumerate(GUIDE)}
+    markup = []
+    for part, members in GUIDE_PARTS:
+        chapters = []
+        for slug in members:
+            number, label = chapter_labels[slug]
+            active = ' aria-current="page"' if slug == current_slug else ''
+            subtopics = ''
+            if slug == current_slug:
+                subtopics = '<ul class="gm-toc-topics">' + ''.join(
+                    f'<li><a href="#{anchor}" data-guide-topic>{html.escape(text)}</a></li>'
+                    for anchor, text in topics
+                ) + '</ul>'
+            link = (
+                f'<a class="gm-toc-chapter" href="{guide_path(slug)}"{active}>'
+                f'<span class="gm-chapter-number" aria-hidden="true">{number:02d}</span>'
+                f'<span>{html.escape(label)}</span></a>'
+            )
+            chapters.append(f'<li>{link}{subtopics}</li>')
+        markup.append(
+            f'<li><span class="gm-toc-part">{html.escape(part)}</span>'
+            f'<ol class="gm-toc-chapters">{"".join(chapters)}</ol></li>'
+        )
+    label = "Guide table of contents (mobile)" if mobile else "Guide table of contents"
+    return f'<nav class="gm-toc" aria-label="{label}"><ul class="gm-toc-parts">{"".join(markup)}</ul></nav>'
+
+
+def guide_catalog():
+    labels = {slug: (i + 1, label) for i, (slug, label, _) in enumerate(GUIDE)}
+    parts = []
+    chapter_index = "gm-chapter-index"
+    for part, members in GUIDE_PARTS:
+        entries = []
+        for slug in members:
+            number, label = labels[slug]
+            entries.append(
+                f'<li><a href="{guide_path(slug)}"><span aria-hidden="true">{number:02d}. </span>'
+                f'{html.escape(label)}</a><p>{html.escape(CHAPTER_SUMMARIES[slug])}</p></li>'
+            )
+        parts.append(f'<li><h3>{html.escape(part)}</h3><ol>{"".join(entries)}</ol></li>')
+    return (
+        f'<div class="gm-book-index" aria-labelledby="{chapter_index}">'
+        f'<h2 id="{chapter_index}" tabindex="-1">Chapter index</h2>'
+        f'<ul>{"".join(parts)}</ul></div>'
+    )
+
+
+TOC_SCRIPT = """'use strict';
+(() => {
+  const topics = Array.from(document.querySelectorAll('a[data-guide-topic]'));
+  const drawer = document.querySelector('.gm-toc-mobile');
+  const mark = () => {
+    for (const link of topics) {
+      if (link.hash === location.hash) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  };
+  mark();
+  window.addEventListener('hashchange', mark);
+  if (drawer) drawer.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !drawer.open) return;
+    event.preventDefault();
+    drawer.open = false;
+    drawer.querySelector('summary').focus({preventScroll: true});
+  });
+  for (const link of topics) {
+    link.addEventListener('click', (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      const target = document.getElementById(link.hash.slice(1));
+      if (drawer && drawer.contains(link)) drawer.open = false;
+      if (target) requestAnimationFrame(() => target.focus({preventScroll: true}));
+    });
+  }
+})();
+"""
+
 MASTHEAD = """<a class="bc-skip" href="#gm-main">Skip to content</a>
 <header class="bc-masthead">
   <div class="bc-stars" aria-hidden="true"><span>+</span><span>+</span><span>·</span><span>+</span><span>+</span><span>·</span></div>
@@ -95,16 +238,27 @@ def nav_link(href, label, current):
     return f'<a href="{href}"{selected}>{html.escape(label)}</a>'
 
 
-def render_document(head, title, path, content, guide_slug=None):
+def render_document(head, title, path, content, guide_slug=None, topics=()):
     nav = [("/", "Home"), ("/guide/", "User Guide"), ("/emu/", "Play"), ("/technical/", "How it works")]
     is_guide = guide_slug is not None
     if is_guide:
         nav = [("/", "Home"), ("/emu/", "Play in browser")]
     site_nav = "".join(nav_link(href, label, path) for href, label in nav)
-    guide_nav = ''.join(nav_link(guide_path(slug), label, path) for slug, label, _ in GUIDE)
-    chapters = (f'<nav class="gm-chapters" aria-label="Guide chapters">{guide_nav}</nav>' if is_guide else '')
+    chapters = ""
+    if is_guide:
+        active_label = next(label for slug, label, _ in GUIDE if slug == guide_slug)
+        chapters = (
+            '<div class="gm-toc-desktop"><p class="gm-toc-title">Table of contents</p>'
+            + guide_navigation(guide_slug, topics) + '</div>'
+            '<details class="gm-toc-mobile">'
+            '<summary aria-label="Table of contents">Contents'
+            f'<span>{html.escape(active_label)}</span></summary>'
+            '<div class="gm-toc-mobile-panel">'
+            + guide_navigation(guide_slug, topics, mobile=True) + '</div></details>'
+        )
     css_class = ' gm-guide-page' if is_guide else ''
-    js = '<script src="/chapter-redirect.js"></script>\n' if path == '/' else ''
+    js = ('<script src="/chapter-redirect.js"></script>\n' if path == '/' else
+          '<script src="/guide-toc.js" defer></script>\n' if is_guide else '')
     return (
         '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
@@ -172,11 +326,33 @@ def build_landing(out):
     tech_dir = out / "technical"
     tech_dir.mkdir(exist_ok=True)
     (tech_dir / "index.html").write_text(render_document(head, "Inside GhettoMachine · Technical tour", "/technical/", contents))
+    (out / "guide-toc.js").write_text(TOC_SCRIPT)
+    slugs = [slug for slug, _, _ in GUIDE]
+    if slugs != [slug for _, members in GUIDE_PARTS for slug in members] or set(CHAPTER_SUMMARIES) != set(slugs):
+        raise SystemExit("site: guide manifest and TOC parts must contain the same chapters in order")
     for i, (slug, label, title) in enumerate(GUIDE):
         path = guide_path(slug)
         dest = out / path.strip("/")
         dest.mkdir(parents=True, exist_ok=True)
         chapter = (ROOT / "site" / "guide" / f"{slug or 'index'}.html").read_text().strip()
+        parser = ChapterHeadings()
+        try:
+            parser.feed(chapter)
+            parser.close()
+            if parser.text is not None or not parser.headings:
+                raise ValueError("missing or unclosed H2")
+            if not slug and "gm-chapter-index" in parser.identifiers:
+                raise ValueError("chapter index ID reserved for generated content")
+        except ValueError as error:
+            raise SystemExit(f"site: bad guide chapter {slug or 'index'}: {error}") from error
+        chapter = re.sub(r'(<h2\b[^>]*)(>)', r'\1 tabindex="-1"\2', chapter)
+        chapter = re.sub(r"<table\b[^>]*>.*?</table>", guide_table, chapter, flags=re.S)
+
+        topics = parser.headings
+        if not slug:
+            chapter += guide_catalog()
+            topics = topics + [("gm-chapter-index", "Chapter index")]
+
         nav = []
         if i:
             prev_slug, prev_label, _ = GUIDE[i - 1]
@@ -190,7 +366,7 @@ def build_landing(out):
             + chapter + '<nav class="gm-guide-pager" aria-label="Adjacent chapters">'
             + "".join(nav) + '</nav></article>'
         )
-        (dest / "index.html").write_text(render_document(head, f"{title} · GhettoMachine User Guide", path, body, slug))
+        (dest / "index.html").write_text(render_document(head, f"{title} · GhettoMachine User Guide", path, body, slug, topics))
     for file in ("bong-cult-logo.svg", "bong-cult-shell.css"):
         shutil.copyfile(BRANDING / file, out / file)
 

@@ -1,6 +1,40 @@
-<p class="gm-guide-lead">Set the balance of your tracks first, then shape the whole mix at the master bus.</p>
-<h2>Mixer and sends</h2>
-<p>Use the mixer for track levels, pan and sends. The shared effects are a reverb and tempo delay. Press <strong>FX</strong> to open the effects pages.</p>
-<h2>Master bus</h2>
-<p>Hold <strong>SEL</strong> and press <strong>GLO</strong> to jump straight to the master bus. The chain has EQ, compression, tape saturation, stereo width and a limiter, plus presets and a loudness meter.</p>
-<p><a href="/technical/#fx">Mixer and effects tour</a> · <a href="/technical/#master">Master bus details</a></p>
+<p class="gm-guide-lead">Start by balancing the tracks. Add sends next. Adjust the master only after the mix works. MASTER is a listening-volume knob after the mastering chain; it doesn't improve headroom inside the chain.</p>
+
+<h2 id="track-mixer">Balance four tracks before the master</h2>
+<table>
+<caption>GLO mixer pages</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">What K1–K4 do</th><th scope="col">Listen for</th></tr></thead>
+<tbody>
+<tr><th scope="row">LEVEL</th><td>DRUMS, T2, T3, T4 levels.</td><td>Lower the loudest part first. If the red peak caps light, lower one or more track levels or bus GAIN.</td></tr>
+<tr><th scope="row">PAN</th><td>DRUMS, T2, T3, T4 pan.</td><td>Try moving a bright synth a little off center rather than widening the whole mix.</td></tr>
+<tr><th scope="row">REVERB</th><td>Send level by track.</td><td>The drum send opens the bus to the individual pads' own reverb settings too.</td></tr>
+<tr><th scope="row">DELAY</th><td>Send level by track.</td><td>The drum send opens the bus to individual pad delays. Check that both the send and the effect's LEVEL give you enough signal.</td></tr>
+</tbody></table>
+
+<h2 id="send-effects">FX returns and whole-mix DJ filter</h2>
+<table>
+<caption>Press FX again or turn SELECT for the next page</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">Controls</th><th scope="col">A starting point</th></tr></thead>
+<tbody>
+<tr><th scope="row">REVERB</th><td>DECAY, TONE, LOW CUT, LEVEL.</td><td>Use less decay for a busy pattern. Increase low cut if the bass sounds smeared.</td></tr>
+<tr><th scope="row">DELAY</th><td>TIME in note values, FEEDBACK, TONE, LEVEL.</td><td>Try a little send from one synth and adjust feedback before raising LEVEL.</td></tr>
+<tr><th scope="row">DELAY 2</th><td>Digital or tape, WEAR, ping-pong width, LOW CUT.</td><td>Keep the feedback modest while finding a tape tone.</td></tr>
+<tr><th scope="row">FILTER</th><td>DJ filtering and resonance.</td><td>Left is low-pass, right high-pass. Return to center for an unfiltered mix.</td></tr>
+</tbody></table>
+<p>When delay disappears during sampling, Stutter or Tape Stop, that is shared memory in use, not a changed send or broken preset.</p>
+
+<h2 id="master-chain">Read and adjust the master bus</h2>
+<p>Hold <strong>SEL</strong> and press <strong>GLO</strong> to jump to CHAIN. GLO advances its pages; SELECT can also move back into the four mixer pages. Signal order: <strong>EQ → COMP → DJ filter → TAPE → STEREO → GAIN → LIMITER → MASTER</strong>.</p>
+<table>
+<caption>Master controls in order</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">Controls</th></tr></thead>
+<tbody>
+<tr><th scope="row">CHAIN</th><td>Preset (CLEAN, GLUE, PUNCH, WARM, WIDE, LOUD, LO-FI), GAIN into the limiter (0 to +12 dB), CEILING (−0.3 dB initially), and BYPASS. A star marks a changed preset. BYPASS still keeps a limiter at 0 dB GAIN.</td></tr>
+<tr><th scope="row">EQ / EQ 2</th><td>Low, mid, high (±12 dB), LOW CUT; then the band frequencies and MID Q. Low Q means a wider band.</td></tr>
+<tr><th scope="row">COMP / COMP 2</th><td>Threshold, ratio, attack, release; then makeup, parallel MIX, kick-triggered PUMP, and a reduction readout. Ratio 1:1 turns compression off.</td></tr>
+<tr><th scope="row">TAPE</th><td>DRIVE rounds peaks, WARMTH adds even harmonics, TONE rolls off highs, MIX blends.</td></tr>
+<tr><th scope="row">STEREO</th><td>WIDTH, BASS MONO, BALANCE, correlation readout. 100% width leaves it as-is. Lower frequencies below BASS MONO center; a correlation below zero warns of cancellation in mono.</td></tr>
+<tr><th scope="row">LIMIT</th><td>GAIN, CEILING, RELEASE, limiter ON/OFF. Turning it off does not stop a hot mix from clipping.</td></tr>
+</tbody></table>
+<p><strong>How to compare:</strong> loop a representative bar. Check input/output peaks and compressor/limiter reduction on CHAIN. The LUFS display shows short-term (3 seconds) and momentary (0.4 seconds) loudness. Try CLEAN against BYPASS first so loudness doesn't decide for you. If the limiter is constantly taking a large bite, remove GAIN or rebalance the tracks. The example-groove readings in the source manual aren't targets for every song.</p>
+<p>No per-track EQ/compression or multiband mastering is in 0.4. To hear the bus more loudly while preserving its behavior, raise MASTER; to drive the chain harder or change loudness, use GAIN and listen to the reduction.</p>

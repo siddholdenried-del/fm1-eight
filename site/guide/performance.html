@@ -1,7 +1,39 @@
-<p class="gm-guide-lead">Use HOME to move from making one loop to playing whole patterns together.</p>
-<h2>Play live</h2>
-<p>Press <strong>HOME</strong> to open the scene grid. Each track can play a different pattern. A <strong>clip</strong> is just one track’s pattern; a <strong>scene</strong> sets all tracks to the same pattern.</p>
-<p>The performance keys give you live moves like roll, fill, stutter, filter and tape stop. The screen shows track levels, voices in use and CPU load.</p>
-<h2>Build a song</h2>
-<p>From the scene grid, press <strong>HOME</strong> again to get to <strong>SONG</strong>, where you arrange the pattern chain. Press it again for <strong>SETUP</strong>, then again to get back to the track.</p>
-<p><a href="/technical/#live">More on playing live</a> · <a href="https://github.com/siddholdenried-del/ghettomachine/blob/main/MANUAL.md">Full controls and MIDI reference</a></p>
+<p class="gm-guide-lead">HOME is a 16-column clip grid for the four track rows. Make a couple of patterns first, then practice changing only the bass while the drums carry on. You don't have to stop playback to launch a clip.</p>
+
+<h2 id="scene-grid">Launch a scene or an individual clip</h2>
+<p>Press <strong>HOME</strong> from a track page. A filled clip is playing; a blinking clip is waiting to start. White keys address pattern columns; black keys 1–4 address the DRUMS, T2, T3, T4 rows.</p>
+<table>
+<caption>HOME controls</caption>
+<thead><tr><th scope="col">Gesture</th><th scope="col">What happens</th></tr></thead>
+<tbody>
+<tr><th scope="row">Tap white key</th><td>Queue a scene: all four tracks select that pattern. At the default BAR boundary, all change at the end of the bar.</td></tr>
+<tr><th scope="row">Hold row key + tap white key</th><td>Queue only that track's clip. Hold black 2 and tap white 7 to use T2 of pattern 7 without changing the drums.</td></tr>
+<tr><th scope="row">Tap row key</th><td>Mute or unmute that track.</td></tr>
+<tr><th scope="row">Hold row key + OCT−</th><td>Stop that clip at the bar. Launch a clip into the row to start it again.</td></tr>
+<tr><th scope="row">Hold row key + OCT+</th><td>Solo the row; repeat to return to the previous mute state.</td></tr>
+<tr><th scope="row">Tap OCT− at least twice</th><td>Tap tempo.</td></tr>
+<tr><th scope="row">SEL + SELECT while playing</th><td>Nudge the groove by 5 ms per click. Use this for phase alignment when playing beside another machine.</td></tr>
+</tbody></table>
+<p>Set quantized launching in <strong>SONG → K3 LAUNCH</strong>: BAR (default), BEAT, or NOW. BEAT gives a quicker change and NOW is immediate. When clips are mixed from different patterns, STEPS and EDIT go to <em>that track's current clip</em>. The top pattern number only shows the last scene picked. Check the row on HOME before an edit.</p>
+
+<h2 id="perform-keys">Play an effect without writing it into the loop</h2>
+<p>On HOME, hold a black perform key. It acts while held, and the normal mix returns on release. Turn K1 while holding an effect to adjust its setting where shown.</p>
+<table>
+<caption>Momentary effects on HOME</caption>
+<thead><tr><th scope="col">Control</th><th scope="col">Effect</th><th scope="col">K1 while held</th></tr></thead>
+<tbody>
+<tr><th scope="row">Black 5 · ROLL</th><td>Repeats the current step on each track; the pattern's playhead keeps going underneath.</td><td>1/8, 1/16, 1/32, 1/16T, 1/32T.</td></tr>
+<tr><th scope="row">Black 6 · FILL</th><td>Switches the drums temporarily to the next pattern's part.</td><td>None.</td></tr>
+<tr><th scope="row">Black 7 · STUTTER</th><td>Loops a short slice of the output.</td><td>1/32, 1/16, 1/8.</td></tr>
+<tr><th scope="row">Black 8 · FILTER</th><td>Momentary whole-mix sweep.</td><td>Left low-pass, right high-pass.</td></tr>
+<tr><th scope="row">Black 9 · THROW</th><td>Sends everything into the delay.</td><td>Feedback.</td></tr>
+<tr><th scope="row">Black 10 · WASH</th><td>Sends everything into a long reverb.</td><td>Decay.</td></tr>
+<tr><th scope="row">Black 11 · CRUSH</th><td>Reduces resolution and sample rate on the mix.</td><td>Amount.</td></tr>
+<tr><th scope="row">Hold OCT+ · TAPE STOP</th><td>Slows the output toward a stop.</td><td>None.</td></tr>
+</tbody></table>
+<p>Stutter and Tape Stop borrow the delay's memory, so expect the delay tail to disappear while they're held. Those effects are unavailable while sampling. In the browser a latched key stays on until you release the latch; a normal press is better for a quick throw.</p>
+
+<h2 id="song-and-follow">Build a set with SONG or follow actions</h2>
+<p><strong>For a fixed arrangement:</strong> press HOME again from the scene grid to get SONG. Use up to 32 entries, each 1–16 bars. SELECT moves the cursor; white pattern keys set the cursor's scene and advance, adding an entry at the end. K1 changes the entry's pattern, K2 its bars, K3 launch timing, K4 turns SONG on or off. OCT+ copies an entry, OCT− deletes it. PLAY starts at the cursor on SONG, otherwise from the beginning. The arrangement loops.</p>
+<p><strong>For patterns that advance themselves:</strong> on HOME hold your scene's white key and use <strong>K1</strong> for NEXT, PREV, FIRST or RANDOM and <strong>K2</strong> for how many bars (1–16). Try pattern 1 NEXT after 4 bars and pattern 2 FIRST after 4. Manually launching a scene restarts its clock. SONG takes precedence when enabled.</p>
+<p>To make two scenes with different kits or synths, select <strong>SETUP → SOUNDS → OWN</strong>. This stores per-pattern sounds, not a different mixer or master for each scene. See <a href="/guide/setup/#midi-and-sounds">Setup</a>.</p>

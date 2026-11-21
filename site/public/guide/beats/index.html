@@ -180,6 +180,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 </style>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/bong-cult-shell.css">
+<script src="/guide-toc.js" defer></script>
 </head>
 <body class="gm-bong-cult gm-guide-page">
 <a class="bc-skip" href="#gm-main">Skip to content</a>
@@ -190,23 +191,70 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   <div class="bc-rainbow" aria-hidden="true"></div>
 </header>
 <div class="bc-frame">
-<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><nav class="gm-chapters" aria-label="Guide chapters"><a href="/guide/">Quick start</a><a href="/guide/beats/" aria-current="page">Drums &amp; steps</a><a href="/guide/sounds/">Sounds &amp; samples</a><a href="/guide/recording/">Recording</a><a href="/guide/performance/">Live &amp; song</a><a href="/guide/mixer/">Mixer &amp; FX</a><a href="/guide/setup/">Save &amp; install</a></nav></div></aside>
+<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><div class="gm-toc-desktop"><p class="gm-toc-title">Table of contents</p><nav class="gm-toc" aria-label="Guide table of contents"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a><ul class="gm-toc-topics"><li><a href="#drum-pads" data-guide-topic>Pick and edit a drum</a></li><li><a href="#step-banks" data-guide-topic>Steps, banks, length and rate</a></li><li><a href="#step-combos" data-guide-topic>Accents, chance and held-step controls</a></li><li><a href="#acid-generator" data-guide-topic>Write and edit an acid line</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a></li></ol></li></ul></nav></div><details class="gm-toc-mobile"><summary aria-label="Table of contents">Contents<span>Drums &amp; steps</span></summary><div class="gm-toc-mobile-panel"><nav class="gm-toc" aria-label="Guide table of contents (mobile)"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a><ul class="gm-toc-topics"><li><a href="#drum-pads" data-guide-topic>Pick and edit a drum</a></li><li><a href="#step-banks" data-guide-topic>Steps, banks, length and rate</a></li><li><a href="#step-combos" data-guide-topic>Accents, chance and held-step controls</a></li><li><a href="#acid-generator" data-guide-topic>Write and edit an acid line</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a></li></ol></li></ul></nav></div></details></div></aside>
 <main class="wrap" id="gm-main" tabindex="-1">
 <article class="gm-guide"><p class="gm-crumb">User Guide · 2 of 7</p><h1>Drums and sequencing</h1>
-<p class="gm-guide-lead">Build a part from the white step keys. Each track has its own length and rate.</p>
-<h2>Drums: 909 or 808</h2>
-<ul>
-  <li><strong>ALGORITHM → DRUMS</strong>; turn <strong>PRESETS</strong> to choose the kit.</li>
-  <li>In <strong>SEQ</strong>, tap a black pad key to choose a drum. Tap white keys to toggle steps. Move through pages with <strong>OCT− / OCT+</strong> or <strong>SELECT</strong>.</li>
-  <li>Hold <strong>SEQ</strong> and press a step to accent it. Hold a step and turn <strong>SELECT</strong> to set its chance.</li>
-  <li><strong>EDIT</strong> opens the pad’s sound controls. Hold a step and turn a knob to set a value for just that step. Held step + <strong>OCT−</strong> clears its locks.</li>
-</ul>
-<h2>Instrument steps</h2>
-<ul>
-  <li>Select <strong>T2–T4</strong>, play a note, then press <strong>SEQ</strong>. An empty step gets the last note you played.</li>
-  <li>Hold a step: <strong>K1</strong> changes the note or chord, <strong>K2</strong> velocity, <strong>K3</strong> gate, and <strong>SELECT</strong> chance. Pad keys 1–4 choose the step page.</li>
-</ul>
-<p><a href="/technical/#sequencer">Sequencer internals</a> · <a href="/technical/#drums">Drum engine</a></p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/">← Quick start</a><a rel="next" href="/guide/sounds/">Sounds &amp; samples →</a></nav></article>
+<p class="gm-guide-lead">A part is one track's note or hit data in one pattern. There are 16 patterns, four parts per pattern, and up to 64 steps per part. A scene normally launches all four parts together; HOME can also launch each track's clip separately.</p>
+
+<h2 id="drum-pads" tabindex="-1">Pick and edit a drum</h2>
+<p>On DRUMS, <strong>PRESETS</strong> picks 909, 808 or a user kit. Tap a black key to both audition and select its pad. <strong>SEQ</strong> shows that pad's steps; <strong>EDIT</strong> shows its sound knobs. Press EDIT again, or use SELECT, for further parameter pages.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Black key pad order, left to right"><table>
+<caption>Black key pad order, left to right</caption>
+<thead><tr><th scope="col">Black key</th><th scope="col">909</th><th scope="col">808</th><th scope="col">What to listen for</th></tr></thead>
+<tbody>
+<tr><th scope="row">1</th><td>BD</td><td>BD</td><td>Bass drum / kick</td></tr>
+<tr><th scope="row">2</th><td>SD</td><td>SD</td><td>Snare</td></tr>
+<tr><th scope="row">3, 4, 5</th><td>LT, MT, HT</td><td>LT, MT, HT</td><td>Low, middle and high toms</td></tr>
+<tr><th scope="row">6, 7</th><td>RS, CP</td><td>RS, CP</td><td>Rimshot and clap</td></tr>
+<tr><th scope="row">8, 9</th><td>CH, OH</td><td>CH, OH</td><td>Closed and open hi-hat</td></tr>
+<tr><th scope="row">10, 11</th><td>CR, RD</td><td>CY, CB</td><td>Crash and ride (909); cymbal and cowbell (808)</td></tr>
+</tbody></table></div>
+<p>The parameters depend on the pad and kit. Start with tune and decay; try a little reverb send on the clap before turning up reverb for the whole drum track. The last EDIT page exposes kit-wide controls. <strong>ENV</strong> on DRUMS opens pad MUTE: black keys mute individual pads in this pattern, and <strong>OCT+</strong> unmutes them all.</p>
+
+<h2 id="step-banks" tabindex="-1">Steps, banks, length and rate</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="The four knobs on STEPS with no step held"><table>
+<caption>The four knobs on STEPS with no step held</caption>
+<thead><tr><th scope="col">Knob</th><th scope="col">Meaning</th><th scope="col">What it affects</th></tr></thead>
+<tbody>
+<tr><th scope="row">K1 LENGTH</th><td>1–64 steps.</td><td>Just this track's current part. Set all four the same for a regular loop, or try a 15-step hat part against a 16-step bass.</td></tr>
+<tr><th scope="row">K2 RATE</th><td>1/16, 1/8, 1/32, 1/16T or 1/8T.</td><td>Just this part. T is a triplet division; 16 steps at 1/16 is a bar in 4/4.</td></tr>
+<tr><th scope="row">K3 SWING</th><td>50–75%; 50% is straight.</td><td>The project groove, not a per-step timing offset.</td></tr>
+<tr><th scope="row">K4 TEMPO</th><td>60–240 BPM.</td><td>The shared clock; MIDI FOLLOW takes its tempo from the incoming source.</td></tr>
+</tbody></table></div>
+<p>Each bank displays 16 steps: 1–16, 17–32, 33–48, 49–64. Raise LENGTH before looking for a higher bank. On DRUMS, move banks with <strong>OCT−/OCT+</strong> or <strong>SELECT</strong>. On instrument STEPS, black keys <strong>1–4</strong> go straight to banks that exist at the current length. Those same black keys play notes on KEYS.</p>
+<p>A quick tap on an empty step lights it. A quick tap and release on an already lit step clears it and its locks. To edit an existing step, keep holding it while you operate a secondary control; simply letting go without an edit can erase it. <strong>EDIT + OCT−</strong> undoes an accidental clear.</p>
+
+<h2 id="step-combos" tabindex="-1">Accents, chance and held-step controls</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Controls while working on STEPS"><table>
+<caption>Controls while working on STEPS</caption>
+<thead><tr><th scope="col">Gesture</th><th scope="col">DRUMS</th><th scope="col">Instrument track</th></tr></thead>
+<tbody>
+<tr><th scope="row">Hold SEQ + white step</th><td>Toggle the accent for that step.</td><td>Use the velocity accent below instead.</td></tr>
+<tr><th scope="row">Hold step + SELECT</th><td>Set trigger chance.</td><td>Set trigger chance from 5% to 100%, in 5-point clicks. Use SELECT on STEPS, not EDIT/ENV/LFO.</td></tr>
+<tr><th scope="row">Hold step + K1 / K2 / K3</th><td>Go to the selected pad's EDIT page to lock a sound knob.</td><td>Move the note or whole chord / edit velocity / set gate. Turn K2 one click beyond 127 for an accent; one click back removes the accent.</td></tr>
+<tr><th scope="row">Hold step + OCT+</th><td>No 303 note-length mode.</td><td>Cycle HALF, WHOLE and SLIDE. Gate can otherwise be adjusted with K3.</td></tr>
+<tr><th scope="row">Hold step + OCT−</th><td>Clear that pad step's locks; restore chance.</td><td>Clear locks and restore chance to 100%.</td></tr>
+<tr><th scope="row">Hold step, then EDIT / ENV / LFO</th><td>An EDIT knob change can apply only to the held step.</td><td>Use EDIT, ENV or supported LFO 2/matrix controls to write a lock. SELECT can turn pages while the step is held.</td></tr>
+</tbody></table></div>
+<p>A <strong>lock</strong> sets one sound parameter for one step. Think of it as one hit's special setting, not a change to the base sound. A low-chance hit does not fire on every pass; the numbered steps are still in the pattern. Try putting chance on an extra percussion hit, not on your only kick. A good first lock is more decay on one closed hat.</p>
+
+<h2 id="acid-generator" tabindex="-1">Write and edit an acid line</h2>
+<p>On T2–T4, cycle <strong>SEQ</strong> until <strong>ACID</strong>. This generator writes into the current part. It works with MONO, POLY or SAMPLER; it isn't a separate track. Copy the pattern first if it contains notes you want to keep.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="ACID page controls"><table>
+<caption>ACID page controls</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">ACID</th><td>DENSITY</td><td>WHOLE</td><td>SLIDE</td><td>ACCENT</td></tr>
+<tr><th scope="row">NOTES</th><td>ROOT, C1–B4</td><td>SCALE</td><td>NOTES, degrees available</td><td>OCTAVE jumps</td></tr>
+<tr><th scope="row">LINE</th><td>SEED</td><td>LENGTH</td><td>RATE</td><td>SWING</td></tr>
+</tbody></table></div>
+<ol>
+<li>Try the ACID preset, then use SELECT to reach NOTES and choose a root and scale. Minor, Phrygian, Dorian, pentatonic, blues, harmonic minor, major and Mixolydian are available.</li>
+<li>Return to ACID with SELECT. Use moderate DENSITY, then add a little SLIDE and ACCENT. <strong>OCT+</strong> makes a new line; <strong>OCT−</strong> changes only a few steps. Lowering and then restoring a knob gives the same line back for the same seed. Turning DENSITY up adds notes rather than shuffling all the old ones.</li>
+<li>Press SEQ through KEYS and back to STEPS if you want to edit the generated notes by hand. A half note is short, a whole note holds toward the next note, and a slide glides into the next without a fresh attack. GLIDE at zero uses the generator's roughly 58 ms slide. Accents give velocity 127 plus a quick filter lift; ordinary generated notes use velocity 90.</li>
+<li>Save when happy. Turning ACID controls again regenerates the part and replaces hand edits within the current length. Undo restores both line settings and steps. Patterns save and copy their generator state; a 32- or 64-step line is generated for the whole part, not tiled from 16.</li>
+</ol>
+<p>There's no drum generator, transpose track or per-step dice lock in 0.4. The arpeggiator plays its own stream of notes and ignores the generated slides.</p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/">← Quick start</a><a rel="next" href="/guide/sounds/">Sounds &amp; samples →</a></nav></article>
 </main>
 </div>
 </body>

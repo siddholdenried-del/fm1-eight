@@ -154,18 +154,13 @@ body.gm-bong-cult {
   .gm-bong-cult .hero h1 .logo { font-size: clamp(1.6rem, 7vw, 2.35rem); }
 }
 
-/* Keep the short task-based guide separate from the engineering write-up. */
+/* Keep the task-based User Guide separate from the engineering write-up. */
 .bc-skip { z-index: 5; }
 .gm-nav-stack { position: sticky; top: 1rem; }
 .gm-bong-cult .bc-sidebar a[aria-current="page"] {
   border-color: var(--bc-shadow) var(--bc-highlight) var(--bc-highlight) var(--bc-shadow);
   background: #290744;
   color: #fff5fa;
-}
-.gm-chapters {
-  padding-top: .7rem;
-  margin-top: .7rem;
-  border-top: 2px solid #724594;
 }
 .gm-actions {
   display: flex;
@@ -228,19 +223,195 @@ body.gm-bong-cult {
   padding-top: .7rem;
   font-weight: 700;
 }
-@media (max-width: 47rem) {
-  .gm-guide-page .bc-sidebar { position: sticky; top: 0; z-index: 3; padding: .35rem; }
-  .gm-guide-page .gm-nav-stack { position: static; }
-  .gm-guide-page .gm-chapters {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: .2rem;
-    border-top-width: 1px;
-    padding-top: .27rem;
-    margin-top: .27rem;
-  }
-  .gm-guide-page .bc-sidebar a { min-height: 2.05rem; padding: .12rem .08rem; font-size: .85rem; border-width: 2px; }
-  .gm-guide-page #gm-main { scroll-margin-top: 10.2rem; }
-}
 @media (max-width: 26rem) {
   .gm-actions { display: grid; }
+}
+
+/* The guide resembles a small manual, not a second copy of the landing menu. */
+.gm-guide-page .bc-masthead { gap: .65rem; padding-top: .8rem; }
+.gm-guide-page .bc-name { width: min(62%, 15rem); }
+.gm-guide-page .bc-frame {
+  grid-template-columns: clamp(15rem, 24vw, 19rem) minmax(0,1fr);
+  margin-top: 1.2rem;
+}
+.gm-guide-page .bc-sidebar { text-align: left; }
+.gm-guide-page .gm-nav-stack {
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: .2rem .2rem .5rem;
+}
+.gm-guide-page .gm-nav-stack > nav {
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: .4rem;
+  margin-bottom: .8rem;
+}
+.gm-guide-page .gm-nav-stack > nav a {
+  min-height: 2.55rem;
+  border-width: 3px;
+  text-align: center;
+  font-size: .93rem;
+}
+.gm-toc-title {
+  margin: 0;
+  padding: .45rem .45rem .55rem;
+  border-top: 2px solid #734c8f;
+  color: #2c0d43;
+  font: bold 1.27rem/1.13 "Times New Roman", Times, serif;
+}
+.gm-toc-mobile { display: none; }
+.bc-sidebar .gm-toc { display: block; }
+.gm-toc ul, .gm-toc ol { list-style: none; margin: 0; padding: 0; }
+.gm-toc-parts > li + li { margin-top: .5rem; }
+.gm-toc-part {
+  display: block;
+  border-top: 1px solid #8356a5;
+  padding: .5rem .38rem .22rem;
+  color: #301047;
+  font: 700 .73rem/1.2 var(--mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.gm-bong-cult .gm-toc a {
+  display: block;
+  padding: .41rem .44rem;
+  border: 1px solid transparent;
+  min-height: 0;
+  color: #1d0928;
+  background: transparent;
+  font: 650 .97rem/1.25 var(--body);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.gm-bong-cult .gm-toc a:hover { background: #e4c3fa; }
+.gm-bong-cult .gm-toc a.gm-toc-chapter {
+  display: grid;
+  grid-template-columns: 1.55rem minmax(0,1fr);
+  gap: .25rem;
+}
+.gm-chapter-number { opacity: .84; font: .75rem/1.55 var(--mono); }
+.gm-bong-cult .gm-toc a[aria-current="page"] {
+  background: #30084a;
+  border-color: #30084a;
+  color: #fff5fa;
+}
+.gm-bong-cult .gm-toc a:focus-visible, .gm-toc-mobile summary:focus-visible {
+  outline-color: #290744;
+  outline-offset: 1px;
+}
+.gm-toc .gm-toc-topics {
+  margin: .25rem 0 .45rem .9rem;
+  padding-left: .6rem;
+  border-left: 2px solid #8753aa;
+}
+.gm-bong-cult .gm-toc .gm-toc-topics a {
+  padding: .31rem .35rem;
+  font-size: .91rem;
+  font-weight: 500;
+}
+.gm-bong-cult .gm-toc a[aria-current="location"] {
+  border-color: #613477;
+  background: #efd6ff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.gm-guide h2[id] { scroll-margin-top: .85rem; }
+.gm-guide h2[id]:target { color: var(--bc-yellow); }
+.gm-guide h2[id]:focus { outline: none; }
+.gm-guide h3 { margin: 1.05rem 0 .35rem; }
+.gm-guide .note { margin: .8rem 0; }
+.gm-guide .gm-guide-table { max-width: 100%; padding-bottom: .25rem; }
+.gm-guide table { min-width: 29rem; }
+.gm-guide caption {
+  padding: .45rem .55rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  color: var(--bc-white);
+  font-weight: 700;
+  text-align: left;
+}
+.gm-guide kbd {
+  border: 1px solid var(--bc-rule);
+  border-bottom-width: 2px;
+  padding: .05em .26em;
+  background: var(--panel);
+  font: 700 .85em/1.4 var(--mono);
+}
+.gm-guide pre { overflow-x: auto; padding: .75rem; background: var(--panel); white-space: pre-wrap; }
+.gm-book-index > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,14rem),1fr));
+  gap: .65rem;
+  margin: .85rem 0;
+  padding: 0;
+  list-style: none;
+}
+.gm-book-index > ul > li { margin: 0; padding: .65rem; border: 1px solid var(--bc-rule); }
+.gm-book-index h3 { margin: 0; color: var(--bc-white); }
+.gm-book-index ol { padding: 0; list-style: none; }
+.gm-book-index p { margin: .14rem 0 .55rem; color: var(--muted); font-size: .9em; }
+@media (max-width: 57rem) {
+  .gm-guide-page .bc-frame { display: block; }
+  .gm-guide-page .bc-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding: .35rem;
+    border-right: 0;
+    border-bottom: 5px ridge var(--bc-paper);
+  }
+  .gm-guide-page .gm-nav-stack {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(0,2fr) minmax(0,3fr);
+    align-items: start;
+    gap: .35rem;
+    max-height: none;
+    overflow: visible;
+    scrollbar-gutter: auto;
+    padding: 0;
+  }
+  .gm-guide-page .gm-nav-stack > nav { margin: 0; gap: .15rem; }
+  .gm-guide-page .gm-nav-stack > nav a { min-height: 2.75rem; font-size: .79rem; line-height: 1.07; }
+  .gm-toc-desktop { display: none; }
+  .gm-toc-mobile {
+    display: block;
+    position: relative;
+  }
+  .gm-toc-mobile summary {
+    padding: .21rem .4rem .26rem;
+    min-height: 2.75rem;
+    border: 3px solid;
+    border-color: var(--bc-highlight) var(--bc-shadow) var(--bc-shadow) var(--bc-highlight);
+    background: #dec0f5;
+    color: #1c0a28;
+    font: 700 .95rem/1.12 var(--body);
+    cursor: pointer;
+  }
+  .gm-toc-mobile summary span {
+    display: block;
+    margin-left: .95rem;
+    color: #49265d;
+    font-size: .78rem;
+    overflow-wrap: anywhere;
+  }
+  .gm-toc-mobile-panel {
+    position: absolute;
+    z-index: 2;
+    top: 100%;
+    right: 0;
+    width: min(82vw, 20rem);
+    max-height: 66vh;
+    max-height: min(66dvh, calc(100dvh - 4.2rem));
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: .35rem;
+    border: 4px ridge var(--bc-paper);
+    background: var(--bc-sidebar);
+    box-shadow: 0 .35rem .6rem #19022970;
+  }
+  .gm-bong-cult .gm-toc-mobile a { min-height: 2.5rem; padding: .44rem; }
+  .gm-bong-cult .gm-toc-mobile .gm-toc-topics a { min-height: 2.3rem; padding: .4rem; }
+  .gm-guide-page #gm-main, .gm-guide h2[id] { scroll-margin-top: 4.4rem; }
 }

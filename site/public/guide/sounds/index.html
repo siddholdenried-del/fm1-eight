@@ -180,6 +180,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 </style>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/bong-cult-shell.css">
+<script src="/guide-toc.js" defer></script>
 </head>
 <body class="gm-bong-cult gm-guide-page">
 <a class="bc-skip" href="#gm-main">Skip to content</a>
@@ -190,21 +191,66 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   <div class="bc-rainbow" aria-hidden="true"></div>
 </header>
 <div class="bc-frame">
-<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><nav class="gm-chapters" aria-label="Guide chapters"><a href="/guide/">Quick start</a><a href="/guide/beats/">Drums &amp; steps</a><a href="/guide/sounds/" aria-current="page">Sounds &amp; samples</a><a href="/guide/recording/">Recording</a><a href="/guide/performance/">Live &amp; song</a><a href="/guide/mixer/">Mixer &amp; FX</a><a href="/guide/setup/">Save &amp; install</a></nav></div></aside>
+<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><div class="gm-toc-desktop"><p class="gm-toc-title">Table of contents</p><nav class="gm-toc" aria-label="Guide table of contents"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a><ul class="gm-toc-topics"><li><a href="#choose-a-mode" data-guide-topic>Choose MONO, POLY or SAMPLER</a></li><li><a href="#edit-pages" data-guide-topic>Find each sound parameter</a></li><li><a href="#sound-recipes" data-guide-topic>Hear what the advanced controls do</a></li><li><a href="#modulation" data-guide-topic>LFOs, the matrix and macros</a></li><li><a href="#chords-and-arp" data-guide-topic>Chords and arpeggios</a></li><li><a href="#user-presets" data-guide-topic>Keep a sound without changing your project template</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a></li></ol></li></ul></nav></div><details class="gm-toc-mobile"><summary aria-label="Table of contents">Contents<span>Sounds &amp; samples</span></summary><div class="gm-toc-mobile-panel"><nav class="gm-toc" aria-label="Guide table of contents (mobile)"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a><ul class="gm-toc-topics"><li><a href="#choose-a-mode" data-guide-topic>Choose MONO, POLY or SAMPLER</a></li><li><a href="#edit-pages" data-guide-topic>Find each sound parameter</a></li><li><a href="#sound-recipes" data-guide-topic>Hear what the advanced controls do</a></li><li><a href="#modulation" data-guide-topic>LFOs, the matrix and macros</a></li><li><a href="#chords-and-arp" data-guide-topic>Chords and arpeggios</a></li><li><a href="#user-presets" data-guide-topic>Keep a sound without changing your project template</a></li></ul></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a></li></ol></li></ul></nav></div></details></div></aside>
 <main class="wrap" id="gm-main" tabindex="-1">
 <article class="gm-guide"><p class="gm-crumb">User Guide · 3 of 7</p><h1>Synths, samples and acid</h1>
-<p class="gm-guide-lead">T2, T3 and T4 can each be a mono synth, poly synth, or sampler.</p>
-<h2>Choose and edit a sound</h2>
-<ul>
-  <li><strong>PRESETS</strong> browses factory sounds and user slots. Open <strong>EDIT → VOICE</strong> to change the track type.</li>
-  <li>Press <strong>EDIT</strong> again for oscillator, tone, filter and other pages. Use <strong>ENV</strong> for envelopes, and <strong>LFO</strong> for modulation and the matrix.</li>
-  <li>To keep a sound, hold <strong>SAVE</strong>, turn <strong>PRESETS</strong> to choose a user slot, then let go.</li>
-</ul>
-<h2>Sample into a track</h2>
-<p>On a sampler track, hold <strong>REC</strong> and press <strong>SEL</strong>. Use <strong>EDIT → SAMPLE</strong> to set start, end and loop; use <strong>PITCH</strong> to set the sample’s root key.</p>
-<h2>Make a 303 line</h2>
-<p>On T2–T4, press <strong>SEQ</strong> twice to reach <strong>ACID</strong>. <strong>OCT+</strong> makes a new line and <strong>OCT−</strong> mutates it. K1–K4 control density, whole notes, slides and accents.</p>
-<p><a href="/technical/#synth">Synth and sampler</a> · <a href="/technical/#deeper">FM, shaping and the matrix</a> · <a href="/technical/#acid">303 generator</a></p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/beats/">← Drums &amp; steps</a><a rel="next" href="/guide/recording/">Recording →</a></nav></article>
+<p class="gm-guide-lead">T2, T3 and T4 each have their own sound. Start with a preset, make one change you can hear, then save it into a user slot when it earns a place in another pattern.</p>
+
+<h2 id="choose-a-mode" tabindex="-1">Choose MONO, POLY or SAMPLER</h2>
+<p>Turn ALGORITHM to an instrument track. In <strong>EDIT → VOICE</strong>, <strong>TYPE</strong> chooses the engine. <strong>LEVEL</strong> sets the sound's level before the mixer. <strong>PRESETS</strong> selects a whole sound, not merely a waveform.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Voice modes and what you can play"><table>
+<caption>Voice modes and what you can play</caption>
+<thead><tr><th scope="col">Mode</th><th scope="col">Use it for</th><th scope="col">Important controls</th></tr></thead>
+<tbody>
+<tr><th scope="row">MONO</th><td>Bass, leads and single-note lines.</td><td>UNISON 1–4 stacks voices per note. GLIDE controls transition time. With held keys, releasing the newest note returns to an older one that is still held.</td></tr>
+<tr><th scope="row">POLY</th><td>Chords, pads and overlapping tails.</td><td>Up to eight voices per track, within a 16-voice pool shared by the instrument tracks. Release and unison can use up that pool quickly.</td></tr>
+<tr><th scope="row">SAMPLER</th><td>A recorded sound or imported WAV played at different pitches.</td><td>Set trim, loop, root and pitch under EDIT. FILTER, ENV and the shaper can still shape the sound. See <a href="/guide/recording/#sampling">Sampling</a>.</td></tr>
+</tbody></table></div>
+<p><strong>LEGATO</strong> on EDIT → MORE: OFF starts the envelopes for each note; ON keeps tied envelopes and allows GLIDE; SLIDE glides only tied notes. On an acid part, the generator's explicit slide marks can glide without a new attack regardless of the LEGATO setting.</p>
+
+<h2 id="edit-pages" tabindex="-1">Find each sound parameter</h2>
+<p>Press EDIT repeatedly, or use SELECT while on its pages. The four cards on screen correspond to K1–K4. The sampler has its own sample pages instead of the normal oscillator pages.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Synth EDIT pages"><table>
+<caption>Synth EDIT pages</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">VOICE</th><td>TYPE</td><td>LEVEL</td><td>VOICES / UNISON where applicable</td><td>GLIDE where applicable</td></tr>
+<tr><th scope="row">OSC</th><td>WAVE</td><td>DETUNE</td><td>MIX</td><td>OSC 2 INTERVAL, ±24 semitones</td></tr>
+<tr><th scope="row">TONE</th><td>SUB</td><td>NOISE</td><td>PWM</td><td>DRIVE</td></tr>
+<tr><th scope="row">FILTER</th><td>CUTOFF</td><td>RESO</td><td>ENV AMT</td><td>Low-, band- or high-pass</td></tr>
+<tr><th scope="row">MORE</th><td>KEYTRACK</td><td>VELOCITY</td><td>SPREAD</td><td>LEGATO</td></tr>
+<tr><th scope="row">OSC 2</th><td>WAVE 2</td><td>FM</td><td>RING</td><td>DRIFT</td></tr>
+<tr><th scope="row">SHAPER</th><td>Type: FOLD / CLIP / RECT / CRUSH</td><td>AMOUNT</td><td>BIAS</td><td>PRE FLT / POST FLT</td></tr>
+<tr><th scope="row">MACRO</th><td>MACRO 1</td><td>MACRO 2</td><td>MACRO 3</td><td>MACRO 4</td></tr>
+</tbody></table></div>
+<p><strong>ENV</strong> opens ADSR for the amp; then the filter; then MOD ENV. The filter envelope is audible when FILTER → ENV AMT is away from zero. The third envelope has no job until you route it in the matrix.</p>
+
+<h2 id="sound-recipes" tabindex="-1">Hear what the advanced controls do</h2>
+<ol>
+<li><strong>Subtractive bass.</strong> Pick MONO and a saw or square. Lower CUTOFF, use moderate RESO, and set a positive filter ENV AMT. Shorten filter decay to get a quick edge without keeping the top end bright for the full note. Set a little SUB, then compare at matched level.</li>
+<li><strong>FM bell.</strong> Pick sine for both oscillators. Turn OSC MIX to zero so only OSC 1 is directly audible. Bring up OSC 2 → FM and try INTERVAL +12 (2:1) or +19 (about 3:1). For a bell that softens after the strike, route a short-decay MOD ENV to FM. For a ready-made version to compare, load FM BELL.</li>
+<li><strong>Shaped lead.</strong> Try FOLD on a simple waveform and raise AMOUNT slowly. PRE FLT lets a low-pass filter tame the harmonics afterward; POST FLT puts them back on the filtered sound. BIAS changes the symmetry. CLIP squares peaks, RECT flips the lower half of the wave, and CRUSH reduces resolution and holds samples.</li>
+<li><strong>Slow pad.</strong> Start with a POLY preset, lengthen the amp attack and release a little, and add a small amount of DRIFT. For a vibrato that emerges after the note, route LFO 2 to PITCH at a small amount and increase FADE IN. If chords start losing voices, shorten release before adding more motion.</li>
+</ol>
+<p>FM phase-modulates OSC 1 with OSC 2. RING moves toward multiplying the two waveforms. Both can get bright quickly. WAVE 2, FM and RING apply when OSC 1 is saw through PWM; SYNC and SUB use their own pairs.</p>
+
+<h2 id="modulation" tabindex="-1">LFOs, the matrix and macros</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Which modulation page to open"><table>
+<caption>Which modulation page to open</caption>
+<thead><tr><th scope="col">Section</th><th scope="col">What it controls</th><th scope="col">When to use it</th></tr></thead>
+<tbody>
+<tr><th scope="row">LFO page 1</th><td>SHAPE, RATE, DEPTH, DEST.</td><td>One LFO per track. On DRUMS, select a pad and pick one of its parameters as DEST. Sample-and-hold on closed-hat decay is a useful starting point.</td></tr>
+<tr><th scope="row">LFO page 2</th><td>SYNC, RETRIG, FADE IN, PHASE.</td><td>Tempo sync is available from 4 bars to 1/32. RETRIG can run FREE or restart at NOTE or BAR.</td></tr>
+<tr><th scope="row">LFO page 3 on T2–T4</th><td>LFO 2 SHAPE, RATE, FADE IN, RESTART.</td><td>Each note has its own 0.05–30 Hz LFO. Restart EACH NOTE or let each start FREE. This LFO is not tempo synced.</td></tr>
+<tr><th scope="row">LFO page 4 on T2–T4</th><td>Six MATRIX slots: slot, source, destination, signed amount.</td><td>Route envelopes, velocity, note pitch, random or macros. An amount of zero is no modulation.</td></tr>
+</tbody></table></div>
+<p>In MATRIX, K1 picks the slot. Set SOURCE, DEST and AMOUNT (−64 to +63). Destinations include PITCH, OSC 2, DETUNE, CUTOFF, RESO, PWM, MIX, SUB, NOISE, DRIVE, FM, RING, SHAPER, BIAS, LEVEL, PAN and LFO 2 RATE. Use two slots from MACRO 1, one to CUTOFF and one to SHAPER, then move EDIT → MACRO's first knob. You can lock or record macro moves and matrix amounts, but not LFO 1 or arp settings. The matrix cannot modulate another slot's amount.</p>
+
+<h2 id="chords-and-arp" tabindex="-1">Chords and arpeggios</h2>
+<p><strong>ARP</strong> page 1 sets the order, timing division, octave span and gate. Page 2 has LATCH plus <strong>K2 CHORD</strong> and <strong>K3 INVERT</strong>. Try MIN on a POLY sound and play one key, then try 1ST inversion before recording. Available chord shapes include MAJ, MIN, dominant 7, MAJ7, MIN7, SUS2, SUS4, DIM, AUG, fifth and octave. Chords record as up to four notes per step. The built-in keys expand to chords; external MIDI notes arrive as played. The arp can play held or sequenced chords, but does not write the resulting arpeggio back into the steps.</p>
+
+<h2 id="user-presets" tabindex="-1">Keep a sound without changing your project template</h2>
+<p>PRESETS moves through 24 factory sounds, then USER 1–16 on an instrument track. On DRUMS, you'll see 909, 808 and USER KIT 1–8. A star after the preset name means it's been edited. To save, hold <strong>SAVE</strong>, turn <strong>PRESETS</strong> to select a slot, check whether it says EMPTY or REPLACE, and release SAVE. This immediately writes the user sound or entire kit separately from the project. Tap SAVE separately to keep the current project. <a href="/guide/setup/#what-is-saved">Learn how presets and project saves differ</a>.</p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/beats/">← Drums &amp; steps</a><a rel="next" href="/guide/recording/">Recording →</a></nav></article>
 </main>
 </div>
 </body>

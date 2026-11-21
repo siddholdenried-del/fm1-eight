@@ -1,10 +1,42 @@
-<p class="gm-guide-lead">Play a take live, enter notes while stopped, or record a knob move.</p>
-<h2>Record notes and knob moves</h2>
-<ul>
-  <li>Tap <strong>REC</strong> to arm. Play while the sequencer is running and notes go to the nearest step. Turn a knob while recording and playing to record motion.</li>
-  <li>On an instrument’s <strong>KEYS</strong> page while stopped, playing a note or chord puts it at the cursor. Let go to move to the next step; use <strong>SELECT</strong> to leave a rest.</li>
-  <li><strong>EDIT + OCT− / OCT+</strong> undo and redo, up to eight levels.</li>
-</ul>
-<h2>Count-in and timing</h2>
-<p>Hold <strong>REC</strong>. On that page, <strong>K1</strong> controls the metronome, <strong>K2</strong> the count-in, <strong>K3</strong> quantize and <strong>K4</strong> the click volume. <strong>OCT−</strong> quantizes notes already in the current part. On instrument tracks, <strong>OCT+</strong> makes them legato.</p>
-<p><a href="/technical/#recording">More on recording</a> · <a href="/technical/#modulation">LFOs, arpeggiator, chords and locks</a></p>
+<p class="gm-guide-lead">Use tap REC to capture notes or motion. Use held REC to set up the click or edit timing. Use held REC plus SEL to sample the groovebox's audio. Those are three different actions.</p>
+
+<h2 id="record-notes">Record notes live or one step at a time</h2>
+<table>
+<caption>Recording workflows</caption>
+<thead><tr><th scope="col">Goal</th><th scope="col">Start here</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><th scope="row">Live instrument take</th><td>Select T2–T4, find KEYS, tap REC then PLAY, and play the keys.</td><td>Notes snap to the recording grid and hold for roughly as long as you played them. Tapping REC again stops writing without stopping the loop.</td></tr>
+<tr><th scope="row">Live drum take</th><td>On DRUMS, tap REC and PLAY, then play the black pad keys.</td><td>Hits land on the recording grid. The playing part continues to loop, so add percussion on successive passes.</td></tr>
+<tr><th scope="row">Stopped step recording</th><td>Stop; choose an instrument track and KEYS; tap REC. Turn SELECT to choose the cursor, then play a note or chord.</td><td>Releasing the last held key writes the chord and advances the cursor. Turn SELECT again to skip a step for a rest. Use POLY or SAMPLER for chords.</td></tr>
+<tr><th scope="row">Motion recording</th><td>Leave REC armed while the pattern plays. On a sound page, turn a supported knob.</td><td>The movement becomes step locks on the steps you passed. A stopped transport or disarmed REC changes the sound without recording motion.</td></tr>
+</tbody></table>
+<p>To fix one take, use <strong>EDIT + OCT−</strong> before doing something else. To fix one held note instead, go to STEPS and use K1 NOTE, K2 VELOCITY, or K3 GATE while holding that step. <a href="/guide/beats/#step-combos">Held-step details</a>.</p>
+
+<h2 id="recording-settings">Click, count-in and quantize</h2>
+<p>Hold <strong>REC</strong> until the red recording page shows; keep holding while making the adjustment. In the browser, latch REC and then unlatch when done. A quick tap still only arms/disarms.</p>
+<table>
+<caption>REC page controls</caption>
+<thead><tr><th scope="col">Control</th><th scope="col">Job</th></tr></thead>
+<tbody>
+<tr><th scope="row">K1 CLICK</th><td>OFF, ON while playing, or REC only while recording. The first click in a bar is higher. The click isn't in the source for a sample or the master meters.</td></tr>
+<tr><th scope="row">K2 COUNT-IN</th><td>OFF, 1 BAR or 2 BARS. It only counts in when REC is armed; press PLAY during the count-in to cancel. A note played in its last half beat can land on step 1.</td></tr>
+<tr><th scope="row">K3 QUANTIZE</th><td>Every step, every second step, or every fourth step. At 1/16 RATE these show as 1/16, 1/8 and 1/4. Labels follow the part's rate.</td></tr>
+<tr><th scope="row">K4 LEVEL</th><td>Click level.</td></tr>
+<tr><th scope="row">OCT− QUANTIZE</th><td>Snap existing notes or drum hits to the chosen grid. Locks move with their steps. Instrument notes landing together form a chord, subject to the four-note limit.</td></tr>
+<tr><th scope="row">OCT+ LEGATO (T2–T4)</th><td>Extend notes to the next one, wrapping round the loop. This changes gate lengths; in a MONO sound enable its LEGATO separately if you don't want tied notes to retrigger.</td></tr>
+</tbody></table>
+
+<h2 id="sampling">Sample the groovebox or send it a WAV</h2>
+<ol>
+<li><strong>Internal resampling:</strong> choose T2–T4 and set EDIT → VOICE → TYPE to SAMPLER. Hold REC and press SEL. REC and SEL blink while waiting. Play the sounds you want, or run the beat. Recording starts when it hears audio and stops at roughly 2 seconds or when you press SEL again.</li>
+<li><strong>Trim and tune:</strong> on EDIT → SAMPLE, use START, END, LOOP and LOOP START. On PITCH, use ROOT for the key that plays the sample at original pitch (C4 to start), TUNE for fine adjustment, DRIVE, and RECORD AT for 44.1 or 22.05 kHz. Pitch changes also change playback speed.</li>
+<li><strong>Hardware WAV transfer:</strong> stop the FM-1 and connect its USB-MIDI port to the Mac. The source repository includes <code>app/tools/fm1_sample.py</code>. Run the commands from the repository root; replace the track and filename to suit. A send replaces the sample on that track, so use GET first if it matters.</li>
+</ol>
+<pre><code>python3 -I app/tools/fm1_sample.py send loop.wav --track 3
+python3 -I app/tools/fm1_sample.py send loop.wav --track 3 --rate 22050
+python3 -I app/tools/fm1_sample.py get copied-sample.wav --track 3</code></pre>
+<p>The Mac tool accepts PCM or floating-point WAV, mixes it to mono, resamples, peak-normalizes by default (use <code>--no-normalize</code> to keep the level), and stores packed 12-bit audio. GET writes a standard 16-bit WAV. Use track 2, 3 or 4. <code>--port</code> selects among connected MIDI ports.</p>
+<p><strong>Limits:</strong> about 3.3 seconds at 44.1 kHz or 6.6 seconds at 22.05 kHz across all three instrument tracks, not per track. A new sample can be cut to fit; <strong>STORED, CUT</strong> means part was kept, <strong>BANK FULL</strong> means there wasn't room. The FM-1 resamples its own mix, including reverb; the delay pauses because it shares recording memory. No live line input, slicing, reverse or ping-pong looping in 0.4.</p>
+
+<h2 id="browser-export">Export the right thing</h2>
+<p>The browser panel's <strong>Copy session</strong> copies a script for simulator troubleshooting. It isn't a project backup or a WAV export. The current browser page has no WAV import, whole-mix bounce or portable project-backup button. Use internal resampling for short sounds there. On the Mac/hardware route, GET exports only that track's sample, not your full arrangement. See <a href="/guide/setup/#what-is-saved">what SAVE actually keeps</a>.</p>

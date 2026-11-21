@@ -180,6 +180,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
 </style>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/bong-cult-shell.css">
+<script src="/guide-toc.js" defer></script>
 </head>
 <body class="gm-bong-cult gm-guide-page">
 <a class="bc-skip" href="#gm-main">Skip to content</a>
@@ -190,19 +191,85 @@ footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 
   <div class="bc-rainbow" aria-hidden="true"></div>
 </header>
 <div class="bc-frame">
-<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><nav class="gm-chapters" aria-label="Guide chapters"><a href="/guide/">Quick start</a><a href="/guide/beats/">Drums &amp; steps</a><a href="/guide/sounds/">Sounds &amp; samples</a><a href="/guide/recording/">Recording</a><a href="/guide/performance/">Live &amp; song</a><a href="/guide/mixer/">Mixer &amp; FX</a><a href="/guide/setup/" aria-current="page">Save &amp; install</a></nav></div></aside>
+<aside class="bc-sidebar"><div class="gm-nav-stack"><nav aria-label="GhettoMachine"><a href="/">Home</a><a href="/emu/">Play in browser</a></nav><div class="gm-toc-desktop"><p class="gm-toc-title">Table of contents</p><nav class="gm-toc" aria-label="Guide table of contents"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a><ul class="gm-toc-topics"><li><a href="#browser-controls" data-guide-topic>Browser controls that replace physical gestures</a></li><li><a href="#shortcuts" data-guide-topic>Context shortcuts worth memorizing</a></li><li><a href="#midi-and-sounds" data-guide-topic>MIDI clock, external playing and sounds per pattern</a></li><li><a href="#what-is-saved" data-guide-topic>What stays saved and where it goes</a></li><li><a href="#hardware-install" data-guide-topic>FM-1 hardware installation and recovery</a></li><li><a href="#troubleshooting" data-guide-topic>Troubleshoot the symptom in front of you</a></li></ul></li></ol></li></ul></nav></div><details class="gm-toc-mobile"><summary aria-label="Table of contents">Contents<span>Save &amp; install</span></summary><div class="gm-toc-mobile-panel"><nav class="gm-toc" aria-label="Guide table of contents (mobile)"><ul class="gm-toc-parts"><li><span class="gm-toc-part">Getting started</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/"><span class="gm-chapter-number" aria-hidden="true">01</span><span>Quick start</span></a></li></ol></li><li><span class="gm-toc-part">Making a track</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/beats/"><span class="gm-chapter-number" aria-hidden="true">02</span><span>Drums &amp; steps</span></a></li><li><a class="gm-toc-chapter" href="/guide/sounds/"><span class="gm-chapter-number" aria-hidden="true">03</span><span>Sounds &amp; samples</span></a></li><li><a class="gm-toc-chapter" href="/guide/recording/"><span class="gm-chapter-number" aria-hidden="true">04</span><span>Recording</span></a></li></ol></li><li><span class="gm-toc-part">Finishing &amp; performing</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/performance/"><span class="gm-chapter-number" aria-hidden="true">05</span><span>Live &amp; song</span></a></li><li><a class="gm-toc-chapter" href="/guide/mixer/"><span class="gm-chapter-number" aria-hidden="true">06</span><span>Mixer &amp; FX</span></a></li></ol></li><li><span class="gm-toc-part">Reference</span><ol class="gm-toc-chapters"><li><a class="gm-toc-chapter" href="/guide/setup/" aria-current="page"><span class="gm-chapter-number" aria-hidden="true">07</span><span>Save &amp; install</span></a><ul class="gm-toc-topics"><li><a href="#browser-controls" data-guide-topic>Browser controls that replace physical gestures</a></li><li><a href="#shortcuts" data-guide-topic>Context shortcuts worth memorizing</a></li><li><a href="#midi-and-sounds" data-guide-topic>MIDI clock, external playing and sounds per pattern</a></li><li><a href="#what-is-saved" data-guide-topic>What stays saved and where it goes</a></li><li><a href="#hardware-install" data-guide-topic>FM-1 hardware installation and recovery</a></li><li><a href="#troubleshooting" data-guide-topic>Troubleshoot the symptom in front of you</a></li></ul></li></ol></li></ul></nav></div></details></div></aside>
 <main class="wrap" id="gm-main" tabindex="-1">
 <article class="gm-guide"><p class="gm-crumb">User Guide · 7 of 7</p><h1>Saving and installing</h1>
-<p class="gm-guide-lead">Save your work before an update and keep a copy of important projects.</p>
-<h2>Saving and copying</h2>
+<p class="gm-guide-lead">Most controls work the same in the browser and on the FM-1. Sound output, storage, WAV transfers and firmware updates do not. Check which version you're using before you reset, move or save anything important.</p>
+
+<h2 id="browser-controls" tabindex="-1">Browser controls that replace physical gestures</h2>
+<p><a href="/emu/">Open the browser groovebox</a>, choose <strong>Switch on</strong>, then press the on-screen <strong>PLAY / STOP</strong> button. Switching on starts audio processing; it is not the transport. The front panel needs focus for its single-key shortcuts.</p>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Mouse, keyboard and touch controls"><table>
+<caption>Mouse, keyboard and touch controls</caption>
+<thead><tr><th scope="col">Hardware gesture</th><th scope="col">Browser equivalent</th></tr></thead>
+<tbody>
+<tr><th scope="row">Turn a knob</th><td>Drag vertically or wheel over it. With the knob focused, use arrow keys for fine changes and Page Up/Down for larger jumps. Focused MASTER can use Home/End for minimum/maximum; this is not the panel HOME button.</td></tr>
+<tr><th scope="row">Tap a key or button</th><td>Click or tap. Tab moves focus through knobs and keys; holding Space or Enter acts like holding a focused key.</td></tr>
+<tr><th scope="row">Hold one control while using another</th><td>Shift-click or right-click to latch it with a mouse, or Shift+Enter when focused. Use the second control, then click or toggle the first to release the latch. Keep a genuine long press for momentary effects if you only want a quick hit.</td></tr>
+<tr><th scope="row">White keys 1–16</th><td>Q W E R T Y U I, then A S D F G H J K. These are physical keyboard positions, so printed labels can differ on non-QWERTY layouts.</td></tr>
+<tr><th scope="row">Black keys 1–11</th><td>1 2 3 4 5 6 7 8 9 0 and minus.</td></tr>
+<tr><th scope="row">Transport and octave</th><td>P = PLAY; O = REC; Escape = panel HOME; Z / X = OCT− / OCT+. Arrow Up/Down can turn SELECT while the panel has focus, unless focused on a knob that handles arrows itself. Disable single-key bindings with the Keyboard shortcuts checkbox.</td></tr>
+<tr><th scope="row">Read the display without relying on the LCD</th><td>Open Screen Reader below the panel. Use System screen reader, Built-in voice, or Off, plus Read whole screen and Repeat last. If the built-in voice won't start, try System screen reader.</td></tr>
+</tbody></table></div>
+
+<h2 id="shortcuts" tabindex="-1">Context shortcuts worth memorizing</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="FM-1 shortcuts and their context"><table>
+<caption>FM-1 shortcuts and their context</caption>
+<thead><tr><th scope="col">Shortcut</th><th scope="col">Where</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><th scope="row">SEL + black 1–4</th><td>Track selection.</td><td>DRUMS, T2, T3, T4.</td></tr>
+<tr><th scope="row">SEL + GLO</th><td>Any track page.</td><td>Jump to master bus CHAIN.</td></tr>
+<tr><th scope="row">EDIT + OCT− / OCT+</th><td>Editing.</td><td>Undo / redo, eight levels.</td></tr>
+<tr><th scope="row">SAVE + white pattern key</th><td>Choose a destination pattern while holding SAVE.</td><td>Copy to that slot; check the destination before overwriting it.</td></tr>
+<tr><th scope="row">SAVE + PRESETS</th><td>Choose the user slot while holding SAVE.</td><td>Release SAVE to write a sound or a drum kit.</td></tr>
+<tr><th scope="row">SAVE + OCT−</th><td>Select the relevant track and clip first.</td><td>Restore the selected track's saved sound. This isn't an undo of all pattern edits.</td></tr>
+<tr><th scope="row">REC + SEL</th><td>Instrument track, TYPE = SAMPLER.</td><td>Arm internal resampling. SEL again finishes the take.</td></tr>
+<tr><th scope="row">REC + OCT− / OCT+</th><td>Held REC settings.</td><td>Quantize existing steps / extend instrument gates to the next note.</td></tr>
+<tr><th scope="row">SEQ + white key</th><td>DRUMS STEPS.</td><td>Toggle that step's drum accent.</td></tr>
+<tr><th scope="row">Hold step + SELECT</th><td>STEPS.</td><td>Set chance. Holding the step on an instrument edit page lets SELECT page through the locked parameter pages instead.</td></tr>
+<tr><th scope="row">OCT− / OCT+</th><td>ACID.</td><td>MUTATE a few steps / NEW line.</td></tr>
+</tbody></table></div>
+<p>For row/clip gestures, nudge and momentary effects see <a href="/guide/performance/#scene-grid">Playing live</a>. For the full knob map see <a href="/guide/#panel-controls">Panel controls</a>.</p>
+
+<h2 id="midi-and-sounds" tabindex="-1">MIDI clock, external playing and sounds per pattern</h2>
+<p>From the HOME scene grid press HOME again for SONG, then again for SETUP.</p>
 <ul>
-  <li>Tap <strong>SAVE</strong> to save the project. Hold <strong>SAVE</strong> and press a pattern key to copy the current pattern there.</li>
-  <li>Hold <strong>SAVE</strong> and turn <strong>PRESETS</strong> to save a sound or drum kit. Hold <strong>SAVE</strong> and press <strong>OCT−</strong> to return the track sound to its saved state.</li>
-  <li>In the browser groovebox, your work stays in that browser. Firmware 0.4 reads projects and user presets from 0.2 and 0.3.</li>
+<li><strong>K1 MIDI CLOCK:</strong> OFF uses the internal clock without clock routing. SEND outputs 24 clocks per beat plus transport start/stop over USB-MIDI. FOLLOW uses the external tempo and start/stop, and begins on the first clock after Start. Only one unit should be clock master. FOLLOW is not sample-accurate; allow a few milliseconds and check alignment by ear.</li>
+<li><strong>K2 SOUNDS:</strong> SHARED uses one sound per track across patterns. OWN stores the kit and the three instrument sounds per pattern. A pattern without its own sound initially adopts the one now playing. OWN does not store per-pattern mixer, send-effect or master settings.</li>
+<li><strong>Note channels:</strong> channel 10 plays/receives the drum pads by General MIDI assignments, channels 2–4 address instrument tracks, and incoming channel 1 plays the selected track. Local keys transmit on the instrument track's channel or drum channel 10. Chord mode does not expand incoming MIDI notes.</li>
+<li><strong>Browser MIDI:</strong> choose MIDI ports if the browser exposes Web MIDI; permit access if you want this feature, then choose the input and output explicitly. Sound does not require MIDI permission. If a port loops back into itself, clear the unused out port.</li>
 </ul>
-<h2>Updating an FM-1</h2>
-<p><strong>Tap SAVE first.</strong> When GhettoMachine or another compatible firmware is already installed, the update goes over USB-MIDI and restarts the unit. Updating uses a different procedure than installing over factory firmware.</p>
-<p><a href="/technical/#storage">What is stored</a> · <a href="/technical/#building">Building and installing</a> · <a href="https://github.com/siddholdenried-del/ghettomachine/blob/main/MANUAL.md#installing-it-and-getting-back">Full install and recovery instructions</a></p><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/mixer/">← Mixer &amp; FX</a></nav></article>
+
+<h2 id="what-is-saved" tabindex="-1">What stays saved and where it goes</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Project, samples and user sounds are separate"><table>
+<caption>Project, samples and user sounds are separate</caption>
+<thead><tr><th scope="col">Data</th><th scope="col">When it is kept</th><th scope="col">Where it stays</th></tr></thead>
+<tbody>
+<tr><th scope="row">Project</th><td>Tap SAVE. If playing, the project write waits for Stop.</td><td>On the device, patterns, song, sounds, mixer, FX, master, modulation and SETUP use a two-copy project store to survive a write interruption. Browser keeps its own copy in site storage.</td></tr>
+<tr><th scope="row">Samples</th><td>When recording/transfer completes; while playing, a recorded sample is finalized when you stop.</td><td>Separate shared sample bank, not embedded in the project. Export an individual hardware sample as a WAV with the <a href="/guide/recording/#sampling">Mac companion</a> if you need a separate copy.</td></tr>
+<tr><th scope="row">User presets and kits</th><td>Immediately on releasing SAVE after choosing a user location.</td><td>Separate preset store. Tap SAVE as well to keep the edits in the current project.</td></tr>
+</tbody></table></div>
+<p>Browser saves are local to the site and browser profile; another browser, private mode, storage cleanup or a reset can mean a different or empty project. The browser's <strong>Factory reset</strong> requires a second press and forgets its saved groovebox data. It is not an audio fix and cannot restore data once cleared. <strong>Copy session</strong> is for troubleshooting, not backup.</p>
+<p><strong>Versions:</strong> 0.4 reads 0.2 and 0.3 project data. Older projects gain default values for newer settings; generator state starts unset. After a 0.4 SAVE, older firmware cannot read the new project format and can show a fresh project if downgraded. Return to 0.4 to read the new format again. Builds before 0.2 are not supported for conversion.</p>
+
+<h2 id="hardware-install" tabindex="-1">FM-1 hardware installation and recovery</h2>
+<p>GhettoMachine is replacement firmware for the M-VAVE FM-1. Save before updating, because the install restarts the device. Once an fm1-base or Felucca-based firmware is present, the fm1-base USB-MIDI installer can send the built GhettoMachine <code>.fwsc</code> package. It writes changed 4 KiB firmware sectors, not the boot code. Projects and samples are separate from those writes.</p>
+<p>Stock M-VAVE firmware needs a different first-install path: the documented build initially used an ESP32-S3 adapter with a backup and dry run before writing. The same hardware recovery path was used for stock firmware. Don't treat a stock FM-1 or a cut-off install as an ordinary USB update. Check the exact firmware and board before proceeding; see <a href="/technical/">the technical overview</a> and <a href="https://github.com/charlesvestal/fm1-base">fm1-base documentation</a>.</p>
+
+<h2 id="troubleshooting" tabindex="-1">Troubleshoot the symptom in front of you</h2>
+<div class="table-wrap gm-guide-table" tabindex="0" role="region" aria-label="Fast checks before resetting anything"><table>
+<caption>Fast checks before resetting anything</caption>
+<thead><tr><th scope="col">Symptom</th><th scope="col">Try this first</th></tr></thead>
+<tbody>
+<tr><th scope="row">Browser: buttons move, no sound</th><td>Choose Switch on, then PLAY. Unmute the webpage and the tab/device; turn up MASTER a little. A visible counter and moving LCD meters indicate the engine is running even if output is muted. Try the standalone emulator page rather than an embedded view.</td></tr>
+<tr><th scope="row">Browser: keyboard doesn't control the device</th><td>Focus a panel control, and check Keyboard shortcuts. Browser text fields and other focused elements don't send the panel's letter shortcuts. On a phone, rotate sideways for a larger control panel.</td></tr>
+<tr><th scope="row">A step disappeared while trying to adjust it</th><td>On STEPS, releasing a lit step without operating an adjustment clears it. Undo with EDIT + OCT−. Keep the step held or latched while turning the knob.</td></tr>
+<tr><th scope="row">A track appears to play or edit the wrong pattern</th><td>Check the HOME row and its queued clip, not just the top pattern number. Choose BAR, BEAT or NOW on SONG as needed. Check whether SONG or a follow action is marking the next change.</td></tr>
+<tr><th scope="row">Notes drop from poly chords</th><td>Check for MONO mode, then POLY voice count and total voices on HOME. Shorten release or reduce overlapping notes/unison; the instrument tracks share a 16-voice pool, and the hardware can drop voices under load instead of breaking up.</td></tr>
+<tr><th scope="row">No delay while sampling or holding an effect</th><td>Sampling, Stutter and Tape Stop borrow delay memory. Finish the sample or release the effect before changing send settings.</td></tr>
+<tr><th scope="row">BANK FULL or a sample is shorter than the WAV</th><td>Check the shared bank, not just the selected track. Export and delete an unwanted hardware sample if appropriate, shorten the recording or use 22.05 kHz. STORED, CUT is a successful shortened sample.</td></tr>
+<tr><th scope="row">MIDI clock doesn't start or notes double</th><td>Check SEND versus FOLLOW and the selected ports. The FM-1 FOLLOW starts on the first clock after Start; transmission is over USB. Remove MIDI loops and make sure the receiving track's channel matches.</td></tr>
+<tr><th scope="row">Edits vanish after refresh or power cycle</th><td>Save again and stop the transport so the write completes. Browser profiles do not share project data and private mode may not persist it. Export important hardware samples individually.</td></tr>
+</tbody></table></div><nav class="gm-guide-pager" aria-label="Adjacent chapters"><a rel="prev" href="/guide/mixer/">← Mixer &amp; FX</a></nav></article>
 </main>
 </div>
 </body>
