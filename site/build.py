@@ -56,25 +56,29 @@ GUIDE = (
     ("", "Quick start", "Quick start"),
     ("beats", "Drums & steps", "Drums and sequencing"),
     ("sounds", "Sounds & samples", "Synths, samples and acid"),
+    ("modulation", "Modulation", "Modulation in depth"),
     ("recording", "Recording", "Recording"),
     ("performance", "Live & song", "Playing live"),
     ("mixer", "Mixer & FX", "Mixer and effects"),
     ("setup", "Save & install", "Saving and installing"),
+    ("reference", "Every control", "Every control, page by page"),
 )
 GUIDE_PARTS = (
     ("Getting started", ("",)),
-    ("Making a track", ("beats", "sounds", "recording")),
+    ("Making a track", ("beats", "sounds", "modulation", "recording")),
     ("Finishing & performing", ("performance", "mixer")),
-    ("Reference", ("setup",)),
+    ("Reference", ("setup", "reference")),
 )
 CHAPTER_SUMMARIES = {
     "": "First beat, panel controls, screen and the browser instrument.",
-    "beats": "Drum pads, step pages, track lengths, accents and parameter locks.",
+    "beats": "Drum pads, step pages, track lengths, accents, parameter locks and erasing.",
     "sounds": "Voice types, oscillators, modulation, presets, sampling and the 303.",
     "recording": "Real-time and step entry, recording options, chords and knob motion.",
     "performance": "Clips, scenes, follow actions, performance moves, songs and sync.",
     "mixer": "Levels, sends, effects, the mastering chain and reading the meters.",
     "setup": "Project storage, saving patterns and sounds, MIDI, updates and recovery.",
+    "modulation": "LFO 1 and 2, the MOD ENV, the matrix's sources and destinations, macros, locks and recipes.",
+    "reference": "Every page, button, key and knob with its range, the presets, the limits and the screen's messages.",
 }
 
 

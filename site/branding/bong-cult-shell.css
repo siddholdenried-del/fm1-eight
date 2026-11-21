@@ -322,7 +322,7 @@ body.gm-bong-cult {
 .gm-guide h3 { margin: 1.05rem 0 .35rem; }
 .gm-guide .note { margin: .8rem 0; }
 .gm-guide .gm-guide-table { max-width: 100%; padding-bottom: .25rem; }
-.gm-guide table { min-width: 29rem; }
+.gm-guide table { min-width: 29rem; overflow-wrap: break-word; }   /* whole words: the wrapper scrolls instead */
 .gm-guide caption {
   padding: .45rem .55rem;
   background: var(--panel);

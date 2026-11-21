@@ -1,0 +1,296 @@
+<p class="gm-guide-lead">Every page, button, key and knob in GhettoMachine 0.5, with ranges in the units the screen shows. Use it to look things up; the other chapters explain how to use them. The browser groovebox works the same way, apart from what <a href="/guide/setup/">Saving and installing</a> lists.</p>
+
+<h2 id="pages">Every page and how to reach it</h2>
+<p>A section button opens the page you last used in that section; press it again for the next page. GLO is the exception: from another page it always opens the mixer (at the mixer page you used last), even if you were last on the master bus. SELECT also turns between a section's pages and stops at the first and last. Changing tracks resets EDIT to its first page.</p>
+<table>
+<caption>Pages behind each button</caption>
+<thead><tr><th scope="col">Button</th><th scope="col">DRUMS</th><th scope="col">T2–T4</th></tr></thead>
+<tbody>
+<tr><th scope="row">SEQ</th><td>STEPS.</td><td>STEPS → ACID → KEYS → STEPS… From any other page, SEQ goes to STEPS. ACID has three pages (ACID, NOTES, LINE) on SELECT.</td></tr>
+<tr><th scope="row">EDIT</th><td>The selected pad's knob pages (two or three), then the KIT page, then the first pad page again. EDIT acts when you let go, so it can be held as a modifier.</td><td>VOICE, OSC, TONE, FILTER, MORE, OSC 2, SHAPER, MACRO, then KEYS. On SAMPLER: VOICE, SAMPLE, PITCH, FILTER, MORE, SHAPER, MACRO, then KEYS.</td></tr>
+<tr><th scope="row">ENV</th><td>MUTE (the pads' mutes in this pattern); again: STEPS.</td><td>AMP ENV, FILTER ENV, MOD ENV, then KEYS.</td></tr>
+<tr><th scope="row">LFO</th><td>LFO 1, LFO 1 MORE, then STEPS.</td><td>LFO 1, LFO 1 MORE, LFO 2, MATRIX, then KEYS.</td></tr>
+<tr><th scope="row">ARP</th><td>Not on DRUMS (the screen says ARP ON T2-T4).</td><td>ARP (mode, rate, octaves, gate), ARP 2 (latch, chord, inversion), then KEYS.</td></tr>
+<tr><th scope="row">FX</th><td colspan="2">REVERB, DELAY, DELAY 2, FILTER, then the track's own page (STEPS or KEYS).</td></tr>
+<tr><th scope="row">GLO</th><td colspan="2">Mixer LEVEL, PAN, REVERB, DELAY, then the master bus CHAIN, EQ, EQ 2, COMP, COMP 2, TAPE, STEREO, LIMIT, then the track's own page. SELECT moves along all 12 as one row. SEL + GLO jumps to CHAIN.</td></tr>
+<tr><th scope="row">HOME</th><td colspan="2">PATTERNS (the scene grid), SONG, SETUP, then the track's own page. From any page, HOME goes to PATTERNS.</td></tr>
+</tbody></table>
+<p>Changing between DRUMS and an instrument track jumps to the new track's own page (STEPS or KEYS), except on EDIT, LFO, HOME, SONG, SETUP, the mixer, FX and the master bus, which stay where they are. Between T2, T3 and T4 the page stays.</p>
+
+<h2 id="buttons">Buttons: tap, hold and combinations</h2>
+<table>
+<caption>Every button gesture</caption>
+<thead><tr><th scope="col">Button</th><th scope="col">Tap</th><th scope="col">Hold, or hold with another control</th></tr></thead>
+<tbody>
+<tr><th scope="row">PLAY</th><td>Start or stop. On SONG, PLAY starts the song from the cursor's entry. With REC lit and a count-in set, PLAY starts the count-in; PLAY during the count-in cancels it.</td><td>Stopping also finishes a pending save and stores a sample recorded while playing.</td></tr>
+<tr><th scope="row">REC</th><td>Arm or disarm recording (notes, hits and knob motion).</td><td>Held: the REC page (K1 CLICK, K2 COUNT-IN, K3 QUANTIZE, K4 click LEVEL). REC + OCT−: quantize the part. REC + OCT+: legato, notes held to the next (T2–T4). REC + SEL: start sampling (SAMPLER tracks).</td></tr>
+<tr><th scope="row">SEL</th><td>Shows SEL + PAD KEYS 1-4 PICK A TRACK. While sampling, stops the recording.</td><td>SEL + black 1–4: pick DRUMS, T2, T3, T4. SEL + GLO: master bus. SEL + SELECT on HOME while playing: nudge 5 ms per click. REC + SEL: sampling.</td></tr>
+<tr><th scope="row">SAVE</th><td>Save the project (lit: unsaved changes). While playing, it saves when you stop.</td><td>SAVE + PRESETS, then let go: save a user sound or kit (only while stopped). SAVE + white key: copy the current pattern to that slot. SAVE + OCT−: reload the selected track's sound as last saved.</td></tr>
+<tr><th scope="row">EDIT</th><td>EDIT pages (acts on release).</td><td>EDIT + OCT−: undo. EDIT + OCT+: redo. Eight levels.</td></tr>
+<tr><th scope="row">SEQ</th><td>STEPS, ACID, KEYS (see above).</td><td>Held on DRUMS STEPS: the step lights show accents, and white keys toggle accents.</td></tr>
+<tr><th scope="row">ENV, LFO, ARP, FX, GLO, HOME</th><td>Their pages (see above).</td><td>No hold function.</td></tr>
+<tr><th scope="row">OCT−</th><td colspan="2">In order of priority: SAVE held: reload the sound. HOME with a track key held: stop that track's clip. HOME (EDIT and REC not held): tap tempo, tapped twice or more. REC held: QUANTIZE. A step held: clear its locks and chance. EDIT held: undo. SONG: delete the cursor's entry. ACID: MUTATE. T2–T4 KEYS, EDIT, ENV, LFO, ARP, mixer, FX and master pages: octave down. STEPS and DRUMS EDIT: previous step bank.</td></tr>
+<tr><th scope="row">OCT+</th><td colspan="2">In order of priority: HOME with a track key held: solo that track (again: unsolo). HOME (EDIT and REC not held): TAPE STOP while held. REC held: LEGATO. A step held on T2–T4: cycle HALF, WHOLE, SLIDE. EDIT held: redo. SONG: copy the cursor's entry after it. DRUMS MUTE page: every pad on. ACID: NEW line. T2–T4 KEYS, EDIT, ENV, LFO, ARP, mixer, FX and master pages: octave up. STEPS and DRUMS EDIT: next step bank.</td></tr>
+</tbody></table>
+
+<h2 id="keys">What the keys do on each page</h2>
+<p>The FM-1 has 16 white keys and 11 black keys. In this guide they're numbered from the left: white 1–16, black 1–11.</p>
+<table>
+<caption>Keys by page</caption>
+<thead><tr><th scope="col">Where</th><th scope="col">White keys</th><th scope="col">Black 1–4</th><th scope="col">Black 5–11</th></tr></thead>
+<tbody>
+<tr><th scope="row">SAVE held (any page)</th><td>Copy the current pattern to that slot.</td><td colspan="2">As on the page.</td></tr>
+<tr><th scope="row">SEL held (any page)</th><td>As on the page.</td><td>Pick DRUMS, T2, T3, T4.</td><td>As on the page.</td></tr>
+<tr><th scope="row">HOME (PATTERNS)</th><td>Pick a scene: every track to that pattern. Held: K1/K2 set its follow action. With a track key held: launch only that track's clip.</td><td>Track keys. Tap: mute or unmute. Hold: modifier for clips, OCT− stop and OCT+ solo.</td><td>Perform effects while held: ROLL, FILL, STUTTER, FILTER, THROW, WASH, CRUSH.</td></tr>
+<tr><th scope="row">SONG</th><td>Set the cursor's entry to that pattern and move on (at the end: add an entry).</td><td>Mute or unmute a track.</td><td>Nothing.</td></tr>
+<tr><th scope="row">DRUMS, every other page</th><td>Steps of the selected pad on the bank shown. Steps 1, 5, 9 and 13 of the bank (the beats) glow dimly while empty. A lit step held: a modifier for locks, chance and quick clears.</td><td colspan="2">Select a pad and play it (recorded when REC is lit and playing). On MUTE: mute or unmute the pad in this pattern.</td></tr>
+<tr><th scope="row">T2–T4 STEPS</th><td>Steps. An empty one lights at once with the last note played. A lit one held: modifier for NOTE, VELOCITY, GATE, CHANCE and locks.</td><td>Step banks 1–16, 17–32, 33–48, 49–64 (those that exist at the length).</td><td>Nothing.</td></tr>
+<tr><th scope="row">T2–T4, every other page</th><td colspan="3">A chromatic keyboard of 27 notes from F3 to G5 at octave 0, moved by OCT− / OCT+ from −3 to +3 octaves. Velocity comes from how hard you press. With REC lit, playing records; stopped on KEYS, it step-records at the cursor.</td></tr>
+</tbody></table>
+
+<h2 id="encoders">PRESETS, ALGORITHM, SELECT and K1–K4</h2>
+<table>
+<caption>The encoders by context</caption>
+<thead><tr><th scope="col">Encoder</th><th scope="col">What it does</th></tr></thead>
+<tbody>
+<tr><th scope="row">ALGORITHM</th><td>Pick the track: DRUMS, T2, T3, T4 (it stops at each end).</td></tr>
+<tr><th scope="row">PRESETS</th><td>DRUMS: 909, 808, USER KIT 1–8 (empty slots skipped). T2–T4: 24 factory sounds, then USER 1–16 (empty slots skipped). A factory or user sound sets TYPE to MONO or POLY, so turning PRESETS on a SAMPLER track leaves SAMPLER. With SAVE held: choose the user slot to save to.</td></tr>
+<tr><th scope="row">SELECT</th><td>A step held: its CHANCE (on T2–T4 EDIT, ENV and LFO it turns pages instead). EDIT, ENV, LFO, ARP, ACID, FX, mixer and master: the page. SONG: the cursor. HOME: the previous or next scene; with SEL held while playing, nudge. T2–T4 KEYS: the step-record cursor. STEPS: the step bank.</td></tr>
+<tr><th scope="row">K1–K4</th><td>In order of priority: REC held: the REC page. HOME with a scene key held: FOLLOW and BARS. SETUP: MIDI CLOCK and SOUNDS. HOME with a perform key held: K1 sets the effect. Otherwise the four cards on the page. On STEPS, KEYS, HOME and the DRUMS MUTE page the cards are LENGTH, RATE, SWING and TEMPO. On T2–T4 STEPS with a step held: NOTE, VELOCITY, GATE.</td></tr>
+<tr><th scope="row">MASTER</th><td>Speaker and headphone volume, after the master bus. It doesn't change the USB audio.</td></tr>
+</tbody></table>
+
+<h2 id="timing">Steps, timing and held steps</h2>
+<table>
+<caption>STEPS, KEYS and HOME knobs, and a held instrument step</caption>
+<thead><tr><th scope="col">Knob</th><th scope="col">Range</th><th scope="col">Notes</th></tr></thead>
+<tbody>
+<tr><th scope="row">K1 LENGTH</th><td>1–64 steps</td><td>The selected track's part in this pattern.</td></tr>
+<tr><th scope="row">K2 RATE</th><td>1/16, 1/8, 1/32, 1/16T, 1/8T</td><td>The selected track's part.</td></tr>
+<tr><th scope="row">K3 SWING</th><td>50–75%</td><td>The whole project.</td></tr>
+<tr><th scope="row">K4 TEMPO</th><td>60–240 BPM, 1 BPM a click</td><td>The whole project. Also tap tempo (HOME, OCT− twice or more: the tempo follows when the taps average 0.25–1 s apart; a gap over 2 s starts counting again) and MIDI FOLLOW.</td></tr>
+<tr><th scope="row">Held step: K1 NOTE</th><td>Moves the step's note, or its whole chord, by semitones</td><td>You hear the step while stopped. A “+” after the note means a chord.</td></tr>
+<tr><th scope="row">Held step: K2 VELOCITY</th><td>1–127, then ACCENT</td><td>ACCENT is 127 with the 303-style accent: louder with a filter lift.</td></tr>
+<tr><th scope="row">Held step: K3 GATE</th><td>0.12–31.87 steps</td><td>An eighth of a step a click up to two steps, then a whole step a click. SLIDE shows when the step slides.</td></tr>
+<tr><th scope="row">Held step: SELECT CHANCE</th><td>5–100%, 5% a click</td><td>Also on DRUMS, where it uses one of the part's 16 locks.</td></tr>
+<tr><th scope="row">Held step: OCT+</th><td>HALF, WHOLE, SLIDE</td><td>T2–T4. HALF is half a step. WHOLE holds to just before the next note. SLIDE glides into the next note without a new attack.</td></tr>
+</tbody></table>
+
+<h2 id="drum-sound">Drum pads: every knob</h2>
+<p>On DRUMS, tap a pad's black key, then press EDIT. The pad's knobs fill pages of four in the order below; the last EDIT page is the KIT page. Every knob is 0–127 except the switches. Rev and Dly are the pad's own sends into the reverb and delay; the mixer's DRUMS REVERB and DELAY sends then set how much of them reaches the effects.</p>
+<table>
+<caption>909 kit, knobs in page order</caption>
+<thead><tr><th scope="col">Pad</th><th scope="col">Knobs</th></tr></thead>
+<tbody>
+<tr><th scope="row">BD</th><td>Tune, Attack, Decay, Level, P.Dpth, Pitch, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">SD</th><td>Tune, Tone, Snappy, Decay, Level, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">LT, MT, HT</th><td>Tune, Decay, Level, Attack, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">RS</th><td>Level, Tune, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">CP</th><td>Level, Tune, Tail, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">CH, OH</th><td>Decay, Level, Tune, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">CR, RD</th><td>Tune, Level, Decay, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">KIT page</th><td>Accent (how much louder an accented hit is), Veloc (how much the pads' velocity changes their level)</td></tr>
+</tbody></table>
+<table>
+<caption>808 kit, knobs in page order</caption>
+<thead><tr><th scope="col">Pad</th><th scope="col">Knobs</th></tr></thead>
+<tbody>
+<tr><th scope="row">BD</th><td>Level, Tone, Decay, Tune, Attack, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">SD</th><td>Level, Tone, Snappy, Tune, Decay, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">LT, MT, HT</th><td>Level, Tune, Decay, Sound (TOM or CONGA), Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">RS</th><td>Level, Tune, Decay, Sound (RIM or CLAVE), Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">CP</th><td>Level, Tune, Decay, Attack, Sound (CLAP or MARAC, maracas), Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">CH, CB</th><td>Level, Tune, Decay, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">OH, CY</th><td>Level, Decay, Tune, Drive, Dist, Rev, Dly, Pan</td></tr>
+<tr><th scope="row">KIT page</th><td>Level (the whole kit), Accent</td></tr>
+</tbody></table>
+<ul>
+<li><strong>Dist</strong> picks the distortion that Drive feeds: Diode, Clip, SAT, BFZ, PDIST, Fold, Crush.</li>
+<li><strong>P.Dpth</strong> and <strong>Pitch</strong> on the 909 BD set the depth and amount of the kick's pitch drop. <strong>Tail</strong> on the 909 CP is the clap's reverb-like tail. <strong>Snappy</strong> is the snare wires' level.</li>
+<li>The 909 and 808 keep their own knob settings. Switching kit and back keeps both.</li>
+<li>Pads triggered by the sequencer play at a normal level; accented steps play at full level, shaped by the KIT page's Accent.</li>
+</ul>
+
+<h2 id="instrument-sound">T2–T4 sound parameters</h2>
+<p>Every value below except LEVEL is part of the sound: PRESETS loads them, user presets save them, and SETUP → SOUNDS → OWN keeps them per pattern. LEVEL belongs to the track: PRESETS leaves it and user presets don't store it, though SOUNDS → OWN keeps it per pattern. TYPE comes from the preset as MONO or POLY. The parameters marked with a dash for range are 0–127.</p>
+<table>
+<caption>EDIT pages (MONO and POLY)</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">VOICE</th><td>TYPE: MONO, POLY, SAMPLER</td><td>LEVEL 0–127 (the same value as the mixer's LEVEL for the track)</td><td>POLY and SAMPLER: VOICES 1–8, the most this track may use. MONO: UNISON 1–4 voices stacked per note</td><td>GLIDE: OFF to 1.5 s</td></tr>
+<tr><th scope="row">OSC</th><td>WAVE: SAW, SQUARE, TRI, SINE, PWM, SYNC, SUB</td><td>DETUNE: —</td><td>MIX (OSC 1 to OSC 2): —</td><td>INTERVAL (OSC 2): −24 to +24 semitones</td></tr>
+<tr><th scope="row">TONE</th><td>SUB: —</td><td>NOISE: —</td><td>PWM: —</td><td>DRIVE: —</td></tr>
+<tr><th scope="row">FILTER</th><td>CUTOFF: 30 Hz to 15.7 kHz</td><td>RESO: —</td><td>ENV AMT: −64 to +63</td><td>FILTER: LP, BP, HP</td></tr>
+<tr><th scope="row">MORE</th><td>KEYTRACK (cutoff follows the note): —</td><td>VELOCITY (how much velocity changes the level): —</td><td>SPREAD (unison detune, up to ±50 cents): —</td><td>LEGATO: OFF, ON, SLIDE</td></tr>
+<tr><th scope="row">OSC 2</th><td>WAVE 2: SAME, SAW, SQUARE, TRI, SINE, PWM</td><td>FM (OSC 2 into OSC 1): —</td><td>RING: —</td><td>DRIFT (slow random pitch and cutoff wander): —</td></tr>
+<tr><th scope="row">SHAPER</th><td>SHAPER: FOLD, CLIP, RECTIFY, CRUSH</td><td>AMOUNT (0 is off): —</td><td>BIAS: −64 to +63</td><td>PLACE: PRE FLT, POST FLT</td></tr>
+<tr><th scope="row">MACRO</th><td>MACRO 1: —</td><td>MACRO 2: —</td><td>MACRO 3: —</td><td>MACRO 4: —</td></tr>
+</tbody></table>
+<table>
+<caption>ENV pages</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">ATTACK</th><th scope="col">DECAY</th><th scope="col">SUSTAIN</th><th scope="col">RELEASE</th></tr></thead>
+<tbody>
+<tr><th scope="row">AMP ENV, FILTER ENV, MOD ENV</th><td>1 ms to 5.0 s</td><td>1 ms to 5.0 s</td><td>0–127</td><td>1 ms to 5.0 s</td></tr>
+</tbody></table>
+<p>Times are 1 ms at 0, 11 ms at 16, 81 ms at 32, 271 ms at 48, 641 ms at 64, 1.3 s at 80, 2.2 s at 96, 3.4 s at 112 and 5.0 s at 127. CUTOFF is 30 Hz at 0, 216 Hz at 40, 580 Hz at 60, 1.6 kHz at 80, 4.2 kHz at 100 and 15.7 kHz at 127. LEGATO ON glides whenever a MONO voice is still sounding; SLIDE glides only into tied notes, as a 303 does. GLIDE at OFF uses 58 ms for slides.</p>
+
+<h2 id="sampler">SAMPLER pages</h2>
+<table>
+<caption>EDIT pages when TYPE is SAMPLER</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">VOICE</th><td>TYPE</td><td>LEVEL</td><td>VOICES 1–8</td><td>GLIDE</td></tr>
+<tr><th scope="row">SAMPLE</th><td>START</td><td>END</td><td>LOOP: OFF, ON</td><td>LOOP START</td></tr>
+<tr><th scope="row">PITCH</th><td>ROOT: the note that plays the sample at its own pitch (C4 at first)</td><td>TUNE: −50 to +50 cents</td><td>DRIVE</td><td>RECORD AT: 44 KHZ or 22 KHZ, for the next recording</td></tr>
+<tr><th scope="row">FILTER, MORE, SHAPER, MACRO</th><td colspan="4">As for MONO and POLY.</td></tr>
+</tbody></table>
+<p>START, END and LOOP START move 0.5% of the sample a click and show as a time into the sample. A loop plays from LOOP START to END; LOOP START snaps to the nearest rising zero crossing so the loop doesn't click. A new recording resets START, END and LOOP START to the whole sample. The ENV, LFO, ARP and matrix pages work on a SAMPLER as on a synth; LFO 1's DEST START moves where each note starts.</p>
+
+<h2 id="lfo-arp">LFO and ARP pages</h2>
+<p>LFO 1, LFO 1 MORE, LFO 2 and MATRIX are covered knob by knob in <a href="/guide/modulation/">Modulation in depth</a>.</p>
+<table>
+<caption>ARP pages (T2–T4)</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">ARP</th><td>MODE: OFF, UP, DOWN, UP+DOWN, RANDOM, AS PLAYED</td><td>RATE: 1/4, 1/8, 1/8T, 1/16, 1/16T, 1/32 (1/16 at first)</td><td>OCTAVES: 1–4</td><td>GATE: 5–100%, 5% a click (50% at first)</td></tr>
+<tr><th scope="row">ARP 2</th><td>LATCH: OFF, ON</td><td>CHORD: OFF, MAJ, MIN, 7, MAJ7, MIN7, SUS2, SUS4, DIM, AUG, 5, OCT</td><td>INVERT: ROOT, 1ST, 2ND, 3RD</td><td>—</td></tr>
+</tbody></table>
+<p>The arpeggiator plays held keys, incoming MIDI notes and the notes of sequenced steps, up to 16 notes. LATCH keeps notes going after you let go; turning LATCH off with no key down stops them. CHORD makes every key play a chord of up to four notes; inversions move its lowest notes up an octave. Chords record into a step as up to four notes. Incoming MIDI notes are not turned into chords.</p>
+
+<h2 id="acid">ACID pages</h2>
+<table>
+<caption>ACID, NOTES and LINE (T2–T4)</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">ACID</th><td>DENSITY 0–100% (75): how many steps play. Step 1 always plays unless DENSITY is 0</td><td>WHOLE 0–100% (20): notes held to the next</td><td>SLIDE 0–100% (25)</td><td>ACCENT 0–100% (30)</td></tr>
+<tr><th scope="row">NOTES</th><td>ROOT C1–B4 (C2)</td><td>SCALE: MINOR, PHRYGIAN, DORIAN, PENTA, BLUES, HARM MIN, MAJOR, MIXOLYD</td><td>NOTES: how many of the scale's notes, root and fifth first (4)</td><td>OCTAVE 0–100% (20): octave jumps</td></tr>
+<tr><th scope="row">LINE</th><td>SEED 1–999</td><td>LENGTH, as on STEPS (makes a new line for the length)</td><td>RATE, as on STEPS</td><td>SWING, as on STEPS</td></tr>
+</tbody></table>
+<p>OCT+ is NEW (the next seed). OCT− is MUTATE (re-roll about an eighth of the steps; the seed shows as, say, SEED 42 M3). The ACID and NOTES knobs and SEED rewrite the part up to its LENGTH at once. On LINE, LENGTH writes a new line for the new length only once the part has one; RATE and SWING don't rewrite it. Numbers in brackets are where a part starts the first time; after that, a new part starts from the track's last settings.</p>
+
+<h2 id="mixer-fx">Mixer and FX pages</h2>
+<table>
+<caption>GLO mixer pages: K1 DRUMS, K2 T2, K3 T3, K4 T4</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">Range</th><th scope="col">New project</th></tr></thead>
+<tbody>
+<tr><th scope="row">LEVEL</th><td>0–127. For T2–T4 this is the sound's LEVEL (EDIT → VOICE)</td><td>100 each</td></tr>
+<tr><th scope="row">PAN</th><td>L64 – C – R63</td><td>DRUMS C, T2 C, T3 L12, T4 R12</td></tr>
+<tr><th scope="row">REVERB</th><td>0–127 send</td><td>DRUMS 127 (the pads' own Rev decides), T2 0, T3 45, T4 60</td></tr>
+<tr><th scope="row">DELAY</th><td>0–127 send</td><td>DRUMS 127 (the pads' own Dly decides), T2 0, T3 35, T4 10</td></tr>
+</tbody></table>
+<table>
+<caption>FX pages</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">REVERB</th><td>DECAY 0–127 (73)</td><td>TONE 0–127 (57)</td><td>LOW CUT 0–127 (62)</td><td>LEVEL 0–127 (85)</td></tr>
+<tr><th scope="row">DELAY</th><td>TIME: 1/32, 1/16T, 1/16, 1/8T, 1/16., 1/8, 1/4T, 1/8., 1/4, 1/2T, 1/4., 1/2, 1/2. (1/8.)</td><td>FEEDBACK 0–127 (52)</td><td>TONE 0–127 (51)</td><td>LEVEL 0–127 (85)</td></tr>
+<tr><th scope="row">DELAY 2</th><td>TYPE: DIGI, TAPE</td><td>WEAR 0–127 (64)</td><td>WIDTH 0–127 (0), ping-pong spread</td><td>LOW CUT 0–127 (62)</td></tr>
+<tr><th scope="row">FILTER</th><td>FILTER: LP 100% … OFF … HP 100% (OFF in the middle)</td><td>RESO 0–127 (20)</td><td>—</td><td>—</td></tr>
+</tbody></table>
+<p>The delay time follows the tempo. The DJ FILTER sits on the master bus after the compressor, so it filters the whole mix including the returns.</p>
+
+<h2 id="master">Master bus pages</h2>
+<table>
+<caption>Master bus knobs, ranges and new-project values</caption>
+<thead><tr><th scope="col">Page</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">CHAIN</th><td>PRESET: CLEAN, GLUE, PUNCH, WARM, WIDE, LOUD, LO-FI (CLEAN)</td><td>GAIN 0 to +12 dB in 0.5 dB (0)</td><td>CEILING 0.0 to −6.0 dB (−0.3)</td><td>BYPASS OFF, ON</td></tr>
+<tr><th scope="row">EQ</th><td>LOW −12 to +12 dB (0)</td><td>MID −12 to +12 dB (0)</td><td>HIGH −12 to +12 dB (0)</td><td>LOW CUT: OFF, 20, 25, 30, 40, 50, 60, 80, 100, 120, 150 Hz</td></tr>
+<tr><th scope="row">EQ 2</th><td>LOW FREQ: 40, 60, 80, 100, 120, 150, 200, 300 Hz (80)</td><td>MID FREQ 150 Hz to 8 kHz (1 kHz)</td><td>MID Q: 0.4, 0.7, 1.0, 1.4, 2.0, 3.0 (0.7)</td><td>HIGH FREQ: 2, 3, 4, 5, 6, 8, 10, 12, 16 kHz (8k)</td></tr>
+<tr><th scope="row">COMP</th><td>THRESHOLD −48 to 0 dB (−18)</td><td>RATIO: 1:1, 1.5:1, 2:1, 3:1, 4:1, 6:1, 8:1, 12:1, 20:1, INF (2:1)</td><td>ATTACK 0.1–100 ms (10)</td><td>RELEASE 10–1500 ms (152)</td></tr>
+<tr><th scope="row">COMP 2</th><td>MAKEUP 0 to 24 dB (3)</td><td>MIX 0–100% (100)</td><td>PUMP OFF to 24 dB, ducking from the kick</td><td>REDUCTION readout</td></tr>
+<tr><th scope="row">TAPE</th><td>DRIVE OFF to +12 dB</td><td>WARMTH 0–100%</td><td>TONE 3 kHz to OPEN (OPEN)</td><td>MIX 0–100% (100)</td></tr>
+<tr><th scope="row">STEREO</th><td>WIDTH 0–200% (100)</td><td>BASS MONO: OFF, 60, 80, 100, 120, 150, 200 Hz</td><td>BALANCE L64 – C – R63</td><td>PHASE readout: the correlation, −1 to +1, red below 0</td></tr>
+<tr><th scope="row">LIMIT</th><td>GAIN (as CHAIN)</td><td>CEILING (as CHAIN)</td><td>RELEASE 10–1000 ms (152)</td><td>LIMIT OFF, ON (ON)</td></tr>
+</tbody></table>
+<p>A chain PRESET sets many of these knobs at once; a star after its name means a knob it set has moved since. The order is EQ, COMP, the DJ FILTER, TAPE, STEREO, GAIN and the limiter, then MASTER.</p>
+
+<h2 id="home-song-setup">HOME, SONG, SETUP and REC pages</h2>
+<table>
+<caption>Knobs on the HOME, SONG, SETUP and REC pages</caption>
+<thead><tr><th scope="col">Where</th><th scope="col">K1</th><th scope="col">K2</th><th scope="col">K3</th><th scope="col">K4</th></tr></thead>
+<tbody>
+<tr><th scope="row">HOME, a scene's white key held</th><td>FOLLOW: OFF, NEXT, PREV, FIRST, RANDOM</td><td>BARS: 1–16</td><td>—</td><td>—</td></tr>
+<tr><th scope="row">SONG</th><td>PATTERN: P01–P16 for the cursor's entry</td><td>BARS: 1–16</td><td>LAUNCH: BAR, BEAT, NOW (for scenes and clips everywhere)</td><td>SONG: OFF, ON</td></tr>
+<tr><th scope="row">SETUP</th><td>MIDI CLOCK: OFF, SEND, FOLLOW</td><td>SOUNDS: SHARED, OWN</td><td>—</td><td>—</td></tr>
+<tr><th scope="row">REC held</th><td>CLICK: OFF, ON, REC</td><td>COUNT-IN: OFF, 1 BAR, 2 BARS</td><td>QUANTIZE: every step, 2 steps or 4 steps, named for the part's RATE (1/16, 1/8, 1/4 at 1/16)</td><td>LEVEL: 1–15 (10)</td></tr>
+</tbody></table>
+<p>On HOME, white keys are lit for the scene playing, blink for one queued, are dim when the pattern has notes and dark when it's empty. With a track key held, they show that track's clips instead. On SONG the cursor's pattern is lit and the song's other patterns are dim. SELECT on SONG moves the cursor, including one place past the end, where a white key adds an entry.</p>
+
+<h2 id="perform">Perform keys on HOME</h2>
+<table>
+<caption>Perform keys and K1 while held</caption>
+<thead><tr><th scope="col">Key</th><th scope="col">Effect while held</th><th scope="col">K1 while held</th></tr></thead>
+<tbody>
+<tr><th scope="row">Black 5 ROLL</th><td>Repeats each track's current step</td><td>RATE: 1/8, 1/16, 1/32, 1/16T, 1/32T</td></tr>
+<tr><th scope="row">Black 6 FILL</th><td>The drums play the next pattern's drum part</td><td>—</td></tr>
+<tr><th scope="row">Black 7 STUTTER</th><td>Loops a slice of the output</td><td>LENGTH: 1/32, 1/16, 1/8</td></tr>
+<tr><th scope="row">Black 8 FILTER</th><td>The DJ filter at the perform setting</td><td>FILTER 0–127: LP below 60, OFF 60–68, HP above 68</td></tr>
+<tr><th scope="row">Black 9 THROW</th><td>Everything into the delay</td><td>FEEDBACK 0–127</td></tr>
+<tr><th scope="row">Black 10 WASH</th><td>Everything into a long reverb</td><td>SIZE 0–127 (the reverb's decay while held)</td></tr>
+<tr><th scope="row">Black 11 CRUSH</th><td>Bit and rate reduction on the mix</td><td>AMOUNT 0–127</td></tr>
+<tr><th scope="row">OCT+ TAPE STOP</th><td>Slows the output to a stop</td><td>—</td></tr>
+</tbody></table>
+<p>STUTTER and TAPE STOP borrow the delay's memory and aren't available while sampling. The K1 settings last until power-off; they aren't saved.</p>
+
+<h2 id="presets">Presets and user slots</h2>
+<table>
+<caption>The 24 factory sounds, in PRESETS order</caption>
+<thead><tr><th scope="col">Type</th><th scope="col">Sounds</th></tr></thead>
+<tbody>
+<tr><th scope="row">MONO</th><td>SQR BASS, ACID, SUB BASS, FAT BASS, SAW LEAD, SUPERSAW, SYNC LEAD, FM BASS, FOLD LEAD, CRUSH BASS, WOBBLE</td></tr>
+<tr><th scope="row">POLY</th><td>SOFT PAD, PWM STRINGS, PLUCK, BRASS, SINE KEYS, RAVE STAB, ORGAN, WIND, FM BELL, FM KEYS, WEST PLUCK, RING METAL, DRIFT PAD</td></tr>
+</tbody></table>
+<p>The full order is SQR BASS, ACID, SUB BASS, FAT BASS, SAW LEAD, SUPERSAW, SYNC LEAD, SOFT PAD, PWM STRINGS, PLUCK, BRASS, SINE KEYS, RAVE STAB, ORGAN, WIND, FM BELL, FM BASS, FM KEYS, FOLD LEAD, WEST PLUCK, RING METAL, DRIFT PAD, CRUSH BASS, WOBBLE, then USER 1–16. A new project starts with SQR BASS on T2 (an octave down), PLUCK on T3 and SOFT PAD on T4.</p>
+<p>To save: stop, hold SAVE, turn PRESETS to pick a slot (the first turn starts at the slot the sound came from, or the first empty one), check REPLACE or EMPTY, and let go of SAVE. A user sound keeps every sound parameter and whether it's MONO or POLY. A user kit keeps the kit (909 or 808) and all its knobs. User presets are stored apart from the project, so loading or saving the project doesn't change them.</p>
+
+<h2 id="limits">Limits</h2>
+<table>
+<caption>Numbers worth knowing</caption>
+<thead><tr><th scope="col">What</th><th scope="col">Limit</th></tr></thead>
+<tbody>
+<tr><th scope="row">Patterns</th><td>16, each with a DRUMS part and T2, T3, T4 parts</td></tr>
+<tr><th scope="row">Part length</th><td>1–64 steps, in banks of 16</td></tr>
+<tr><th scope="row">Notes per step</th><td>4 (T2–T4)</td></tr>
+<tr><th scope="row">Locks</th><td>16 per part (on DRUMS, a step's chance uses one)</td></tr>
+<tr><th scope="row">Gate</th><td>Up to 31.87 steps</td></tr>
+<tr><th scope="row">Voices</th><td>16 shared by T2–T4; POLY up to 8 per track; MONO up to 4 in unison. Fewer while the processor is short of time.</td></tr>
+<tr><th scope="row">Undo</th><td>8 pattern edits, and redo</td></tr>
+<tr><th scope="row">Song</th><td>32 entries of 1–16 bars</td></tr>
+<tr><th scope="row">User presets</th><td>16 sounds, 8 kits</td></tr>
+<tr><th scope="row">Tempo and swing</th><td>60–240 BPM; 50–75%</td></tr>
+<tr><th scope="row">Arpeggiator</th><td>16 notes</td></tr>
+<tr><th scope="row">Sampling</th><td>One sample per instrument track. A recording lasts up to 2 s at 44.1 kHz or 4 s at 22.05 kHz, and starts at the first sound above −40 dB. The sample bank holds about 3.3 s at 44.1 kHz in total, shared by T2–T4.</td></tr>
+<tr><th scope="row">USB audio</th><td>10 inputs (master, then four stereo stems) and 2 outputs, 44.1 kHz, 16-bit</td></tr>
+</tbody></table>
+
+<h2 id="messages">Screen messages</h2>
+<table>
+<caption>Messages and what they mean</caption>
+<thead><tr><th scope="col">Message</th><th scope="col">Meaning</th></tr></thead>
+<tbody>
+<tr><th scope="row">STEP PAST THE END</th><td>That step is beyond the part's LENGTH. Raise K1 LENGTH first.</td></tr>
+<tr><th scope="row">NO LOCK LEFT</th><td>The part's 16 locks are used. Clear some with a held step + OCT−.</td></tr>
+<tr><th scope="row">NOT LOCKABLE</th><td>That knob can't be locked to a step (TYPE, LEVEL, VOICES, LEGATO, matrix SOURCE and DEST, the sampler's own knobs, the drum KIT page, Sound switches).</td></tr>
+<tr><th scope="row">LOCKS CLEARED / NO LOCKS / CHANCE 100%</th><td>A held step + OCT− cleared its locks, or it had none.</td></tr>
+<tr><th scope="row">SAVE WHEN STOPPED</th><td>SAVE while playing: the project saves when you stop.</td></tr>
+<tr><th scope="row">SAVED / SAVE FAILED</th><td>The project save finished, or the flash write failed.</td></tr>
+<tr><th scope="row">STOP FIRST TO SAVE A PRESET</th><td>User presets only save while stopped.</td></tr>
+<tr><th scope="row">SAVE AS USER n / KIT n: REPLACE or EMPTY</th><td>SAVE held and PRESETS turned: letting go of SAVE writes that slot.</td></tr>
+<tr><th scope="row">COPIED TO n</th><td>SAVE + white key copied the current pattern to pattern n.</td></tr>
+<tr><th scope="row">RELOAD NOTHING SAVED / RELOADED</th><td>SAVE + OCT−: there's no saved project yet, or the sound was reloaded.</td></tr>
+<tr><th scope="row">UNDO NOTHING / REDO NOTHING</th><td>No more pattern edits to undo or redo.</td></tr>
+<tr><th scope="row">NO SAMPLE: HOLD REC, PRESS SEL</th><td>The track is SAMPLER but has no sample yet.</td></tr>
+<tr><th scope="row">SAMPLING ON A SAMPLER TRACK</th><td>REC + SEL needs T2–T4 with TYPE SAMPLER.</td></tr>
+<tr><th scope="row">SAMPLING PLAY A SOUND / CANCELLED</th><td>Armed and waiting for sound above −40 dB; SEL before any sound cancels.</td></tr>
+<tr><th scope="row">SAMPLED / SAMPLE STORED / STORED, CUT</th><td>Recorded (with its length), stored, or stored shortened because the bank was nearly full.</td></tr>
+<tr><th scope="row">BANK FULL NOT KEPT / STORE FAILED</th><td>No room in the sample bank, or the flash write failed; the track keeps its old sample.</td></tr>
+<tr><th scope="row">STOP FIRST TO KEEP THE LAST ONE</th><td>Another track's recording from this run is waiting to be stored; stop first.</td></tr>
+<tr><th scope="row">NOT WHILE SAMPLING</th><td>STUTTER and TAPE STOP need the delay memory the recording is using.</td></tr>
+<tr><th scope="row">TAP AGAIN / TOO FAR APART</th><td>Tap tempo needs two or more taps between 0.25 and 1 s apart.</td></tr>
+<tr><th scope="row">SONG FULL / THE END PRESS A PATTERN</th><td>The song has 32 entries; or the cursor is past the last entry, where a white key adds one.</td></tr>
+<tr><th scope="row">QUANTIZE 1 STEP: ALREADY</th><td>REC + OCT− with QUANTIZE (REC page K3) on every step: every note is already on that grid. Choose the 2- or 4-step grid first.</td></tr>
+<tr><th scope="row">ARP ON T2-T4 / LEGATO ON T2-T4</th><td>Those work on instrument tracks only.</td></tr>
+<tr><th scope="row">SEL + PAD KEYS 1-4 PICK A TRACK</th><td>SEL was tapped alone; hold it and press black 1–4.</td></tr>
+<tr><th scope="row">COUNT-IN OFF</th><td>PLAY during the count-in cancelled it.</td></tr>
+</tbody></table>
